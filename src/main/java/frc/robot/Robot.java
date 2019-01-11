@@ -15,11 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
-<<<<<<< HEAD
 import frc.robot.subsystems.ElevatorSubsystem;
-=======
 import frc.robot.subsystems.RollerSubsystem;
->>>>>>> 82fb0cae252f6867aec3bc8b7ee476cfec72bb5e
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,11 +29,8 @@ public class Robot extends TimedRobot {
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
   public static DriveTrain drivetrain;
-<<<<<<< HEAD
   public static ElevatorSubsystem elevator;
-=======
   public static RollerSubsystem roller;
->>>>>>> 82fb0cae252f6867aec3bc8b7ee476cfec72bb5e
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -49,11 +43,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_oi = new OI();
     drivetrain = new DriveTrain();
-<<<<<<< HEAD
     elevator = new ElevatorSubsystem();
-=======
     roller = new RollerSubsystem();
->>>>>>> 82fb0cae252f6867aec3bc8b7ee476cfec72bb5e
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
