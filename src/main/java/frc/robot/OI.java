@@ -7,6 +7,9 @@
 
 package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.RollerCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -19,7 +22,13 @@ public class OI {
   // You create one by telling it which joystick it's on and which button
   // number it is.
   public Joystick stick = new Joystick(0);
+  public Joystick stick2 = new Joystick(1);
+  Button Xbutton = new JoystickButton(stick2, 1);
   // Button button = new JoystickButton(stick, buttonNumber);
+
+  public OI(){
+    Xbutton.whileHeld(new RollerCommand());
+  }
 
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to
