@@ -10,8 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+<<<<<<< HEAD
 import frc.robot.commands.ElevatorCommand;
 
+=======
+import frc.robot.commands.RollerCommand;
+>>>>>>> 82fb0cae252f6867aec3bc8b7ee476cfec72bb5e
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -31,8 +35,18 @@ public class OI {
   //// joystick.
   // You create one by telling it which joystick it's on and which button
   // number it is.
+<<<<<<< HEAD
   // Joystick stick = new Joystick(port);
+=======
+  public Joystick stick = new Joystick(0);
+  public Joystick stick2 = new Joystick(1);
+  Button Xbutton = new JoystickButton(stick2, 1);
+>>>>>>> 82fb0cae252f6867aec3bc8b7ee476cfec72bb5e
   // Button button = new JoystickButton(stick, buttonNumber);
+
+  public OI(){
+    Xbutton.whileHeld(new RollerCommand());
+  }
 
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to
