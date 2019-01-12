@@ -10,9 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.RollerCommand;
+import frc.robot.commands.PneumaticsCommand;
 
 
 /**
@@ -21,8 +21,9 @@ import frc.robot.commands.RollerCommand;
  */
 public class OI {
   public Joystick stick = new Joystick(0);
-  public Joystick ojoy = new Joystick(2);
-   public Button XButton = new JoystickButton(ojoy, 0);
+  public Joystick ojoy = new Joystick(1);
+  public Button XButton = new JoystickButton(ojoy, 0);
+  public Button YButton = new JoystickButton(stick, 1);
 
   
   
@@ -36,6 +37,7 @@ public class OI {
 
   public OI(){
     XButton.whileHeld(new RollerCommand());
+    YButton.whileHeld(new PneumaticsCommand());
   }
 
   // There are a few additional built in buttons you can use. Additionally,

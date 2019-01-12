@@ -17,6 +17,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.RollerSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
   public static DriveTrain drivetrain;
   public static ElevatorSubsystem elevator;
   public static RollerSubsystem roller;
+  public static PneumaticsSubsystem p;
+  
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -45,6 +48,7 @@ public class Robot extends TimedRobot {
     drivetrain = new DriveTrain();
     elevator = new ElevatorSubsystem();
     roller = new RollerSubsystem();
+    p =  new PneumaticsSubsystem();
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
