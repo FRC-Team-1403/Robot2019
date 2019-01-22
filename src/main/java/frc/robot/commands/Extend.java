@@ -10,13 +10,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class RollerCommand extends Command {
-
-
-
-  public RollerCommand() {
+public class Extend extends Command {
+  public Extend() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.roller);
+    requires(Robot.p);
   }
 
   // Called just before this Command runs the first time
@@ -27,7 +24,7 @@ public class RollerCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.roller.roll();
+    Robot.p.push();
   }
 
   // Make this return true when this Command no longer needs to run execute()

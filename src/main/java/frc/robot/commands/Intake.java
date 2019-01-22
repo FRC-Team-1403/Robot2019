@@ -10,10 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class PneumaticsCommand extends Command {
-  public PneumaticsCommand() {
+public class Intake extends Command {
+
+
+
+  public Intake() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.p);
+    requires(Robot.in);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +27,7 @@ public class PneumaticsCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.p.push();
+    Robot.in.intake();
   }
 
   // Make this return true when this Command no longer needs to run execute()

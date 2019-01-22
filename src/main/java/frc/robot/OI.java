@@ -8,11 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.ElevatorCommand;
-import frc.robot.commands.RollerCommand;
-import frc.robot.commands.PneumaticsCommand;
+import frc.robot.RobotMap;
+
+
 
 
 /**
@@ -20,10 +18,8 @@ import frc.robot.commands.PneumaticsCommand;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  public Joystick stick = new Joystick(0);
-  public Joystick ojoy = new Joystick(1);
-  public Button XButton = new JoystickButton(ojoy, 0);
-  public Button YButton = new JoystickButton(stick, 1);
+  public Joystick djoy = new Joystick(RobotMap.djoy);
+  public Joystick ojoy = new Joystick(RobotMap.ojoy);
 
   
   
@@ -34,11 +30,6 @@ public class OI {
   // number it is.
   // Joystick stick = new Joystick(port);
   // Button button = new JoystickButton(stick, buttonNumber);
-
-  public OI(){
-    XButton.whileHeld(new RollerCommand());
-    YButton.whileHeld(new PneumaticsCommand());
-  }
 
   // There are a few additional built in buttons you can use. Additionally,
   // by subclassing Button you can create custom triggers and bind those to

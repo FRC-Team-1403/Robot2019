@@ -7,30 +7,43 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
+import frc.robot.commands.Extend;
+import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
-public class RollerSubsystem extends Subsystem {
-  public PWM p1, p2;
-
-  public RollerSubsystem(){
-    p1= new PWM(1);
-    p2 =new PWM(2);
-  }
-public void roll(){
-  p1.setSpeed(1);
-  p2.setSpeed(-1);
-}
-
+public class ArmExtension extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+  public DoubleSolenoid doubleSolenoid;
+
+  public ArmExtension() {
+    doubleSolenoid = new DoubleSolenoid(RobotMap.extensionSolenoid1, RobotMap.extensionSolenoid2);
+  }
+
+  public void push() {
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
+    {
+      doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
+    {
+      doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+    else 
+    {
+      doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+    }
+  }
+  
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new Extend());
   }
 }

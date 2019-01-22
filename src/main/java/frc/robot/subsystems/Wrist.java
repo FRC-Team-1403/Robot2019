@@ -7,26 +7,30 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.commands.ElevatorCommand;
-
 /**
  * Add your docs here.
  */
-public class ElevatorSubsystem extends Subsystem {
+public class Wrist extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  public PWM motor = new PWM(0); 
+  public CANSparkMax wristMotor;
 
-  public void elevatorStart(double speed){
-    motor.setSpeed(speed);
+  public Wrist()
+  {
+    wristMotor = new CANSparkMax(RobotMap.wristMotor, MotorType.kBrushless);
   }
-
+  public void moveWrist()
+  {
+    wristMotor.set(Robot.m_oi.ojoy.getRawAxis(5));
+  }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    
-  }  
+    // setDefaultCommand(new MySpecialCommand());
+  }
 }

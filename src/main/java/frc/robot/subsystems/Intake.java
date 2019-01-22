@@ -7,33 +7,42 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
-import frc.robot.commands.PneumaticsCommand;
 
 /**
  * Add your docs here.
  */
-public class PneumaticsSubsystem extends Subsystem {
+public class Intake extends Subsystem {
+  public CANSparkMax intakeMotor;
+
+  public Intake(){
+    intakeMotor = new CANSparkMax(RobotMap.intakeMotor, MotorType.kBrushless);
+  }
+public void intake(){
+  if(Robot.m_oi.ojoy.getRawAxis(2)>0)
+  {
+    intakeMotor.set(Robot.m_oi.ojoy.getRawAxis(2));
+  }
+  else if(-Robot.m_oi.ojoy.getRawAxis(3)<0)
+  {
+    intakeMotor.set(-Robot.m_oi.ojoy.getRawAxis(3));
+  }
+  else
+  {
+    intakeMotor.set(0);
+  }
+}
+
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  public DoubleSolenoid doubleSolenoid;
-
-  public PneumaticsSubsystem() {
-    doubleSolenoid = new DoubleSolenoid(1, 2);
-  }
-
-  public void push() {
-    if(Robot.m_oi.stick.getRawButton(1)) {doubleSolenoid.set(DoubleSolenoid.Value.kForward);}
-    else if(Robot.m_oi.stick.getRawButton(2)) {doubleSolenoid.set(DoubleSolenoid.Value.kReverse);}
-    else {doubleSolenoid.set(DoubleSolenoid.Value.kOff);}
-  }
-  
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new PneumaticsCommand());
+    // setDefaultCommand(new MySpecialCommand());
   }
 }
