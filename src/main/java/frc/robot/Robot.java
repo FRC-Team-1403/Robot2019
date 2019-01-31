@@ -19,6 +19,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,6 +37,15 @@ public class Robot extends TimedRobot {
   public static ArmExtension p;
   public static Arm arm;
   public static Wrist w;
+
+  public static double FASTMAXRPM = 500;
+  public static double DEFAULTMAXRPM = 600;
+  public static double FINECONTROLRPM = 100;
+  public static double maxRPM = DEFAULTMAXRPM;
+
+  public static double FINECONTROLMAXACCELERATION = 100;
+  public static double DEFAULTMAXACCELERATION = 0.0002;
+  public static double HYPERSPEEDMAXACCELERATION = 10000;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -54,6 +65,24 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    talonInit(drivetrain.frontLeft);
+    talonInit(drivetrain.frontRight);
+    talonInit(drivetrain.backLeft);
+    talonInit(drivetrain.backRight);
+    
+    
+    drivetrain.frontLeft.follow(drivetrain.backLeft);
+    drivetrain.frontRight.follow(drivetrain.backRight);
+
+    
+    //each side has a different orientation during installation
+    drivetrain.backLeft.setSensorPhase(true);
+    drivetrain.backRight.setSensorPhase(true);
+    
+    drivetrain.frontLeft.setInverted(false); 
+    drivetrain.backLeft.setInverted(true);
+    drivetrain.frontRight.setInverted(true);
+    drivetrain.backRight.setInverted(true);
   }
 
   /**
@@ -134,8 +163,43 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    FINECONTROLMAXACCELERATION = SmartDashboard.getNumber("Fine Acceleration: ", 100);
+    DEFAULTMAXACCELERATION = SmartDashboard.getNumber("Default Acceleration: ", 500);
+    HYPERSPEEDMAXACCELERATION = SmartDashboard.getNumber("Hyper Speed: ", 10000);
+
+    FASTMAXRPM = SmartDashboard.getNumber("FAST Max RPM:", 8000);
+    DEFAULTMAXRPM = SmartDashboard.getNumber("Default Max RPM:", 5700);
+    FINECONTROLRPM = SmartDashboard.getNumber("Fine Max RPM:", 3000);
+
+    SmartDashboard.putNumber("Motor value 1: ", drivetrain.frontLeft.getMotorOutputPercent());
+    SmartDashboard.putNumber("Motor value 2: ", drivetrain.backLeft.getMotorOutputPercent());
+    SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
+    SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
     Scheduler.getInstance().run();
   }
+  public void talonInit(TalonSRX talon) {
+    /* Factory Default all hardware to prevent unexpected behaviour */
+    talon.configFactoryDefault();
+
+   /* Config sensor used for Primary PID [Velocity] */
+    talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,
+    Constants.kPIDLoopIdx, 
+    Constants.kTimeoutMs);
+
+    
+
+   /* Config the peak and nominal outputs */
+   talon.configNominalOutputForward(0, Constants.kTimeoutMs);
+   talon.configNominalOutputReverse(0, Constants.kTimeoutMs);
+   talon.configPeakOutputForward(1, Constants.kTimeoutMs);
+   talon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+
+   /* Config the Velocity closed loop gains in slot0 */
+   talon.config_kF(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kF, Constants.kTimeoutMs);
+   talon.config_kP(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kP, Constants.kTimeoutMs);
+   talon.config_kI(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kI, Constants.kTimeoutMs);
+   talon.config_kD(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kD, Constants.kTimeoutMs);
+}
 
   /**
    * This function is called periodically during test mode.
