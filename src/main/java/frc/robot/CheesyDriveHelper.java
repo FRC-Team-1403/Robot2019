@@ -1,11 +1,11 @@
 package frc.robot;
 /**
- * Helper class to implement "Cougar Drive". "Cougar Drive" simply means that the "turning" stick controls the curvature
+ * Helper class to implement "Cheesy Drive". "Cheesy Drive" simply means that the "turning" stick controls the curvature
  * of the robot's path rather than its rate of heading change. This helps make the robot more controllable at high
  * speeds. Also handles the robot's quick turn functionality - "quick turn" overrides constant-curvature turning for
  * turn-in-place maneuvers.
  */
-public class CougarDriveHelper {
+public class CheesyDriveHelper {
 
     private static final double kThrottleDeadband = 0.02;
     private static final double kWheelDeadband = 0.02;

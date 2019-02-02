@@ -20,5 +20,6 @@ public class Constants {
      * kF: 1023 represents output value to Talon at 100%, 7200 represents Velocity units at 100% output
      * 
 	 * 	                                    			  kP   kI   kD   kF          Iz    PeakOut */
-    public final static Gains kGains_Velocit = new Gains( 0.3, 0, 0, 5E-3,  0,  1.00);
+	public final static Gains kGains_Velocit = new Gains( 0.3, 0, 0, 5E-3,  0,  1.00);
+	
 }

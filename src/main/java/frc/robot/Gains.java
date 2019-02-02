@@ -16,4 +16,5 @@ public class Gains {
 		this.kIzone = kIzone;
 		this.kPeakOutput = kPeakOutput;
 	}
+	
 }

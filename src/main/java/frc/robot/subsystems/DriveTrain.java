@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.DriveSignal;
-import frc.robot.CougarDriveHelper;
+import frc.robot.CheesyDriveHelper;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
 
@@ -25,7 +25,7 @@ public TalonSRX frontLeft;
 public TalonSRX frontRight;
 public TalonSRX backLeft;
 public TalonSRX backRight;
-CougarDriveHelper helper;
+CheesyDriveHelper helper;
   public DriveTrain()
   {
     frontLeft = new TalonSRX(RobotMap.frontLeftMotor);

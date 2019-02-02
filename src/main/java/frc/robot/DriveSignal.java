@@ -36,4 +36,5 @@ public class DriveSignal {
     public String toString() {
         return "L: " + mLeftMotor + ", R: " + mRightMotor + (mBrakeMode ? ", BRAKE" : "");
     }
+    
 }
