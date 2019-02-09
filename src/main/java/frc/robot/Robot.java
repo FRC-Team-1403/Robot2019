@@ -65,24 +65,24 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-    talonInit(drivetrain.frontLeft);
-    talonInit(drivetrain.frontRight);
-    talonInit(drivetrain.backLeft);
-    talonInit(drivetrain.backRight);
-    
-    
+    talonInitVelocity(drivetrain.frontLeft);
+    talonInitVelocity(drivetrain.frontRight);
+    talonInitVelocity(drivetrain.backLeft);
+    talonInitVelocity(drivetrain.backRight);
+
     drivetrain.frontLeft.follow(drivetrain.backLeft);
     drivetrain.frontRight.follow(drivetrain.backRight);
 
-    
-    //each side has a different orientation during installation
+
     drivetrain.backLeft.setSensorPhase(true);
     drivetrain.backRight.setSensorPhase(true);
     
     drivetrain.frontLeft.setInverted(false); 
-    drivetrain.backLeft.setInverted(true);
-    drivetrain.frontRight.setInverted(true);
-    drivetrain.backRight.setInverted(true);
+    drivetrain.backLeft.setInverted(false);
+    drivetrain.frontRight.setInverted(false);
+    drivetrain.backRight.setInverted(false);
+    // in.intakeMotor.setInverted(true);
+  
   }
 
   /**
@@ -177,7 +177,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
     Scheduler.getInstance().run();
   }
-  public void talonInit(TalonSRX talon) {
+  public void talonInitVelocity(TalonSRX talon) {
     /* Factory Default all hardware to prevent unexpected behaviour */
     talon.configFactoryDefault();
 
@@ -199,6 +199,59 @@ public class Robot extends TimedRobot {
    talon.config_kP(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kP, Constants.kTimeoutMs);
    talon.config_kI(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kI, Constants.kTimeoutMs);
    talon.config_kD(Constants.kPIDLoopIdx, Constants.kGains_Velocit.kD, Constants.kTimeoutMs);
+}
+
+
+//MIGHT NEED TO DELETE
+
+public void talonInitPosition(TalonSRX talon)
+{
+  /* Config the sensor used for Primary PID [POSITION] and sensor direction */
+  talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 
+  Constants.kPIDLoopIdx,
+Constants.kTimeoutMs);
+
+/* Ensure sensor is positive when output is positive */
+talon.setSensorPhase(Constants.kSensorPhase);
+
+/**
+* Set based on what direction you want forward/positive to be.
+* This does not affect sensor phase. 
+*/ 
+talon.setInverted(Constants.kMotorInvert);
+
+/* Config the peak and nominal outputs, 12V means full */
+talon.configNominalOutputForward(0, Constants.kTimeoutMs);
+talon.configNominalOutputReverse(0, Constants.kTimeoutMs);
+talon.configPeakOutputForward(1, Constants.kTimeoutMs);
+talon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+
+/**
+* Config the allowable closed-loop error, Closed-Loop output will be
+* neutral within this range. See Table in Section 17.2.1 for native
+* units per rotation.
+*/
+talon.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+
+/* Config Position Closed Loop gains in slot0, tsypically kF stays zero. */
+talon.config_kF(Constants.kPIDLoopIdx, Constants.kGains.kF, Constants.kTimeoutMs);
+talon.config_kP(Constants.kPIDLoopIdx, Constants.kGains.kP, Constants.kTimeoutMs);
+talon.config_kI(Constants.kPIDLoopIdx, Constants.kGains.kI, Constants.kTimeoutMs);
+talon.config_kD(Constants.kPIDLoopIdx, Constants.kGains.kD, Constants.kTimeoutMs);
+
+/**
+* Grab the 360 degree position of the MagEncoder's absolute
+* position, and intitally set the relative sensor to match.
+*/
+int absolutePosition = talon.getSensorCollection().getPulseWidthPosition();
+
+/* Mask out overflows, keep bottom 12 bits */
+absolutePosition &= 0xFFF;
+if (Constants.kSensorPhase) { absolutePosition *= -1; }
+if (Constants.kMotorInvert) { absolutePosition *= -1; }
+
+/* Set the quadrature (relative) sensor to match absolute */
+talon.setSelectedSensorPosition(absolutePosition, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 }
 
   /**

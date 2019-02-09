@@ -10,9 +10,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import frc.robot.DriveSignal;
 import frc.robot.CheesyDriveHelper;
 import frc.robot.RobotMap;
+import frc.robot.commands.DriveWithJoystick;
 import frc.robot.Robot;
 
 /**
@@ -25,23 +28,32 @@ public TalonSRX frontLeft;
 public TalonSRX frontRight;
 public TalonSRX backLeft;
 public TalonSRX backRight;
-CheesyDriveHelper helper;
+public CheesyDriveHelper helper;
+
+
   public DriveTrain()
   {
     frontLeft = new TalonSRX(RobotMap.frontLeftMotor);
     frontRight = new TalonSRX(RobotMap.frontRightMotor);
     backLeft = new TalonSRX(RobotMap.backLeftMotor);
     backRight = new TalonSRX(RobotMap.backRightMotor);
+    helper = new CheesyDriveHelper();
+
   }
-  public void drive()
+  public void driveCheesy()
   {
     DriveSignal signal = helper.cheesyDrive(-Robot.m_oi.djoy.getRawAxis(1), Robot.m_oi.djoy.getRawAxis(4), Robot.m_oi.djoy.getRawButton(6));
-    backLeft.set(ControlMode.Velocity, signal.mLeftMotor * Robot.maxRPM * 4096 / 600);
-    backRight.set(ControlMode.Velocity, -signal.mRightMotor * Robot.maxRPM * 4096 / 600);
+    backLeft.set(ControlMode.Velocity, .5*signal.mLeftMotor * Robot.maxRPM * 4096 / 600);
+    backRight.set(ControlMode.Velocity, -.5*signal.mRightMotor * Robot.maxRPM * 4096 / 600);
+  }
+  public void driveTank()
+  {
+    backLeft.set(ControlMode.Velocity, -.5 * Robot.m_oi.djoy.getRawAxis(1) * Robot.maxRPM * 4096 / 600);
+    backRight.set(ControlMode.Velocity, .5 * Robot.m_oi.djoy.getRawAxis(5) * Robot.maxRPM * 4096 / 600);
   }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new DriveWithJoystick());
   }
 }

@@ -6,17 +6,13 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class Intake extends Command {
-
-
-
-  public Intake() {
+public class MoveArm extends Command {
+  public MoveArm() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.in);
+    requires(Robot.arm);
   }
 
   // Called just before this Command runs the first time
@@ -27,7 +23,8 @@ public class Intake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.in.intake();
+  //  Robot.arm.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(5));
+  Robot.arm.armTest();
   }
 
   // Make this return true when this Command no longer needs to run execute()

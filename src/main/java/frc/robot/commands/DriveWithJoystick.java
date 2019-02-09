@@ -10,10 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
+
 public class DriveWithJoystick extends Command {
+  public int count;
   public DriveWithJoystick() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
+    count = 0;
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +27,19 @@ public class DriveWithJoystick extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drivetrain.drive();
+   /* if(Robot.m_oi.djoy.getRawButton(5))
+    {
+      count++;
+    }
+    if(count%2==0)
+    {
+      Robot.drivetrain.driveCheesy();
+    }
+    else if(count%2==1)
+    {*/
+      Robot.drivetrain.driveTank();
+   // }
+    
   }
 
   // Make this return true when this Command no longer needs to run execute()

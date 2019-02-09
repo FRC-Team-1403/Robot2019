@@ -6,27 +6,55 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
-import edu.wpi.first.wpilibj.command.Subsystem;
-import com.revrobotics.*;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.MoveArm;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 /**
  * Add your docs here.
  */
-public class Arm extends Subsystem {
+public class Arm extends PIDSubsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-CANSparkMax armMotor;
+public TalonSRX armMotorL;
+public TalonSRX armMotorR;
+public AnalogInput potentiometerArm;
   public Arm()
   {
-    armMotor = new CANSparkMax(RobotMap.armMotor, MotorType.kBrushless);
+    super("Arm",2.0,0.0,0.0);
+    setAbsoluteTolerance(0.05);
+    getPIDController().setContinuous(false);
+    armMotorL = new TalonSRX(RobotMap.armMotorL);
+    armMotorR = new TalonSRX(RobotMap.armMotorR);
+    potentiometerArm = new AnalogInput(RobotMap.potA);
   }
+  public double returnPIDInput()
+  {
+    return potentiometerArm.getAverageVoltage();
+  }
+  public void usePIDOutput(double output)
+  {
+    //armMotorL.pidWrite(output);
+  }
+  public void usePIDOuputVelocity(double output)
+  {
+    //armMotorL.pidWrite(output);
+  }
+  public void armTest()
+  {
+    armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(5));
+    armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(5));
 
+  }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new MoveArm());
   }
+  
 }

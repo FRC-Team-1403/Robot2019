@@ -7,33 +7,55 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import javax.lang.model.util.ElementScanner6;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.robot.RobotMap;
+import frc.robot.commands.IntakeC;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * Add your docs here.
  */
 public class Intake extends Subsystem {
-  public CANSparkMax intakeMotor;
+  public VictorSPX intakeMotor;
+  public DoubleSolenoid hatchPush;
 
   public Intake(){
-    intakeMotor = new CANSparkMax(RobotMap.intakeMotor, MotorType.kBrushless);
+    intakeMotor = new VictorSPX(RobotMap.intakeMotor);
+    hatchPush = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
   }
 public void intake(){
-  if(Robot.m_oi.ojoy.getRawAxis(2)>0)
+  if(Robot.m_oi.ojoy.getRawAxis(3)>0)
   {
-    intakeMotor.set(Robot.m_oi.ojoy.getRawAxis(2));
+    intakeMotor.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(3));
   }
-  else if(-Robot.m_oi.ojoy.getRawAxis(3)<0)
+  else if(-Robot.m_oi.ojoy.getRawAxis(2)<0)
   {
-    intakeMotor.set(-Robot.m_oi.ojoy.getRawAxis(3));
+    intakeMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(2));
   }
   else
   {
-    intakeMotor.set(0);
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+  }
+}
+public void push()
+{
+  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB))
+  {
+    hatchPush.set(DoubleSolenoid.Value.kForward);
+
+  }
+  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
+  {
+    hatchPush.set(DoubleSolenoid.Value.kReverse);
+  }
+  else
+  {
+    hatchPush.set(DoubleSolenoid.Value.kOff);
   }
 }
 
@@ -43,6 +65,6 @@ public void intake(){
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new IntakeC());
   }
 }
