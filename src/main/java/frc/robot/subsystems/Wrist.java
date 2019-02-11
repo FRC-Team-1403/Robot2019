@@ -46,7 +46,7 @@ public class Wrist extends PIDSubsystem {
   }
   public void wristTest()
   {
-    wristMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(1));
+    wristMotor.set(ControlMode.PercentOutput, -.5*Robot.m_oi.ojoy.getRawAxis(1));
   }
   @Override
   public void initDefaultCommand() {

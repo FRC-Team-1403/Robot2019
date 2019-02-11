@@ -48,8 +48,8 @@ public CheesyDriveHelper helper;
   }
   public void driveTank()
   {
-    backLeft.set(ControlMode.Velocity, -.5 * Robot.m_oi.djoy.getRawAxis(1) * Robot.maxRPM * 4096 / 600);
-    backRight.set(ControlMode.Velocity, .5 * Robot.m_oi.djoy.getRawAxis(5) * Robot.maxRPM * 4096 / 600);
+    backLeft.set(ControlMode.Velocity, -0.75* Robot.m_oi.djoy.getRawAxis(1) * Robot.maxRPM * 4096 / 600);
+    backRight.set(ControlMode.Velocity, 0.75 * Robot.m_oi.djoy.getRawAxis(5) * Robot.maxRPM * 4096 / 600);
   }
   @Override
   public void initDefaultCommand() {

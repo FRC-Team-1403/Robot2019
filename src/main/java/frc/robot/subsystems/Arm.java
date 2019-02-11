@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -47,8 +46,8 @@ public AnalogInput potentiometerArm;
   }
   public void armTest()
   {
-    armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(5));
-    armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(5));
+    armMotorL.set(ControlMode.PercentOutput, -.5*Robot.m_oi.ojoy.getRawAxis(5));
+    armMotorR.set(ControlMode.PercentOutput, .5*Robot.m_oi.ojoy.getRawAxis(5));
 
   }
   @Override

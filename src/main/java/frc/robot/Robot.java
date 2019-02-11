@@ -21,6 +21,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.cameraserver.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    CameraServer.getInstance().startAutomaticCapture();
     m_oi = new OI();
     drivetrain = new DriveTrain();
     in = new Intake();
@@ -82,6 +84,7 @@ public class Robot extends TimedRobot {
     drivetrain.frontRight.setInverted(false);
     drivetrain.backRight.setInverted(false);
     // in.intakeMotor.setInverted(true);
+    
   
   }
 
