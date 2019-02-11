@@ -44,6 +44,12 @@ public class SetControl extends Command {
       setBallControl();
     if (SwitchMode.mode == 3)
       setHatchControl();
+    if(Robot.m_oi.ojoy.getRawButton(7)){
+      ballLevel = 1;
+      hatchLevel = 1;
+      Robot.arm.setSetpoint(Robot.arm.floorAngle);
+      Robot.w.moveWithArm();
+     }
   }
 
   public void continuousControl() {
@@ -63,6 +69,8 @@ public class SetControl extends Command {
       if (ballLevel < 1) {
         ballLevel = 1;
       }
+
+      
     }
 
     switch (ballLevel) {
