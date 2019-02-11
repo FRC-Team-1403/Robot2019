@@ -23,6 +23,9 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -50,6 +53,10 @@ public class Robot extends TimedRobot {
   public static double DEFAULTMAXACCELERATION = 0.0002;
   public static double HYPERSPEEDMAXACCELERATION = 10000;
 
+  public static NetworkTable table;
+  public static NetworkTableEntry tx;
+  public static NetworkTableEntry tv;
+  public static NetworkTableEntry ta;
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -180,6 +187,53 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
 
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+    tx = table.getEntry("tx");
+    tv = table.getEntry("tv");
+    ta = table.getEntry("ta");
+    
+   double x = tx.getDouble(0.0);
+   double v = tv.getDouble(2.0);
+
+    if (m_oi.ojoy.getRawButton(3)) {
+      if ((int)(v) == 1) {
+        
+        Vision.isInMiddle(x);
+        Vision.align(x);
+      }  else {
+        
+        System.out.println("No target!!!!!!!");
+      } 
+    }
+    if (m_oi.ojoy.getRawButtonReleased(3)) {
+      System.out.println("This is when the manipulator is supposed to happen!!!");
+      Vision.reset();
+    }
+
+    if (m_oi.ojoy.getRawButton(5)) {
+     if ((int)(v) == 1) {
+       Vision.isInMiddle(tx.getDouble(0.0));
+     }
+     Vision.alignLeft();
+   }
+   if (m_oi.ojoy.getRawButtonReleased(5)) {
+     System.out.println("This is when the manipulator is supposed to happen!!!");
+     Vision.reset();
+   }
+
+   if (m_oi.ojoy.getRawButton(6)) {
+     if ((int)(v) == 1) {
+       Vision.isInMiddle(tx.getDouble(0.0));
+     }
+     Vision.alignRight();
+   }
+   if (m_oi.ojoy.getRawButtonReleased(6)) {
+     System.out.println("This is when the manipulator is supposed to happen!!!");
+     Vision.reset();
+   }
+   if(m_oi.ojoy.getRawButton(2)){
+     drivetrain.moveBackward();
+   }
     Scheduler.getInstance().run();
   }
   public void talonInitVelocity(TalonSRX talon) {

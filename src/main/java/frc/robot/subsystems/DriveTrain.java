@@ -38,7 +38,44 @@ public CheesyDriveHelper helper;
     backLeft = new TalonSRX(RobotMap.backLeftMotor);
     backRight = new TalonSRX(RobotMap.backRightMotor);
     helper = new CheesyDriveHelper();
+    setMaxAccerlation(Robot.DEFAULTMAXACCELERATION);
+  }
+  public void setMaxAccerlation(double secondsFromNeutralToFull) {
+    frontLeft.configClosedloopRamp(secondsFromNeutralToFull);
+    backLeft.configClosedloopRamp(secondsFromNeutralToFull);
+    frontRight.configClosedloopRamp(secondsFromNeutralToFull);
+    backRight.configClosedloopRamp(secondsFromNeutralToFull);
+  }
 
+  public void setRaw(double leftValue, double rightValue) {
+    backLeft.set(ControlMode.Velocity, leftValue * Robot.maxRPM * 4096 / 600);
+    backRight.set(ControlMode.Velocity, -rightValue * Robot.maxRPM * 4096 / 600);
+  }
+  public void turnLeft() {
+    setRaw(-0.55,0.55);
+  }
+
+  public void turnRight() {
+    setRaw(0.55, -0.55);
+  }
+
+  public void moveForward() {
+    setRaw(0.75, 0.75);
+  }
+
+  public void moveBackward(){
+    setRaw(-0.4, -0.4);
+  }
+
+  public void tiltRight(){
+    setRaw(0.5, 0.45);
+  }
+
+  public void tiltLeft(){
+    setRaw(0.45, 0.5);
+  }
+  public void stop(){
+    setRaw(0,0);
   }
   public void driveCheesy()
   {
@@ -46,6 +83,7 @@ public CheesyDriveHelper helper;
     backLeft.set(ControlMode.Velocity, .5*signal.mLeftMotor * Robot.maxRPM * 4096 / 600);
     backRight.set(ControlMode.Velocity, -.5*signal.mRightMotor * Robot.maxRPM * 4096 / 600);
   }
+  
   public void driveTank()
   {
     backLeft.set(ControlMode.Velocity, -.5 * Robot.m_oi.djoy.getRawAxis(1) * Robot.maxRPM * 4096 / 600);
