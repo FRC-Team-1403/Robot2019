@@ -8,7 +8,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.RobotMap;
+import frc.robot.commands.PushHatch;
+import frc.robot.commands.ReleaseHatch;
 
 
 
@@ -20,9 +23,12 @@ import frc.robot.RobotMap;
 public class OI {
   public Joystick djoy = new Joystick(RobotMap.djoy);
   public Joystick ojoy = new Joystick(RobotMap.ojoy);
-
+  public JoystickButton lbOjoy= new JoystickButton(ojoy,6);
   
-  
+  public OI(){
+    lbOjoy.whileHeld(new PushHatch());
+    lbOjoy.whenReleased(new ReleaseHatch());
+  }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
   //// joystick.

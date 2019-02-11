@@ -12,7 +12,7 @@ import javax.lang.model.util.ElementScanner6;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import frc.robot.RobotMap;
-import frc.robot.commands.IntakeC;
+import frc.robot.commands.IntakeCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -31,33 +31,25 @@ public class Intake extends Subsystem {
 public void intake(){
   if(Robot.m_oi.ojoy.getRawAxis(3)>0)
   {
-    intakeMotor.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(3));
+    intakeMotor.set(ControlMode.PercentOutput, .5*Robot.m_oi.ojoy.getRawAxis(3));
   }
   else if(-Robot.m_oi.ojoy.getRawAxis(2)<0)
   {
-    intakeMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(2));
+    intakeMotor.set(ControlMode.PercentOutput, -.5*Robot.m_oi.ojoy.getRawAxis(2));
   }
   else
   {
     intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 }
-public void push()
-{
-  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB))
-  {
-    hatchPush.set(DoubleSolenoid.Value.kForward);
+public void push(){
+    hatchPush.set(DoubleSolenoid.Value.kReverse);
 
   }
-  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
-  {
-    hatchPush.set(DoubleSolenoid.Value.kReverse);
+public void release(){
+    hatchPush.set(DoubleSolenoid.Value.kForward);
   }
-  else
-  {
-    hatchPush.set(DoubleSolenoid.Value.kOff);
-  }
-}
+  
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -65,6 +57,6 @@ public void push()
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new IntakeC());
+   setDefaultCommand(new IntakeCommand());
   }
 }
