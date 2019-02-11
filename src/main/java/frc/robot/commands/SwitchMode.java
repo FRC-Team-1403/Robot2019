@@ -6,13 +6,19 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
 
-public class MoveArm extends Command {
-  public MoveArm() {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class SwitchMode extends Command {
+
+  public static int mode = 1;
+  // 1 - continuous
+  // 2 - set ball
+  // 3 - set hatch
+
+  public SwitchMode() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.arm);
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
@@ -23,9 +29,9 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  //  Robot.arm.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(5));
-  // Robot.arm.armTest();
-  
+    mode++;
+    if (mode > 3)
+      mode = 1;
   }
 
   // Make this return true when this Command no longer needs to run execute()

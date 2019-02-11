@@ -48,6 +48,11 @@ public class Wrist extends PIDSubsystem {
   {
     wristMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(1));
   }
+
+  public void moveWithArm() {
+    setSetpoint(-Robot.arm.potentiometerArm.getAverageVoltage());
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

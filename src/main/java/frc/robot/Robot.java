@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.SwitchMode;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ControlSystem;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -37,6 +39,7 @@ public class Robot extends TimedRobot {
   public static ArmExtension p;
   public static Arm arm;
   public static Wrist w;
+  public static ControlSystem cs;
 
   public static double FASTMAXRPM = 500;
   public static double DEFAULTMAXRPM = 600;
@@ -62,6 +65,7 @@ public class Robot extends TimedRobot {
     p =  new ArmExtension();
     arm = new Arm();
     w = new Wrist();
+    cs = new ControlSystem();
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -175,6 +179,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 2: ", drivetrain.backLeft.getMotorOutputPercent());
     SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
+
     Scheduler.getInstance().run();
   }
   public void talonInitVelocity(TalonSRX talon) {

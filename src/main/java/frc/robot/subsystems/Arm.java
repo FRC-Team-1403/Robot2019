@@ -24,6 +24,13 @@ public class Arm extends PIDSubsystem {
 public TalonSRX armMotorL;
 public TalonSRX armMotorR;
 public AnalogInput potentiometerArm;
+
+public final double floorAngle = 0;
+public final double hpAngle = 0;
+public final double firstAngle = 0;
+public final double secondAngle = 0;
+public final double thirdAngle = 0;
+
   public Arm()
   {
     super("Arm",2.0,0.0,0.0);
@@ -49,8 +56,8 @@ public AnalogInput potentiometerArm;
   {
     armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(5));
     armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(5));
-
   }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
