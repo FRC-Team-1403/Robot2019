@@ -37,7 +37,11 @@ public class DriveWithJoystick extends Command {
     }
     else if(count%2==1)
     {*/
-      Robot.drivetrain.driveTank();
+
+      if (!Robot.m_oi.djoy.getRawButton(3)) {
+        Robot.drivetrain.driveTank();
+      }
+      
    // }
     
   }
