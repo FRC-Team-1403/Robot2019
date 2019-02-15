@@ -31,6 +31,7 @@ public TalonSRX backRight;
 public CheesyDriveHelper helper;
 
 
+
   public DriveTrain()
   {
     frontLeft = new TalonSRX(RobotMap.frontLeftMotor);
@@ -89,9 +90,14 @@ public CheesyDriveHelper helper;
     backLeft.set(ControlMode.Velocity, -.5 * Robot.m_oi.djoy.getRawAxis(1) * Robot.maxRPM * 4096 / 600);
     backRight.set(ControlMode.Velocity, .5 * Robot.m_oi.djoy.getRawAxis(5) * Robot.maxRPM * 4096 / 600);
   }
+ 
+  
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new DriveWithJoystick());
+  }
+  public static void setSpeed(TalonSRX talon, double speed) {
+    talon.set(ControlMode.PercentOutput, speed);
   }
 }

@@ -19,27 +19,37 @@ import frc.robot.RobotMap;
 public class ArmExtension extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  public DoubleSolenoid doubleSolenoid;
+  public DoubleSolenoid armExtender;
 
   public ArmExtension() {
-    doubleSolenoid = new DoubleSolenoid(RobotMap.extensionSolenoid1, RobotMap.extensionSolenoid2);
+    armExtender = new DoubleSolenoid(RobotMap.extensionSolenoid1, RobotMap.extensionSolenoid2);
   }
 
   public void push() {
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
     {
-      doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+      armExtender.set(DoubleSolenoid.Value.kForward);
     }
     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
     {
-      doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+      armExtender.set(DoubleSolenoid.Value.kReverse);
     }
     else 
     {
-      doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+      armExtender.set(DoubleSolenoid.Value.kOff);
     }
   }
-  
+  public static void setPosition(DoubleSolenoid doubleSolenoid, double value){ 
+  if (value==1.0){
+    doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+  if (value == -1.0){
+    doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+  if(value == 0.0){
+    doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+  }
+}
 
   @Override
   public void initDefaultCommand() {

@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class Intake extends Subsystem {
   public VictorSPX intakeMotor;
   public DoubleSolenoid hatchPush;
+  public double value;
+  
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
@@ -47,18 +49,36 @@ public void push()
   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB))
   {
     hatchPush.set(DoubleSolenoid.Value.kForward);
-
+    value = 1.0;
   }
   else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
   {
     hatchPush.set(DoubleSolenoid.Value.kReverse);
+    value = -1.0;
   }
   else
   {
     hatchPush.set(DoubleSolenoid.Value.kOff);
+    value = 0.0;
   }
 }
-
+public static void setSpeed(VictorSPX victor, double speed){
+  victor.set(ControlMode.PercentOutput, speed);
+}
+public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
+{
+  if (value==1.0){
+    doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+  if (value == -1.0){
+    doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+  if(value == 0.0){
+    doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+  }
+  
+  
+}
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
