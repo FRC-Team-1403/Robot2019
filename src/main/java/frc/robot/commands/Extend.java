@@ -13,7 +13,7 @@ import frc.robot.Robot;
 public class Extend extends Command {
   public Extend() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.p);
+    requires(Robot.ae);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +24,7 @@ public class Extend extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.p.push();
+    Robot.ae.push();
   }
 
   // Make this return true when this Command no longer needs to run execute()

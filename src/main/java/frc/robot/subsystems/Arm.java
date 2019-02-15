@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import frc.robot.Robot;
@@ -24,6 +25,7 @@ public class Arm extends PIDSubsystem {
 public TalonSRX armMotorL;
 public TalonSRX armMotorR;
 public AnalogInput potentiometerArm;
+
 
 public final double floorAngle = 0;
 public final double hpAngle = 0;
@@ -57,7 +59,9 @@ public final double thirdAngle = 0;
     armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(5));
     armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(5));
   }
-
+  public static void setSpeed(TalonSRX talon, double speed){
+    talon.set(ControlMode.PercentOutput, speed);
+  }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

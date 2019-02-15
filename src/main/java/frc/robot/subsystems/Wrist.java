@@ -52,6 +52,9 @@ public class Wrist extends PIDSubsystem {
   public void moveWithArm() {
     setSetpoint(-Robot.arm.potentiometerArm.getAverageVoltage());
   }
+  public static void setSpeed(TalonSRX talon, double speed){
+    talon.set(ControlMode.PercentOutput,speed);
+  }
 
   @Override
   public void initDefaultCommand() {

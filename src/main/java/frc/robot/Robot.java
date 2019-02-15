@@ -26,6 +26,11 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
+
+import frc.robot.echo.Recorder;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,7 +44,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static DriveTrain drivetrain;
   public static Intake in;
-  public static ArmExtension p;
+  public static ArmExtension ae;
   public static Arm arm;
   public static Wrist w;
   public static ControlSystem cs;
@@ -57,6 +62,16 @@ public class Robot extends TimedRobot {
   public static NetworkTableEntry tx;
   public static NetworkTableEntry tv;
   public static NetworkTableEntry ta;
+
+  public static Recorder recorder;
+  public static boolean record;
+  public static boolean store;
+  private int numpaths;
+  Command autonomousCommand;
+  String pathChooser;
+  int delay;
+  int autoint;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -66,10 +81,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    numpaths = 0;
+    delay = 0;
+    autoint = 0;
+    recorder = new Recorder(10000);
     m_oi = new OI();
     drivetrain = new DriveTrain();
     in = new Intake();
-    p =  new ArmExtension();
+    ae =  new ArmExtension();
     arm = new Arm();
     w = new Wrist();
     cs = new ControlSystem();
@@ -119,6 +138,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    if (Robot.m_oi.ojoy.getRawButtonReleased(1)) { autoint++; }
+		SmartDashboard.putNumber("autoint", autoint%4);
+		
+		if (autoint%4 == 0) { SmartDashboard.putString("Auto Position", "Left"); }
+		if (autoint%4 == 1) { SmartDashboard.putString("Auto Position", "Right"); }
+		if (autoint%4 == 2) { SmartDashboard.putString("Auto Position", "Middle"); }
+		if (autoint%4 == 3) { SmartDashboard.putString("Auto Position", "STRAIGHT"); }
     Scheduler.getInstance().run();
   }
 
@@ -146,6 +172,16 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
+      
+    	recorder.setCurrentWritefile(1);
+		  recorder.setCurrentReadfile(0);
+		  Recorder.initWriter();
+		  Recorder.initReader();
+		  recorder.resetReadings();
+		  recorder.storeReadings();
+		
+		
+		
       m_autonomousCommand.start();
     }
   }
@@ -155,6 +191,35 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    if(recorder.hasNextLine())
+		{
+			System.out.println(recorder.getReading("drivetrain Back Left"));
+			DriveTrain.setSpeed(drivetrain.frontLeft, recorder.getReading("drivetrain Front Left"));
+			DriveTrain.setSpeed(drivetrain.backLeft, recorder.getReading("drivetrain Back Left"));
+			DriveTrain.setSpeed(drivetrain.frontRight, recorder.getReading("drivetrain Front Right"));
+			DriveTrain.setSpeed(drivetrain.backRight, recorder.getReading("drivetrain Back Right"));
+			Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
+      Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
+      Intake.setPosition(in.hatchPush, recorder.getReading("Manipulate Hatch"));
+      Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
+      Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
+      ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
+			Timer.delay(0.001);
+		}
+		
+		else
+		{
+			DriveTrain.setSpeed(drivetrain.frontLeft, 0);
+			DriveTrain.setSpeed(drivetrain.backLeft, 0);
+			DriveTrain.setSpeed(drivetrain.frontRight, 0);
+			DriveTrain.setSpeed(drivetrain.backRight, 0);
+      Wrist.setSpeed(w.wristMotor, 0);
+      Intake.setSpeed(in.intakeMotor, 0);
+      Intake.setPosition(in.hatchPush, 0);
+      Arm.setSpeed(arm.armMotorL, 0);
+      Arm.setSpeed(arm.armMotorR, 0);
+      ArmExtension.setPosition(ae.armExtender, 0);
+		}
     Scheduler.getInstance().run();
   }
 
