@@ -26,6 +26,7 @@ public class RobotMap {
   public static int armMotorR = 4;
   public static int intakeMotor = 3;
   public static int wristMotor = 5;
+  public static int hookServo = 8;
   
   public static int djoy = 0;
   public static int ojoy = 1;
@@ -37,6 +38,8 @@ public class RobotMap {
 
   public static int ojoyA = 1;
   public static int ojoyB = 2;
+  public static int ojoyX = 3;
+  public static int ojoyY = 4;
   public static int ojoyLB = 5;
   public static int ojoyRB = 6;
 
