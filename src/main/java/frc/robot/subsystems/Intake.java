@@ -16,6 +16,7 @@ import frc.robot.commands.IntakeC;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Servo;
 
 /**
  * Add your docs here.
@@ -23,12 +24,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 public class Intake extends Subsystem {
   public VictorSPX intakeMotor;
   public DoubleSolenoid hatchPush;
+  public Servo hook;
   public double value;
   
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
     hatchPush = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+    hook= new Servo(RobotMap.hookServo);
   }
 public void intake(){
   if(Robot.m_oi.ojoy.getRawAxis(3)>0)
@@ -62,6 +65,15 @@ public void push()
     value = 0.0;
   }
 }
+public void HookHatchPanel(){
+  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
+    hook.set(0.52);
+  }
+  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
+    hook.set(0);
+  }
+}
+
 public static void setSpeed(VictorSPX victor, double speed){
   victor.set(ControlMode.PercentOutput, speed);
 }

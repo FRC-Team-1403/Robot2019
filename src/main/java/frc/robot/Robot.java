@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (Robot.m_oi.ojoy.getRawButtonReleased(1)) { autoint++; }
+    /*if (Robot.m_oi.ojoy.getRawButtonReleased(1)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
 		
 		if (autoint%4 == 0) { SmartDashboard.putString("Auto Position", "Left"); }
@@ -152,6 +152,7 @@ public class Robot extends TimedRobot {
 		if (autoint%4 == 2) { SmartDashboard.putString("Auto Position", "Middle"); }
 		if (autoint%4 == 3) { SmartDashboard.putString("Auto Position", "STRAIGHT"); }
     Scheduler.getInstance().run();
+    */
   }
 
   /**
@@ -199,17 +200,20 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     if(recorder.hasNextLine())
 		{
-			System.out.println(recorder.getReading("drivetrain Back Left"));
-			DriveTrain.setSpeed(drivetrain.frontLeft, recorder.getReading("drivetrain Front Left"));
-			DriveTrain.setSpeed(drivetrain.backLeft, recorder.getReading("drivetrain Back Left"));
-			DriveTrain.setSpeed(drivetrain.frontRight, recorder.getReading("drivetrain Front Right"));
-			DriveTrain.setSpeed(drivetrain.backRight, recorder.getReading("drivetrain Back Right"));
+			System.out.println(recorder.getReading("DriveTrain Back Left"));
+			DriveTrain.setSpeed(drivetrain.frontLeft, recorder.getReading("DriveTrain Front Left"));
+			DriveTrain.setSpeed(drivetrain.backLeft, recorder.getReading("DriveTrain Back Left"));
+			DriveTrain.setSpeed(drivetrain.frontRight, recorder.getReading("DriveTrain Front Right"));
+			DriveTrain.setSpeed(drivetrain.backRight, recorder.getReading("DriveTrain Back Right"));
 			Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
-      Intake.setPosition(in.hatchPush, recorder.getReading("Manipulate Hatch"));
+      Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
+      Intake.setPosition(in.hatchPush, recorder.getReading("Hold Hatch"));
+      Intake.setPosition(in.hatchPush, recorder.getReading("Release Hatch"));
       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
+      ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is retracted"));
 			Timer.delay(0.001);
 		}
 		
@@ -259,6 +263,29 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
 
    
+    if(Recorder.isRecording)
+		{
+			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
+			recorder.addReading("DriveTrain Back Right", Robot.m_oi.djoy.getRawAxis(5));
+			recorder.addReading("DriveTrain Front Left", -Robot.m_oi.djoy.getRawAxis(1));
+			recorder.addReading("DriveTrain Front Right", Robot.m_oi.djoy.getRawAxis(5));
+			System.out.println(recorder.getReading("DriveTrain Back Left"));
+			System.out.println(recorder.getReading("DriveTrain Back Right"));
+			recorder.addReading("Wrist", Robot.m_oi.ojoy.getRawAxis(1));
+			recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
+      //recorder.addReading("Hold Hatch", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB));
+     // recorder.addReading("Release Hatch", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB));
+      recorder.addReading("Eject Ball", Robot.m_oi.ojoy.getRawAxis(3));
+      recorder.addReading("Move Arm Left", -Robot.m_oi.ojoy.getRawAxis(5));
+      recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
+     // recorder.addReading("Arm is extended", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA));
+      //recorder.addReading("Arm is retracted", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB));
+			System.out.println(recorder.initNextReading());
+		}
+		
+		else if (Recorder.isStoring()) {
+			recorder.storeWritings();
+		}
     /*if(m_oi.djoy.getRawButtonPressed(3) && (int)getV() == 1){ //will only run when the button is first pressed
       if(getX() < 0){
         initiallyOnLeft  = true;

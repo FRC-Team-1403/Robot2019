@@ -20,6 +20,8 @@ public class ArmExtension extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   public DoubleSolenoid armExtender;
+  double value;
+
 
   public ArmExtension() {
     armExtender = new DoubleSolenoid(RobotMap.extensionSolenoid1, RobotMap.extensionSolenoid2);
@@ -29,16 +31,20 @@ public class ArmExtension extends Subsystem {
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
     {
       armExtender.set(DoubleSolenoid.Value.kForward);
+      value= 1.0;
     }
     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
     {
       armExtender.set(DoubleSolenoid.Value.kReverse);
+      value= -1.0;
     }
     else 
     {
       armExtender.set(DoubleSolenoid.Value.kOff);
+      value= 0.0;
     }
   }
+
   public static void setPosition(DoubleSolenoid doubleSolenoid, double value){ 
   if (value==1.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kForward);

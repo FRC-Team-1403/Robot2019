@@ -70,8 +70,8 @@ public static double getA(){
 
   void driveWithVision(double x){
     final double motorConstant = 0.5;
-    double leftSpeed = motorConstant + getMotorSpeedWithVision(Robot.getA(), Robot.getX(), true);
-    double rightSpeed = motorConstant + getMotorSpeedWithVision(Robot.getA(), Robot.getX(), false);
+    double leftSpeed = motorConstant + getMotorSpeedWithVision(getA(), getX(), true);
+    double rightSpeed = motorConstant + getMotorSpeedWithVision(getA(), getX(), false);
     Robot.drivetrain.setRaw(leftSpeed, rightSpeed);
   }
 
@@ -79,8 +79,8 @@ public static double getA(){
   @Override
   protected void execute() {
     if(Robot.m_oi.djoy.getRawButtonPressed(3)){ //should only run once, if it runs twice this is a failure
-      if((int)Robot.getV() == 1){
-        double x = Robot.getX();
+      if((int)getV() == 1){
+        double x = getX();
         if(x < 0){
           isCurrentlyOnLeft = true;
           initiallyOnLeft = true;
@@ -93,8 +93,8 @@ public static double getA(){
       }
     } 
     if(Robot.m_oi.djoy.getRawButton(3)){
-      if((int)Robot.getV() == 1){
-        double x = Robot.getX();
+      if((int)getV() == 1){
+        double x = getX();
         if(isCurrentlyOnLeft == initiallyOnLeft)
             align(x);
         else{
