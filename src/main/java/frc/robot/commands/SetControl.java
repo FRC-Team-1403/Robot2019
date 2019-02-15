@@ -27,7 +27,7 @@ public class SetControl extends Command {
 
   public SetControl() {
     // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.cs);
   }
 
   // Called just before this Command runs the first time
@@ -85,23 +85,24 @@ public class SetControl extends Command {
   }
 
   public void setHatchControl() {
-    Robot.w.setSetpoint(90.0f);
-
+    
     if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
+      Robot.w.setSetpoint(90.0f);
       hatchLevel++;
       if (hatchLevel > 4) {
-        hatchLevel = 5;
+        hatchLevel = 4;
       }
     }
 
     if (Robot.m_oi.ojoy.getRawAxis(5) < -0.5) {
+      Robot.w.setSetpoint(90.0f);
       hatchLevel--;
       if (hatchLevel < 1) {
         hatchLevel = 1;
       }
     }
 
-    switch (ballLevel) {
+    switch (hatchLevel) {
       case 1: Robot.arm.setSetpoint(Robot.arm.floorAngle); break;
       case 2: Robot.arm.setSetpoint(Robot.arm.firstAngle); break;
       case 3: Robot.arm.setSetpoint(Robot.arm.secondAngle); break;

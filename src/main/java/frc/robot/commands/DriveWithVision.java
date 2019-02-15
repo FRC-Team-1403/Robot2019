@@ -9,16 +9,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-public class SwitchMode extends Command {
 
-  public static int mode = 1;
-  // 1 - continuous
-  // 2 - set ball
-  // 3 - set hatch
-
-  public SwitchMode() {
+public class DriveWithVision extends Command {
+  public DriveWithVision() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.cs);
+    requires(Robot.vs);
   }
 
   // Called just before this Command runs the first time
@@ -29,11 +24,9 @@ public class SwitchMode extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButton(6))
-      mode++;
-    if (mode > 3)
-      mode = 1;
-    
+    if(Robot.m_oi.djoy.getRawButton(3)){ //while held
+      
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

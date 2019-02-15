@@ -26,6 +26,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
   public static Arm arm;
   public static Wrist w;
   public static ControlSystem cs;
+  public static Vision vs;
 
   public static double FASTMAXRPM = 500;
   public static double DEFAULTMAXRPM = 600;
@@ -53,13 +55,27 @@ public class Robot extends TimedRobot {
   public static double DEFAULTMAXACCELERATION = 0.0002;
   public static double HYPERSPEEDMAXACCELERATION = 10000;
 
-  public static NetworkTable table;
+  public static NetworkTableInstance table;
   public static NetworkTableEntry tx;
   public static NetworkTableEntry tv;
   public static NetworkTableEntry ta;
+
+  public static boolean initiallyOnLeft = false; //for vision code, to see if it had crossed from initial side
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+  public static double getV(){
+    return table.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0);
+}
 
+  public static double getX(){
+    return table.getDefault().getTable("limelight").getEntry("tx").getDouble(0.0);
+
+}
+public static double getA(){
+  return table.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
+
+}
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -73,6 +89,8 @@ public class Robot extends TimedRobot {
     arm = new Arm();
     w = new Wrist();
     cs = new ControlSystem();
+    vs = new Vision();
+
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -187,50 +205,15 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
 
-    table = NetworkTableInstance.getDefault().getTable("limelight");
-    tx = table.getEntry("tx");
-    tv = table.getEntry("tv");
-    ta = table.getEntry("ta");
-    
-   double x = tx.getDouble(0.0);
-   double v = tv.getDouble(2.0);
-
-    if (m_oi.ojoy.getRawButton(3)) {
-      if ((int)(v) == 1) {
-        
-        Vision.isInMiddle(x);
-        Vision.align(x);
-      }  else {
-        
-        System.out.println("No target!!!!!!!");
-      } 
-    }
-    if (m_oi.ojoy.getRawButtonReleased(3)) {
-      System.out.println("This is when the manipulator is supposed to happen!!!");
-      Vision.reset();
-    }
-
-    if (m_oi.ojoy.getRawButton(5)) {
-     if ((int)(v) == 1) {
-       Vision.isInMiddle(tx.getDouble(0.0));
-     }
-     Vision.alignLeft();
-   }
-   if (m_oi.ojoy.getRawButtonReleased(5)) {
-     System.out.println("This is when the manipulator is supposed to happen!!!");
-     Vision.reset();
-   }
-
-   if (m_oi.ojoy.getRawButton(6)) {
-     if ((int)(v) == 1) {
-       Vision.isInMiddle(tx.getDouble(0.0));
-     }
-     Vision.alignRight();
-   }
-   if (m_oi.ojoy.getRawButtonReleased(6)) {
-     System.out.println("This is when the manipulator is supposed to happen!!!");
-     Vision.reset();
-   }
+   
+    /*if(m_oi.djoy.getRawButtonPressed(3) && (int)getV() == 1){ //will only run when the button is first pressed
+      if(getX() < 0){
+        initiallyOnLeft  = true;
+      }
+      else if(getX() >= 0){ //dont know how to handle if x is 0
+        initiallyOnLeft = false;
+      }
+    }*/
    if(m_oi.ojoy.getRawButton(2)){
      drivetrain.moveBackward();
    }
