@@ -30,7 +30,8 @@ public class IntakeC extends Command {
     Robot.in.intake();
     Robot.in.push();
     Robot.in.hookHatchPanel();
-  }
+    Robot.in.hatchSpeed();
+    }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override

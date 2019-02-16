@@ -19,7 +19,10 @@ public class Vision extends Subsystem{
     
     
 
-    
+    public Vision()
+    {
+      
+    }
     
   @Override
   public void initDefaultCommand() {
