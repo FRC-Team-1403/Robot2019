@@ -31,28 +31,39 @@ public class ArmExtension extends Subsystem {
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
     {
       armExtender.set(DoubleSolenoid.Value.kForward);
-      value= 1.0;
+      
     }
     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
     {
       armExtender.set(DoubleSolenoid.Value.kReverse);
-      value= -1.0;
+      
     }
     else 
     {
       armExtender.set(DoubleSolenoid.Value.kOff);
-      value= 0.0;
+     
+    }
+  }
+  public double convertBoolToDouble(){
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)){
+      return 1.0;
+    }
+    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)){
+      return 2.0;
+    }
+    else{
+      return 0.0;
     }
   }
 
   public static void setPosition(DoubleSolenoid doubleSolenoid, double value){ 
-  if (value==1.0){
+  if (Robot.in.convertBoolToDouble()==1.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kForward);
   }
-  if (value == -1.0){
+  if (Robot.in.convertBoolToDouble() == 2.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
-  if(value == 0.0){
+  if(Robot.in.convertBoolToDouble() == 0.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
   }
 }

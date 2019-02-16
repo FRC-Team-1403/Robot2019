@@ -209,9 +209,10 @@ public class Robot extends TimedRobot {
 			Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
-      Intake.setPosition(in.hatchPush, recorder.getReading("Hold Hatch"));
+      Intake.setPosition(in.hatchPush, recorder.getReading("Push Hatch"));
       Intake.setPosition(in.hatchPush, recorder.getReading("Release Hatch"));
-      
+      Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
+      Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
@@ -221,15 +222,20 @@ public class Robot extends TimedRobot {
 		
 		else
 		{
-			DriveTrain.setSpeed(drivetrain.frontLeft, 0);
+      DriveTrain.setSpeed(drivetrain.frontLeft, 0);
 			DriveTrain.setSpeed(drivetrain.backLeft, 0);
 			DriveTrain.setSpeed(drivetrain.frontRight, 0);
 			DriveTrain.setSpeed(drivetrain.backRight, 0);
-      Wrist.setSpeed(w.wristMotor, 0);
+			Wrist.setSpeed(w.wristMotor, 0);
+      Intake.setSpeed(in.intakeMotor, 0);
       Intake.setSpeed(in.intakeMotor, 0);
       Intake.setPosition(in.hatchPush, 0);
-      Arm.setSpeed(arm.armMotorL, 0);
+      Intake.setPosition(in.hatchPush, 0);
+      Intake.setServo(in.hook, 0);
+      Intake.setServo(in.hook, 0);
+      Arm.setSpeed(arm.armMotorL,0);
       Arm.setSpeed(arm.armMotorR, 0);
+      ArmExtension.setPosition(ae.armExtender, 0);
       ArmExtension.setPosition(ae.armExtender, 0);
 		}
     Scheduler.getInstance().run();
@@ -274,14 +280,16 @@ public class Robot extends TimedRobot {
 			System.out.println(recorder.getReading("DriveTrain Back Left"));
 			System.out.println(recorder.getReading("DriveTrain Back Right"));
 			recorder.addReading("Wrist", Robot.m_oi.ojoy.getRawAxis(1));
-			recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
-      //recorder.addReading("Hold Hatch", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB));
-     // recorder.addReading("Release Hatch", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB));
+      recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
       recorder.addReading("Eject Ball", Robot.m_oi.ojoy.getRawAxis(3));
+      recorder.addReading("Push Hatch", Robot.in.convertBoolToDouble());
+      recorder.addReading("Release Hatch", Robot.in.convertBoolToDouble());
+      recorder.addReading("Hook Hatch", Robot.in.convertBoolToDouble());
+      recorder.addReading("Unhook Hatch", Robot.in.convertBoolToDouble());
       recorder.addReading("Move Arm Left", -Robot.m_oi.ojoy.getRawAxis(5));
       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
-     // recorder.addReading("Arm is extended", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA));
-      //recorder.addReading("Arm is retracted", Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB));
+      recorder.addReading("Arm is extended", Robot.ae.convertBoolToDouble());
+      recorder.addReading("Arm is retracted", Robot.ae.convertBoolToDouble());
 			System.out.println(recorder.initNextReading());
 		}
 		

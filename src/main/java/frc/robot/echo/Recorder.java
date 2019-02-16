@@ -92,7 +92,6 @@ public class Recorder {
 		this.sequencedReadings[iteration].addIndex(iteration);
 		this.sequencedReadings[iteration].addReading(key, value);
 	}
-	
 	/**
 	 * Call when TELEOPERATED recording is finished. [Prevents a java.io.IOException]
 	 **/
