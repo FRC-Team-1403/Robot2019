@@ -53,21 +53,24 @@ public static double getA(){
 
   }
 
+  double skewmoid(double area) {
+		return Math.pow((1/(1 + Math.pow(Math.E, -area/4))),2);
+	}
+
   double getMotorSpeedWithVision(double area, double angle, boolean isLeftMotor){
     final double scale = 27;
-    final double motorSpeedConst = .1;
-    
+    final double motorSpeedConst = .5;
     if (isLeftMotor && angle < 0) {
-      return Math.pow(angle/scale, 2) * area * motorSpeedConst;
+        return Math.pow(Math.abs(angle/scale), 2) * skewmoid(area) * motorSpeedConst;
     } else if (isLeftMotor && angle >= 0) {
       return 0;
     } else if (!isLeftMotor && angle < 0) {
       return 0;
     } else {
-      return Math.pow(angle/scale, 2) * area * motorSpeedConst;
+      return Math.pow(Math.abs(angle/scale), 1/2) * skewmoid(area) * motorSpeedConst;
     }
   }
-
+  
   void driveWithVision(double x){
     final double motorConstant = 0.5;
     double leftSpeed = motorConstant + getMotorSpeedWithVision(getA(), getX(), true);
