@@ -27,6 +27,7 @@ public class Intake extends Subsystem {
   public DoubleSolenoid hatchPush;
   public PWM hook;
   public double value;
+  
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
@@ -52,14 +53,17 @@ public void push()
   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB))
   {
     hatchPush.set(DoubleSolenoid.Value.kForward);
+    value = 1.0;
   }
   else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
   {
-    hatchPush.set(DoubleSolenoid.Value.kReverse); 
+    hatchPush.set(DoubleSolenoid.Value.kReverse);
+    value = -1.0;
   }
   else
   {
     hatchPush.set(DoubleSolenoid.Value.kOff);
+    value = 0.0;
   }
 }
 public void hookHatchPanel(){
@@ -70,52 +74,26 @@ public void hookHatchPanel(){
     hook.setPosition(0);
   }
 }
+public void hatchSpeed(){
+  // hook.setPosition(-Robot.m_oi.ojoy.getRawAxis(1));
+}
 
 public static void setSpeed(VictorSPX victor, double speed){
   victor.set(ControlMode.PercentOutput, speed);
 }
-
-public double convertBoolToDouble()
-{
-  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB))
-  {
-    return 1.0;
-  }
-  else if (Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)){
-    return -1.0;
-  }
-  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
-    return 2.0;
-  }
-  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
-    return 3.0;
-  }
-  else {
-    return 0.0;
-  }
-
-  
-}
 public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
 {
-  if (Robot.in.convertBoolToDouble()==1){
+  if (value==1.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kForward);
-
   }
-  if (Robot.in.convertBoolToDouble()== -1.0){
+  if (value == -1.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
-  if(Robot.in.convertBoolToDouble() == 0.0){
+  if(value == 0.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
-  } 
-}
-public static void setServo(PWM servo, double position){
-  if(Robot.in.convertBoolToDouble()==2.0){
-    servo.setPosition(1);
   }
-  if(Robot.in.convertBoolToDouble()==3.0){
-    servo.setPosition(0);
-  }
+  
+  
 }
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
@@ -126,5 +104,3 @@ public static void setServo(PWM servo, double position){
     setDefaultCommand(new IntakeC());
   }
 }
-
-

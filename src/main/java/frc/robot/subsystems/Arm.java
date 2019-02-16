@@ -45,7 +45,7 @@ public final double thirdAngle = 0;
   public double returnPIDInput(){
     return potentiometerArm.getAverageVoltage() * (ratio to convert to radians);
   }
-  public void usePIDOutput(double output){
+  public void usePIDOutput(double output) {
     armMotorL.set(ControlMode.Position, -output);
     armMotorR.set(ControlMode.Position, output);
   }
