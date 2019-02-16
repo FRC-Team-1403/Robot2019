@@ -87,9 +87,10 @@ public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
   }
   if(value == 0.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
-  }
-  
-  
+  } 
+}
+public static void setServo(Servo servo, double position){
+  servo.set
 }
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
