@@ -27,7 +27,6 @@ public class AlignWithVision extends Command {
 }
 public static double getA(){
   return table.getDefault().getTable("limelight").getEntry("ta").getDouble(0.0);
-
 }
 
   public AlignWithVision() {
@@ -100,6 +99,9 @@ public static double getA(){
         double x = getX();
         if(isCurrentlyOnLeft == initiallyOnLeft)
             align(x);
+        else if(getA() >= 10){
+          Robot.drivetrain.stop();
+        }
         else{
           driveWithVision(x);
         }

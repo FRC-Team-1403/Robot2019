@@ -24,12 +24,12 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    /*Robot.w.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(1));
+    Robot.w.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(1));
     if(Math.abs(Robot.m_oi.ojoy.getRawAxis(5)) > 0)
     {
       Robot.w.setSetpointRelative(-Robot.arm.potentiometerArm.getAverageVoltage());
-    }*/
-    //Robot.w.wristTest();
+    }
+    Robot.w.wristTest();
     
   }
 

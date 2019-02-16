@@ -7,19 +7,22 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class SetControl extends Command {
 
-  static int ballLevel = 1;
+  public static int ballLevel = 1;
   // 1 - floor
   // 2 - human player station
   // 3 - 1st
   // 4 - 2nd
   // 5 - 3rd
   
-  static int hatchLevel = 1;
+  public static int hatchLevel = 1;
   // 1 - floor
   // 2 - 1st
   // 3 - 2nd
@@ -44,7 +47,7 @@ public class SetControl extends Command {
       setBallControl();
     if (SwitchMode.mode == 3)
       setHatchControl();
-    if(Robot.m_oi.ojoy.getRawButton(7)){
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack)){ 
       ballLevel = 1;
       hatchLevel = 1;
       Robot.arm.setSetpoint(Robot.arm.floorAngle);
@@ -57,6 +60,7 @@ public class SetControl extends Command {
   }
 
   public void setBallControl() {
+    Robot.w.setSetpoint(10.0); //should move the hatch a little bit up so the ball can shoot
     if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
       ballLevel++;
       if (ballLevel > 5) {
@@ -85,9 +89,8 @@ public class SetControl extends Command {
   }
 
   public void setHatchControl() {
-    
+    Robot.w.setSetpoint(Math.PI*2);
     if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
-      Robot.w.setSetpoint(90.0f);
       hatchLevel++;
       if (hatchLevel > 4) {
         hatchLevel = 4;
@@ -95,7 +98,6 @@ public class SetControl extends Command {
     }
 
     if (Robot.m_oi.ojoy.getRawAxis(5) < -0.5) {
-      Robot.w.setSetpoint(90.0f);
       hatchLevel--;
       if (hatchLevel < 1) {
         hatchLevel = 1;

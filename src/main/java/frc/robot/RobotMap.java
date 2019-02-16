@@ -42,6 +42,10 @@ public class RobotMap {
   public static int ojoyY = 4;
   public static int ojoyLB = 5;
   public static int ojoyRB = 6;
+  public static int ojoyBack = 7;
+  public static int ojoyStart = 8;
+  public static int ojoyRY = 5;
+  public static int ojoyLY = 1;
 
   public static int potA = 1;
   public static int potW = 2;

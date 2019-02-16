@@ -8,6 +8,7 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class MoveArm extends Command {
   public MoveArm() {
@@ -23,8 +24,8 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.arm.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(5));
-  // Robot.arm.armTest();
+    Robot.arm.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));
+    Robot.arm.armTest();
   
   }
 

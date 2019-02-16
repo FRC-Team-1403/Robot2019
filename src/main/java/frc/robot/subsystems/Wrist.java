@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.RobotMap;
 import frc.robot.commands.MoveWrist;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.PIDController;
 /**
  * Add your docs here.
  */
@@ -46,7 +47,7 @@ public class Wrist extends PIDSubsystem {
   }
   public void wristTest()
   {
-    wristMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(1));
+    wristMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
   }
 
   public void moveWithArm() {

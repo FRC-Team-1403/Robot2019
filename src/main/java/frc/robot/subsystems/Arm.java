@@ -42,22 +42,19 @@ public final double thirdAngle = 0;
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
   }
-  public double returnPIDInput()
-  {
-    return potentiometerArm.getAverageVoltage();
+  public double returnPIDInput(){
+    return potentiometerArm.getAverageVoltage() * (ratio to convert to radians);
   }
-  public void usePIDOutput(double output)
-  {
+  public void usePIDOutput(double output){
+    armMotorL.set(ControlMode.Position, -output);
+    armMotorR.set(ControlMode.Position, output);
+  }
+  public void usePIDOuputVelocity(double output){
     //armMotorL.pidWrite(output);
   }
-  public void usePIDOuputVelocity(double output)
-  {
-    //armMotorL.pidWrite(output);
-  }
-  public void armTest()
-  {
-    armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(5));
-    armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(5));
+  public void armTest() {
+    armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));
+    armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));
   }
   public static void setSpeed(TalonSRX talon, double speed){
     talon.set(ControlMode.PercentOutput, speed);

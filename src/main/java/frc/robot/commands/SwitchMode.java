@@ -29,7 +29,7 @@ public class SwitchMode extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButton(6))
+    if(Robot.m_oi.ojoy.getRawButton(8))
       mode++;
     if (mode > 3)
       mode = 1;
