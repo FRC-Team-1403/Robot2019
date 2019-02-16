@@ -71,6 +71,7 @@ public class Robot extends TimedRobot {
   public static boolean record;
   public static boolean store;
   private int numpaths;
+  private String path;
   Command autonomousCommand;
   String pathChooser;
   int delay;
@@ -144,7 +145,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    /*if (Robot.m_oi.ojoy.getRawButtonReleased(1)) { autoint++; }
+    if (Robot.m_oi.ojoy.getRawButtonReleased(8)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
 		
 		if (autoint%4 == 0) { SmartDashboard.putString("Auto Position", "Left"); }
@@ -152,7 +153,7 @@ public class Robot extends TimedRobot {
 		if (autoint%4 == 2) { SmartDashboard.putString("Auto Position", "Middle"); }
 		if (autoint%4 == 3) { SmartDashboard.putString("Auto Position", "STRAIGHT"); }
     Scheduler.getInstance().run();
-    */
+    
   }
 
   /**
@@ -392,5 +393,14 @@ talon.setSelectedSensorPosition(absolutePosition, Constants.kPIDLoopIdx, Constan
    */
   @Override
   public void testPeriodic() {
+  }
+  public void init(){
+    recorder.addFileSelect(numpaths, path);
+		SmartDashboard.putString(Integer.toString(numpaths), path);
+		++numpaths;
+		path = new String("/home/lvuser/RightSwitchFromLeft.txt");
+		recorder.addFileSelect(numpaths, path);
+		SmartDashboard.putString(Integer.toString(numpaths), path);
+		++numpaths;
   }
 }
