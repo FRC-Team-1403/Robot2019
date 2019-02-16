@@ -65,9 +65,9 @@ public void push()
     value = 0.0;
   }
 }
-public void HookHatchPanel(){
+public void hookHatchPanel(){
   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
-    hook.set(0.52);
+    hook.set(0.1);
   }
   else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
     hook.set(0);

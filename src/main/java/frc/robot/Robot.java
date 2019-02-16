@@ -198,6 +198,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    /*
     if(recorder.hasNextLine())
 		{
 			System.out.println(recorder.getReading("DriveTrain Back Left"));
@@ -229,7 +230,7 @@ public class Robot extends TimedRobot {
       Arm.setSpeed(arm.armMotorL, 0);
       Arm.setSpeed(arm.armMotorR, 0);
       ArmExtension.setPosition(ae.armExtender, 0);
-		}
+		}*/
     Scheduler.getInstance().run();
   }
 
@@ -262,7 +263,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
 
-   
+   /*
     if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));

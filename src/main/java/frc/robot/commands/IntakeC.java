@@ -29,6 +29,7 @@ public class IntakeC extends Command {
   protected void execute() {
     Robot.in.intake();
     Robot.in.push();
+    Robot.in.hookHatchPanel();
   }
 
   // Make this return true when this Command no longer needs to run execute()
