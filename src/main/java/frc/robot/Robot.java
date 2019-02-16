@@ -212,8 +212,8 @@ public class Robot extends TimedRobot {
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
       Intake.setPosition(in.hatchPush, recorder.getReading("Push Hatch"));
       Intake.setPosition(in.hatchPush, recorder.getReading("Release Hatch"));
-      Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
-      Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
+      //Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
+      //Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
@@ -232,8 +232,8 @@ public class Robot extends TimedRobot {
       Intake.setSpeed(in.intakeMotor, 0);
       Intake.setPosition(in.hatchPush, 0);
       Intake.setPosition(in.hatchPush, 0);
-      Intake.setServo(in.hook, 0);
-      Intake.setServo(in.hook, 0);
+      //Intake.setServo(in.hook, 0);
+      //Intake.setServo(in.hook, 0);
       Arm.setSpeed(arm.armMotorL,0);
       Arm.setSpeed(arm.armMotorR, 0);
       ArmExtension.setPosition(ae.armExtender, 0);
@@ -283,10 +283,10 @@ public class Robot extends TimedRobot {
 			recorder.addReading("Wrist", Robot.m_oi.ojoy.getRawAxis(1));
       recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
       recorder.addReading("Eject Ball", Robot.m_oi.ojoy.getRawAxis(3));
-      recorder.addReading("Push Hatch", Robot.in.convertBoolToDouble());
-      recorder.addReading("Release Hatch", Robot.in.convertBoolToDouble());
-      recorder.addReading("Hook Hatch", Robot.in.convertBoolToDouble());
-      recorder.addReading("Unhook Hatch", Robot.in.convertBoolToDouble());
+      recorder.addReading("Push Hatch", ArmExtension.convertBoolToDouble()); //boolToDouble is static in ArmExtension, it was intiailly
+      recorder.addReading("Release Hatch", ArmExtension.convertBoolToDouble()); //Robot.in.convertBoolToDouble but that wasn't where it was
+      recorder.addReading("Hook Hatch", ArmExtension.convertBoolToDouble()); //if this doesn't work then that is why
+      recorder.addReading("Unhook Hatch", ArmExtension.convertBoolToDouble());
       recorder.addReading("Move Arm Left", -Robot.m_oi.ojoy.getRawAxis(5));
       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
       recorder.addReading("Arm is extended", Robot.ae.convertBoolToDouble());

@@ -44,7 +44,7 @@ public class ArmExtension extends Subsystem {
      
     }
   }
-  public double convertBoolToDouble(){
+  public static double convertBoolToDouble(){
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)){
       return 1.0;
     }
@@ -57,13 +57,13 @@ public class ArmExtension extends Subsystem {
   }
 
   public static void setPosition(DoubleSolenoid doubleSolenoid, double value){ 
-  if (Robot.in.convertBoolToDouble()==1.0){
+  if (convertBoolToDouble()==1.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kForward);
   }
-  if (Robot.in.convertBoolToDouble() == 2.0){
+  if (convertBoolToDouble() == 2.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
-  if(Robot.in.convertBoolToDouble() == 0.0){
+  if(convertBoolToDouble() == 0.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
   }
 }

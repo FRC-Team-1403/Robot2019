@@ -32,6 +32,9 @@ public final double hpAngle = 0;
 public final double firstAngle = 0;
 public final double secondAngle = 0;
 public final double thirdAngle = 0;
+public double feedForwardConstant = 0; //to find how to deal with torque
+public double armConstant = .1; //to control speed at which joystick moves arm
+public double ratio = ; //ratio to convert from voltage of potentiometer to radians
 
   public Arm()
   {
@@ -43,19 +46,25 @@ public final double thirdAngle = 0;
     potentiometerArm = new AnalogInput(RobotMap.potA);
   }
   public double returnPIDInput(){
-    return potentiometerArm.getAverageVoltage() * (ratio to convert to radians);
+    return potentiometerArm.getAverageVoltage() * (ratio);
   }
   public void usePIDOutput(double output) {
-    armMotorL.set(ControlMode.Position, -output);
-    armMotorR.set(ControlMode.Position, output);
+    armMotorL.set(ControlMode.Position, -output - feedForwardConstant*Math.cos(output));
+    armMotorR.set(ControlMode.Position, output + feedForwardConstant * Math.cos(output));
   }
   public void usePIDOuputVelocity(double output){
     //armMotorL.pidWrite(output);
   }
   public void armTest() {
-    armMotorL.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));
-    armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));
+
+    armMotorL.set(ControlMode.Position, -Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY)*armConstant - potentiometerArm.getAverageVoltage() * feedForwardConstant * ratio);
+    armMotorR.set(ControlMode.Position, Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY)*armConstant + potentiometerArm.getAverageVoltage() * feedForwardConstant * ratio);
   }
+
+  public void moveWithPID(){
+    setSetpoint(getPosition()+Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));
+  }
+
   public static void setSpeed(TalonSRX talon, double speed){
     talon.set(ControlMode.PercentOutput, speed);
   }

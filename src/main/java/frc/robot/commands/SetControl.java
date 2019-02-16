@@ -56,6 +56,7 @@ public class SetControl extends Command {
   }
 
   public void continuousControl() {
+    Robot.arm.moveWithPID();
     Robot.w.moveWithArm();
   }
 
