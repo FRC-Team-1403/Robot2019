@@ -89,7 +89,6 @@ public class Robot extends TimedRobot {
     delay = 0;
     autoint = 0;
     recorder = new Recorder(10000);
-    m_oi = new OI();
     drivetrain = new DriveTrain();
     in = new Intake();
     ae =  new ArmExtension();
@@ -97,6 +96,7 @@ public class Robot extends TimedRobot {
     w = new Wrist();
     cs = new ControlSystem();
     vs = new Vision();
+    m_oi = new OI();
 
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());

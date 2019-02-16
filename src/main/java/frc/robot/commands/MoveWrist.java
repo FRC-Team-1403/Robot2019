@@ -29,7 +29,7 @@ public class MoveWrist extends Command {
     {
       Robot.w.setSetpointRelative(-Robot.arm.potentiometerArm.getAverageVoltage());
     }*/
-    Robot.w.wristTest();
+    //Robot.w.wristTest();
     
   }
 
