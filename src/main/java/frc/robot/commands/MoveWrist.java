@@ -26,7 +26,18 @@ public class MoveWrist extends Command {
   @Override
   protected void execute() {
      Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
-
+     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack))
+      Robot.w.conversion -= .001;
+     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart))
+      Robot.w.conversion += .001;
+     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
+      Robot.w.conversion += .01;
+     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX))
+      Robot.w.conversion -= .01;
+     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY))
+      Robot.w.conversion += .1;
+     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
+      Robot.w.conversion -= .1;
   
 }
 // Robot.w.PID();

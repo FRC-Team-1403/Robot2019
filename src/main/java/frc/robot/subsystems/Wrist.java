@@ -33,8 +33,7 @@ public int integral, previous_error;
 public double error, PID, derivative, setpoint;
 public double flat = 2.917286317999828;
 public double angle;
-public static double conversion;
-public static double armToWristConversion;
+public double conversion = .5;
 
   public Wrist()
   {
@@ -45,6 +44,8 @@ public static double armToWristConversion;
     previousArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
   }
   
+
+
   public void wristTest(double value)
   {
     if(potentiometerWrist.getAverageVoltage() > .39)
@@ -53,16 +54,18 @@ public static double armToWristConversion;
     else
       wristMotor.set(ControlMode.PercentOutput, -.3);
   }
-  public void PID(){
-    setpoint = setpoint - (previousArmAngle-Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage()));
-    angle = Wrist.voltToRadians(potentiometerWrist.getAverageVoltage());
-    error = setpoint - angle; // Error = Target - Actual
-    this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
-    derivative = (error - this.previous_error) / .02;
-    PID = P*error + I*this.integral + D*derivative;
-    previousArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
+  
+  public void moveByArm(double armVoltage){
+    wristMotor.set(ControlMode.PercentOutput, conversion * armVoltage);
   }
-  public static double voltToRadians(double potentiometerValue){
+
+  public void PID(){
+    angle = voltToRadians(potentiometerWrist.getAverageVoltage());
+    error = setpoint - angle; // Error = Target - Actual    
+    PID = P*error;
+  }
+
+  public double voltToRadians(double potentiometerValue){
     return (potentiometerValue-Robot.w.flat)*conversion;
   }
 
