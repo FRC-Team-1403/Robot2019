@@ -39,11 +39,15 @@ public class MoveArm extends Command {
     if(usePID){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
       Robot.arm.PID();
-      Robot.arm.armTest(-Robot.arm.PID);
+      Robot.arm.armTest(-Robot.arm.PID);      
     }
 
     else
       Robot.arm.armTest(Robot.m_oi.ojoy.getRawAxis(1));
+    if(Robot.m_oi.ojoy.getRawAxis(1) == 0)
+      Robot.w.moveByArm(Robot.arm.angle);
+    
+
   }
 
 

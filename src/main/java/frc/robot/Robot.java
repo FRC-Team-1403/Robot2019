@@ -288,6 +288,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("P value", Robot.w.P);
     SmartDashboard.putNumber("Previous", Robot.w.previousArmAngle);
 
+    SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
+
     SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
     SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
     SmartDashboard.putNumber("Error a", Robot.arm.error);

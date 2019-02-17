@@ -20,6 +20,7 @@ public class MoveWrist extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.w.prevArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -27,17 +28,17 @@ public class MoveWrist extends Command {
   protected void execute() {
      Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack))
-      Robot.w.conversion -= .001;
+      Robot.w.armConversion -= .001;
      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart))
-      Robot.w.conversion += .001;
+      Robot.w.armConversion += .001;
      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
-      Robot.w.conversion += .01;
+      Robot.w.armConversion += .01;
      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX))
-      Robot.w.conversion -= .01;
+      Robot.w.armConversion -= .01;
      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY))
-      Robot.w.conversion += .1;
+      Robot.w.armConversion += .1;
      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
-      Robot.w.conversion -= .1;
+      Robot.w.armConversion -= .1;
   
 }
 // Robot.w.PID();

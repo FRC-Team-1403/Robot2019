@@ -63,11 +63,11 @@ public static double conversion;
   }
 
   public void PID(){
-    angle = Arm.voltToRadians(potentiometerArm.getAverageVoltage());
+    angle = voltToRadians(potentiometerArm.getAverageVoltage());
     error = setpoint - angle; // Error = Target - Actual
     this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - this.previous_error) / .02;
-    PID = P*error + I*this.integral + D*derivative + feedForward(angle);
+    PID = P*error + feedForward(angle);
   }
 
   public void moveBy(double stick) {
