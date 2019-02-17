@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class MoveWrist extends Command {
   public MoveWrist() {
@@ -24,14 +25,28 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.w.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(1));
-    if(Math.abs(Robot.m_oi.ojoy.getRawAxis(5)) > 0)
-    {
-      Robot.w.setSetpointRelative(-Robot.arm.potentiometerArm.getAverageVoltage());
-    }
-    Robot.w.wristTest();
-    
-  }
+ 
+//  if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY) != 0)
+//  {
+//   Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+//  } 
+//  else
+//  {
+  Robot.w.PID();
+  //Robot.w.wristTest(-Robot.arm.PID+Robot.arm.feedForward(Robot.arm.angle));
+  Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+ //}
+  
+if(Robot.m_oi.ojoy.getRawButton(7)){
+  Robot.w.P -=.01;
+}
+if(Robot.m_oi.ojoy.getRawButton(8)){
+  Robot.w.P +=.01;
+}
+}
+// Robot.w.PID();
+//     Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+//   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override

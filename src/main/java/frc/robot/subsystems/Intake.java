@@ -26,8 +26,7 @@ public class Intake extends Subsystem {
   public VictorSPX intakeMotor;
   public DoubleSolenoid hatchPush;
   public PWM hook;
-  public double value;
-  
+  public double value;  
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
@@ -68,10 +67,11 @@ public void push()
 }
 public void hookHatchPanel(){
   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
-    hook.setPosition(1);
+    hook.setPosition(1.5);
+    
   }
   else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
-    hook.setPosition(0);
+    hook.setPosition(-.5);
   }
 }
 public void hatchSpeed(){

@@ -24,7 +24,15 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    //Robot.arm.usePIDOuputVelocity(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));  
+    if(Robot.m_oi.ojoy.getRawButton(7)){
+      Robot.arm.P -=.001;
+    }
+    if(Robot.m_oi.ojoy.getRawButton(8)){
+      Robot.arm.P +=.001;
+    }
+    Robot.arm.PID();
+    //Robot.arm.armTest(-Robot.arm.PID);
+    Robot.arm.armTest(Robot.m_oi.ojoy.getRawAxis(1));
   }
 
   // Make this return true when this Command no longer needs to run execute()

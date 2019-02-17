@@ -9,6 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class SwitchMode extends Command {
 
   public static int mode = 1;
@@ -17,7 +19,7 @@ public class SwitchMode extends Command {
   // 3 - set hatch
 
   public SwitchMode() {
-    // Use requires() here to declare subsystem dependencies
+    SmartDashboard.putNumber("reached switchmode constructor: ", mode);
     requires(Robot.cs);
   }
 
@@ -29,6 +31,7 @@ public class SwitchMode extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    SmartDashboard.putNumber("reached exectute: ", mode);
     if(Robot.m_oi.ojoy.getRawButton(8))
       mode++;
     if (mode > 3)

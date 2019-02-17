@@ -47,8 +47,8 @@ public class RobotMap {
   public static int ojoyRY = 5;
   public static int ojoyLY = 1;
 
-  public static int potA = 1;
-  public static int potW = 2;
+  public static int potA = 0;
+  public static int potW = 1;
 
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:

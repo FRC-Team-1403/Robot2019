@@ -12,7 +12,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SetControl extends Command {
 
   public static int ballLevel = 1;
@@ -30,6 +30,8 @@ public class SetControl extends Command {
 
   public SetControl() {
     // Use requires() here to declare subsystem dependencies
+    SmartDashboard.putString("reached set control: ", "hill`");
+
     requires(Robot.cs);
   }
 
@@ -41,78 +43,81 @@ public class SetControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (SwitchMode.mode == 1)
-      continuousControl();
-    if (SwitchMode.mode == 2)
-      setBallControl();
-    if (SwitchMode.mode == 3)
-      setHatchControl();
-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack)){ 
-      ballLevel = 1;
-      hatchLevel = 1;
-      Robot.arm.setSetpoint(Robot.arm.floorAngle);
-      Robot.w.moveWithArm();
-     }
-  }
+  //   SmartDashboard.putString("reached execute: ", "hill`");
 
-  public void continuousControl() {
-    Robot.arm.moveWithPID();
-    Robot.w.moveWithArm();
-  }
+  //   if (SwitchMode.mode == 1)
+  //     continuousControl();
+  //   if (SwitchMode.mode == 2)
+  //     setBallControl();
+  //   if (SwitchMode.mode == 3)
+  //     setHatchControl();
+  //   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack)){ 
+  //     ballLevel = 1;
+  //     hatchLevel = 1;
+  //     Robot.arm.setSetpoint(Robot.arm.floorAngle);
+  //     Robot.w.moveWithArm();
+  //    }
+  // }
 
-  public void setBallControl() {
-    Robot.w.setSetpoint(10.0); //should move the hatch a little bit up so the ball can shoot
-    if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
-      ballLevel++;
-      if (ballLevel > 5) {
-        ballLevel = 5;
-      }
-    }
+  // public void continuousControl() {
+  //   SmartDashboard.putString("reached: ", "hi");
+  //   Robot.arm.armTest(Robot.arm.PID);
+  //   Robot.w.moveWithArm();
+  // }
 
-    if (Robot.m_oi.ojoy.getRawAxis(5) < -0.5) {
-      ballLevel--;
-      if (ballLevel < 1) {
-        ballLevel = 1;
-      }
+  // public void setBallControl() {
+  //   Robot.w.setSetpoint(10.0); //should move the hatch a little bit up so the ball can shoot
+  //   if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
+  //     ballLevel++;
+  //     if (ballLevel > 5) {
+  //       ballLevel = 5;
+  //     }
+  //   }
+
+  //   if (Robot.m_oi.ojoy.getRawAxis(5) < -0.5) {
+  //     ballLevel--;
+  //     if (ballLevel < 1) {
+  //       ballLevel = 1;
+  //     }
 
       
-    }
+  //   }
 
-    switch (ballLevel) {
-      case 1: Robot.arm.setSetpoint(Robot.arm.floorAngle); break;
-      case 2: Robot.arm.setSetpoint(Robot.arm.hpAngle); break;
-      case 3: Robot.arm.setSetpoint(Robot.arm.firstAngle); break;
-      case 4: Robot.arm.setSetpoint(Robot.arm.secondAngle); break;
-      case 5: Robot.arm.setSetpoint(Robot.arm.thirdAngle); break;
-    }
+  //   switch (ballLevel) {
+  //     case 1: Robot.arm.setSetpoint(Robot.arm.floorAngle); break;
+  //     case 2: Robot.arm.setSetpoint(Robot.arm.hpAngle); break;
+  //     case 3: Robot.arm.setSetpoint(Robot.arm.firstAngle); break;
+  //     case 4: Robot.arm.setSetpoint(Robot.arm.secondAngle); break;
+  //     case 5: Robot.arm.setSetpoint(Robot.arm.thirdAngle); break;
+  //   }
 
-    Robot.w.moveWithArm();
-  }
+  //   Robot.w.moveWithArm();
+  // }
 
-  public void setHatchControl() {
-    Robot.w.setSetpoint(Math.PI*2);
-    if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
-      hatchLevel++;
-      if (hatchLevel > 4) {
-        hatchLevel = 4;
-      }
-    }
+  // public void setHatchControl() {
+  //   Robot.w.setSetpoint(Math.PI*2);
+  //   if (Robot.m_oi.ojoy.getRawAxis(5) > 0.5) {
+  //     hatchLevel++;
+  //     if (hatchLevel > 4) {
+  //       hatchLevel = 4;
+  //     }
+  //   }
 
-    if (Robot.m_oi.ojoy.getRawAxis(5) < -0.5) {
-      hatchLevel--;
-      if (hatchLevel < 1) {
-        hatchLevel = 1;
-      }
-    }
+  //   if (Robot.m_oi.ojoy.getRawAxis(5) < -0.5) {
+  //     hatchLevel--;
+  //     if (hatchLevel < 1) {
+  //       hatchLevel = 1;
+  //     }
+  //   }
 
-    switch (hatchLevel) {
-      case 1: Robot.arm.setSetpoint(Robot.arm.floorAngle); break;
-      case 2: Robot.arm.setSetpoint(Robot.arm.firstAngle); break;
-      case 3: Robot.arm.setSetpoint(Robot.arm.secondAngle); break;
-      case 4: Robot.arm.setSetpoint(Robot.arm.thirdAngle); break;
-    }
+  //   switch (hatchLevel) {
+  //     case 1: Robot.arm.setSetpoint(Robot.arm.floorAngle); break;
+  //     case 2: Robot.arm.setSetpoint(Robot.arm.firstAngle); break;
+  //     case 3: Robot.arm.setSetpoint(Robot.arm.secondAngle); break;
+  //     case 4: Robot.arm.setSetpoint(Robot.arm.thirdAngle); break;
+  //   }
         
-    Robot.w.moveWithArm();
+  //   Robot.w.moveWithArm();
   }
 
   // Make this return true when this Command no longer needs to run execute()

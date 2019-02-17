@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
   public static Arm arm;
   public static Wrist w;
   public static ControlSystem cs;
+  
   public static Vision vs;
 
   public static double FASTMAXRPM = 500;
@@ -251,6 +252,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    Robot.arm.potentiometerArm.resetAccumulator();
   }
 
   /**
@@ -271,7 +273,29 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
     SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
 
-   
+    SmartDashboard.putNumber("Arm movement constant: ", Robot.arm.armConstant);
+    SmartDashboard.putNumber("Feed forward constant: ", Robot.arm.feedForwardConstant);
+
+    SmartDashboard.putNumber("Wrist potentiometer: ", Robot.w.potentiometerWrist.getAverageVoltage());
+    SmartDashboard.putNumber("Arm potentiometer: ", Robot.arm.potentiometerArm.getAverageVoltage());
+
+    SmartDashboard.putNumber("PID: ", Robot.w.PID);
+    SmartDashboard.putNumber("Angle: ", Robot.w.angle*180/Math.PI);
+    SmartDashboard.putNumber("Error", Robot.w.error);
+    SmartDashboard.putNumber("Setpoint", Robot.w.setpoint);
+    SmartDashboard.putNumber("Conversion", Robot.w.conversion);
+    SmartDashboard.putNumber("Flat", Robot.w.flat);
+    SmartDashboard.putNumber("P value", Robot.w.P);
+    SmartDashboard.putNumber("Previous", Robot.w.previousArmAngle);
+
+    SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
+    SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
+    SmartDashboard.putNumber("Error a", Robot.arm.error);
+    SmartDashboard.putNumber("Setpoint a", Robot.arm.setpoint);
+    SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
+    SmartDashboard.putNumber("Flat a", Robot.arm.flat);
+    SmartDashboard.putNumber("P value a", Robot.arm.P);
+    SmartDashboard.putNumber("Posititi", Robot.in.hook.getPosition());   
     if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
