@@ -34,6 +34,8 @@ public double error, PID, derivative, setpoint;
 public double flat = 2.917286317999828;
 public double angle;
 public static double conversion;
+public static double armToWristConversion;
+
   public Wrist()
   {
     wristMotor = new TalonSRX(RobotMap.wristMotor);
@@ -46,9 +48,9 @@ public static double conversion;
   public void wristTest(double value)
   {
     if(potentiometerWrist.getAverageVoltage() > .39)
-      wristMotor.set(ControlMode.PercentOutput, value);//-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+      wristMotor.set(ControlMode.PercentOutput, value);
     
-      else
+    else
       wristMotor.set(ControlMode.PercentOutput, -.3);
   }
   public void PID(){
@@ -60,8 +62,7 @@ public static double conversion;
     PID = P*error + I*this.integral + D*derivative;
     previousArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
   }
-  public static double voltToRadians(double potentiometerValue)
-  {
+  public static double voltToRadians(double potentiometerValue){
     return (potentiometerValue-Robot.w.flat)*conversion;
   }
 

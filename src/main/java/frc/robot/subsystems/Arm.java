@@ -40,7 +40,7 @@ public double P = 4.604;
 public double I = 0;
 public double D = 0;
 public int integral, previous_error;
-public double error, PID, derivative, setpoint = Math.PI/4;
+public double error, PID, derivative, setpoint;
 public double flat = 3.663286317999746;
 public double angle;
 public static double conversion;
@@ -50,14 +50,16 @@ public static double conversion;
     armMotorL = new TalonSRX(RobotMap.armMotorL);
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
-    this.angle = 0;
     conversion = -0.9538999999999994;
+    
+    angle = (potentiometerArm.getAverageVoltage()-flat)*conversion;
+    setpoint = angle;
     
   }
 
   public void armTest(double input) {
-    armMotorL.set(ControlMode.PercentOutput, -input);//-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));//*armConstant - potentiometerArm.getAverageVoltage() * feedForwardConstant * ratio);
-    armMotorR.set(ControlMode.PercentOutput, input);//Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY));//*armConstant + potentiometerArm.getAverageVoltage() * feedForwardConstant * ratio);
+    armMotorL.set(ControlMode.PercentOutput, -input);
+    armMotorR.set(ControlMode.PercentOutput, input);
   }
 
   public void PID(){
@@ -66,6 +68,10 @@ public static double conversion;
     this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - this.previous_error) / .02;
     PID = P*error + I*this.integral + D*derivative + feedForward(angle);
+  }
+
+  public void moveBy(double stick) {
+    setpoint += -stick * 0.01;
   }
 
   public static double feedForward(double angle) {

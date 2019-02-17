@@ -28,12 +28,12 @@ public class ArmExtension extends Subsystem {
   }
 
   public void push() {
-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)) 
     {
       armExtender.set(DoubleSolenoid.Value.kForward);
       
     }
-    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
+    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB)) 
     {
       armExtender.set(DoubleSolenoid.Value.kReverse);
       

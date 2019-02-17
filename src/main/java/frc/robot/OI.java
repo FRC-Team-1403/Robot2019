@@ -22,10 +22,7 @@ import frc.robot.commands.SwitchMode;
 public class OI {
   public Joystick djoy = new Joystick(RobotMap.djoy);
   public Joystick ojoy = new Joystick(RobotMap.ojoy);
-  Button rightBumper = new JoystickButton(ojoy, 0000000000000000000000000000000);
-  public OI() {
-    rightBumper.whenPressed(new SwitchMode());;
-  }
+  
   
   
   //// CREATING BUTTONS

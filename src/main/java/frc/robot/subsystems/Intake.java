@@ -25,22 +25,22 @@ import edu.wpi.first.wpilibj.Servo;
 public class Intake extends Subsystem {
   public VictorSPX intakeMotor;
   public DoubleSolenoid hatchPush;
-  public PWM hook;
+  public Servo hook;
   public double value;  
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
     hatchPush = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
-    hook= new PWM(RobotMap.hookServo);
+    hook= new Servo(RobotMap.hookServo);
   }
 public void intake(){
-  if(Robot.m_oi.ojoy.getRawAxis(3)>0)
+  if(Robot.m_oi.ojoy.getRawAxis(2)>0)
   {
-    intakeMotor.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(3));
+    intakeMotor.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(2));
   }
-  else if(-Robot.m_oi.ojoy.getRawAxis(2)<0)
+  else if(-Robot.m_oi.ojoy.getRawAxis(3)<0)
   {
-    intakeMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(2));
+    intakeMotor.set(ControlMode.PercentOutput, -Robot.m_oi.ojoy.getRawAxis(3));
   }
   else
   {
@@ -49,12 +49,12 @@ public void intake(){
 }
 public void push()
 {
-  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB))
+  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
   {
     hatchPush.set(DoubleSolenoid.Value.kForward);
     value = 1.0;
   }
-  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
+  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
   {
     hatchPush.set(DoubleSolenoid.Value.kReverse);
     value = -1.0;
@@ -67,11 +67,11 @@ public void push()
 }
 public void hookHatchPanel(){
   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
-    hook.setPosition(1.5);
+    hook.setPosition(1);
     
   }
   else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
-    hook.setPosition(-.5);
+    hook.setPosition(0);
   }
 }
 public void hatchSpeed(){

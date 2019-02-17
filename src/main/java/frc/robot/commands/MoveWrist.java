@@ -25,24 +25,9 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
- 
-//  if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY) != 0)
-//  {
-//   Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
-//  } 
-//  else
-//  {
-  Robot.w.PID();
-  //Robot.w.wristTest(-Robot.arm.PID+Robot.arm.feedForward(Robot.arm.angle));
-  Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
- //}
+     Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+
   
-if(Robot.m_oi.ojoy.getRawButton(7)){
-  Robot.w.P -=.01;
-}
-if(Robot.m_oi.ojoy.getRawButton(8)){
-  Robot.w.P +=.01;
-}
 }
 // Robot.w.PID();
 //     Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));

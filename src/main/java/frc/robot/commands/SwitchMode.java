@@ -19,7 +19,6 @@ public class SwitchMode extends Command {
   // 3 - set hatch
 
   public SwitchMode() {
-    SmartDashboard.putNumber("reached switchmode constructor: ", mode);
     requires(Robot.cs);
   }
 
@@ -31,11 +30,10 @@ public class SwitchMode extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    SmartDashboard.putNumber("reached exectute: ", mode);
-    if(Robot.m_oi.ojoy.getRawButton(8))
-      mode++;
-    if (mode > 3)
-      mode = 1;
+    //if(Robot.m_oi.ojoy.getRawButton(8))
+      //mode++;
+    //if (mode > 3)
+      //mode = 1;
     
   }
 

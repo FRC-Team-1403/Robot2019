@@ -18,7 +18,6 @@ public class ControlSystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 public ControlSystem() {
-  SmartDashboard.putString("hi", "hiaksdalsd");
 }
   @Override
   public void initDefaultCommand() {

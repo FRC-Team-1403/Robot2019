@@ -11,6 +11,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class MoveArm extends Command {
+  boolean usePID = true;
   public MoveArm() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.arm);
@@ -24,16 +25,28 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButton(7)){
-      Robot.arm.P -=.001;
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)){
+      Robot.arm.setpoint += Math.PI/16;
+      if(Robot.arm.setpoint > Math.PI/4)
+        Robot.arm.setpoint = 0;
     }
-    if(Robot.m_oi.ojoy.getRawButton(8)){
-      Robot.arm.P +=.001;
+
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)){
+      Robot.arm.PID();
+      Robot.arm.armTest(-Robot.arm.PID);
     }
-    Robot.arm.PID();
-    //Robot.arm.armTest(-Robot.arm.PID);
-    Robot.arm.armTest(Robot.m_oi.ojoy.getRawAxis(1));
+
+    if(usePID){
+      Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
+      Robot.arm.PID();
+      Robot.arm.armTest(-Robot.arm.PID);
+    }
+
+    else
+      Robot.arm.armTest(Robot.m_oi.ojoy.getRawAxis(1));
   }
+
+
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
