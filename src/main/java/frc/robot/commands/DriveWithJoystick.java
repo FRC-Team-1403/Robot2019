@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 
 public class DriveWithJoystick extends Command {
@@ -27,23 +28,11 @@ public class DriveWithJoystick extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-   /* if(Robot.m_oi.djoy.getRawButton(5))
-    {
-      count++;
-    }
-    if(count%2==0)
-    {
+    if (Robot.m_oi.djoy.getRawButton(RobotMap.ojoyLB)) { //while held
       Robot.drivetrain.driveCheesy();
+    } else {
+      Robot.drivetrain.driveTank();
     }
-    else if(count%2==1)
-    {*/
-
-      if (!Robot.m_oi.djoy.getRawButton(3)) {
-        Robot.drivetrain.driveTank();
-      }
-      
-   // }
-    
   }
 
   // Make this return true when this Command no longer needs to run execute()

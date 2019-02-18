@@ -17,6 +17,8 @@ import frc.robot.commands.MoveWrist;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Add your docs here.
  */
@@ -26,7 +28,7 @@ public class Wrist extends Subsystem {
   public TalonSRX wristMotor;
   public AnalogInput potentiometerWrist;
   public double previousArmAngle;
-  public double P = 4.604;
+  public double P = 1;
 public double I = 0;
 public double D = 0;
 public int integral, previous_error;
@@ -52,8 +54,11 @@ public double prevArmAngle;
     else
       wristMotor.set(ControlMode.PercentOutput, -.3);
   }
-  
+  public void moveBy(double stick){
+    setpoint += stick * .01;
+  }
   public void moveByArm(double armAngle){
+    SmartDashboard.putNumber("change in wrist angle: ", armConversion * (armAngle-prevArmAngle));
     setpoint += armConversion * (armAngle-prevArmAngle);
     prevArmAngle = armAngle;
   }

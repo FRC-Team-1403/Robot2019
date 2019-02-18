@@ -28,21 +28,6 @@ public class MoveArm extends Command {
 
     if(SetControl.mode == 1){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
-
-      //if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY) == 0)
-        //Robot.w.moveByArm(Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage()));  
-    }
-    
-    if(SetControl.mode == 2){
-      Robot.arm.setpoint = Robot.arm.ballPositions[SetControl.ballLevel].getArmAngle();
-      if(Robot.m_oi.ojoy.getRawAxis(5) == 0)
-        Robot.w.setpoint = Robot.arm.ballPositions[SetControl.ballLevel].getWristAngle();
-    }
-
-    else if(SetControl.mode == 3){
-      Robot.arm.setpoint = Robot.arm.hatchPositions[SetControl.hatchLevel].getArmAngle();
-      if(Robot.m_oi.ojoy.getRawAxis(5) == 0)
-        Robot.w.setpoint = Robot.arm.hatchPositions[SetControl.hatchLevel].getWristAngle();
     }
 
     Robot.arm.PID();

@@ -146,6 +146,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    SetControl.mode = 1;
+    SetControl.ballLevel = 1;
+    SetControl.hatchLevel = 1;
+    arm.setpoint = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
+    w.setpoint = Robot.w.voltToRadians(Robot.w.potentiometerWrist.getAverageVoltage());
     if (Robot.m_oi.ojoy.getRawButtonReleased(8)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
 		
@@ -290,6 +295,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
 
+    
 
 
     SmartDashboard.putNumber("mode: ", SetControl.mode);
@@ -300,7 +306,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
     SmartDashboard.putNumber("Flat a", Robot.arm.flat);
     SmartDashboard.putNumber("P value a", Robot.arm.P);
-    SmartDashboard.putNumber("Posititi", Robot.in.hook.getPosition());   
+    SmartDashboard.putNumber("Posititi", Robot.in.hook.getPosition());
+    SmartDashboard.putNumber("hatchLevel: ", SetControl.hatchLevel);
+    SmartDashboard.putNumber("ballLevel: ", SetControl.ballLevel);   
     if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));

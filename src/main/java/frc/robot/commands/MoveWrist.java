@@ -26,12 +26,16 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-     if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY) != 0)
-      Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+     if(Math.abs(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY)) > .1){
+      Robot.w.moveBy(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+    }
      else{
-      Robot.w.PID();
-      //Robot.w.wristTest(Robot.w.PID);
+      if(SetControl.mode == 1)
+        Robot.w.moveByArm(Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage())); 
+      
      }
+     Robot.w.PID();
+     Robot.w.wristTest(Robot.w.PID);
     /*if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack))
       Robot.w.armConversion -= .001;
      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart))

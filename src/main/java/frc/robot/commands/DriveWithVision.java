@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-
+import frc.robot.RobotMap;
 public class DriveWithVision extends Command {
   public DriveWithVision() {
     // Use requires() here to declare subsystem dependencies
@@ -24,9 +24,7 @@ public class DriveWithVision extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.djoy.getRawButton(3)){ //while held
-      
-    }
+    
   }
 
   // Make this return true when this Command no longer needs to run execute()

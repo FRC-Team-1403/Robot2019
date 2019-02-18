@@ -42,6 +42,7 @@ public double error, PID, derivative, setpoint;
 public double flat = 3.663286317999746;
 public double angle;
 public static double conversion;
+public final double tooFast = .5;
 
   public Arm()
   {
@@ -66,10 +67,17 @@ public static double conversion;
     this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - this.previous_error) / .02;
     PID = P*error + feedForward(angle);
+    if(PID > tooFast)
+      PID = tooFast;
+    if(PID < -tooFast)
+      PID = -tooFast;
   }
 
   public void moveBy(double stick) {
-    setpoint += -stick * 0.01;
+    if(Math.abs(stick) < .05){
+      return;
+    }
+      setpoint += -stick * 0.01;
   }
 
   public static double feedForward(double angle) {
