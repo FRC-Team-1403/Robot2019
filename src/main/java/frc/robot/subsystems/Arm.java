@@ -17,6 +17,7 @@ import frc.robot.RobotMap;
 import frc.robot.commands.MoveArm;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Setpoint;
 /**
  * Add your docs here.
  */
@@ -28,11 +29,8 @@ public TalonSRX armMotorR;
 public AnalogInput potentiometerArm;
 
 
-public final double floorAngle = 0;
-public final double hpAngle = 0;
-public final double firstAngle = 0;
-public final double secondAngle = 0;
-public final double thirdAngle = 0;
+public final Setpoint[] hatchPositions = {new Setpoint(0,0), new Setpoint(4.353026898, 2.130126735), new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.455810193, 1.408691262), new Setpoint(2.6879880060000003, 2.1118161900000003)};
+public final Setpoint[] ballPositions = {new Setpoint(0,0), new Setpoint(4.42260696, 2.51464818), new Setpoint(3.922118739, 2.504882556), new Setpoint(2.935790715, 3.447265272), new Setpoint(2.302245858, 3.7890621120000003)};
 public static double feedForwardConstant = 0; //to find how to deal with torque
 public double armConstant = .1; //to control speed at which joystick moves arm
 public double ratio = 1; //ratio to convert from voltage of potentiometer to radians

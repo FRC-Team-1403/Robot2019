@@ -9,11 +9,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.commands.SetControl;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.SwitchMode;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -290,6 +290,9 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
 
+
+
+    SmartDashboard.putNumber("mode: ", SetControl.mode);
     SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
     SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
     SmartDashboard.putNumber("Error a", Robot.arm.error);

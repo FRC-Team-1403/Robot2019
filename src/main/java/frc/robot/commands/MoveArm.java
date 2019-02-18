@@ -25,28 +25,29 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)){
-      Robot.arm.setpoint += Math.PI/16;
-      if(Robot.arm.setpoint > Math.PI/4)
-        Robot.arm.setpoint = 0;
-    }
 
-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)){
-      Robot.arm.PID();
-      Robot.arm.armTest(-Robot.arm.PID);
-    }
-
-    if(usePID){
+    if(SetControl.mode == 1){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
-      Robot.arm.PID();
-      Robot.arm.armTest(-Robot.arm.PID);      
+
+      //if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY) == 0)
+        //Robot.w.moveByArm(Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage()));  
+    }
+    
+    if(SetControl.mode == 2){
+      Robot.arm.setpoint = Robot.arm.ballPositions[SetControl.ballLevel].getArmAngle();
+      if(Robot.m_oi.ojoy.getRawAxis(5) == 0)
+        Robot.w.setpoint = Robot.arm.ballPositions[SetControl.ballLevel].getWristAngle();
     }
 
-    else
-      Robot.arm.armTest(Robot.m_oi.ojoy.getRawAxis(1));
-    if(Robot.m_oi.ojoy.getRawAxis(1) == 0)
-      Robot.w.moveByArm(Robot.arm.angle);
-    
+    else if(SetControl.mode == 3){
+      Robot.arm.setpoint = Robot.arm.hatchPositions[SetControl.hatchLevel].getArmAngle();
+      if(Robot.m_oi.ojoy.getRawAxis(5) == 0)
+        Robot.w.setpoint = Robot.arm.hatchPositions[SetControl.hatchLevel].getWristAngle();
+    }
+
+    Robot.arm.PID();
+    Robot.arm.armTest(-Robot.arm.PID);    
+
 
   }
 
