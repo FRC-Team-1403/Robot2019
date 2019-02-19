@@ -36,23 +36,8 @@ public class MoveWrist extends Command {
      }
      Robot.w.PID();
      Robot.w.wristTest(Robot.w.PID);
-    /*if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyBack))
-      Robot.w.armConversion -= .001;
-     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart))
-      Robot.w.armConversion += .001;
-     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
-      Robot.w.armConversion += .01;
-     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX))
-      Robot.w.armConversion -= .01;
-     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY))
-      Robot.w.armConversion += .1;
-     else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
-      Robot.w.armConversion -= .1;*/
-  
 }
-// Robot.w.PID();
-//     Robot.w.wristTest(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
-//   }
+
 
   // Make this return true when this Command no longer needs to run execute()
   @Override

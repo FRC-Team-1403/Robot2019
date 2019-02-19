@@ -28,9 +28,10 @@ public TalonSRX armMotorL;
 public TalonSRX armMotorR;
 public AnalogInput potentiometerArm;
 
-
-public final Setpoint[] hatchPositions = {new Setpoint(0,0), new Setpoint(4.353026898, 2.130126735), new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.455810193, 1.408691262), new Setpoint(2.6879880060000003, 2.1118161900000003)};
-public final Setpoint[] ballPositions = {new Setpoint(0,0), new Setpoint(4.210204647, 2.51464818), new Setpoint(3.922118739, 2.504882556), new Setpoint(2.935790715, 3.447265272), new Setpoint(2.302245858, 3.7890621120000003)};
+//.75087152622, 0.39339194857, 2.21688712317, 1.43904882392, 0.76833795509
+// 0.38407651983, 0.39339194857, -0.50554692422, -0.83158692989
+public final Setpoint[] hatchPositions = {new Setpoint(0,0), new Setpoint(4.353026898, 2.130126735,true), new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.455810193, 1.408691262), new Setpoint(2.6879880060000003, 2.1118161900000003, true)};
+public final Setpoint[] ballPositions = {new Setpoint(0,0), new Setpoint(4.210204647, 2.51464818),new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.922118739, 2.504882556), new Setpoint(2.935790715, 3.447265272), new Setpoint(2.302245858, 3.7890621120000003, true)};
 public static double feedForwardConstant = 0; //to find how to deal with torque
 public double armConstant = .1; //to control speed at which joystick moves arm
 public double ratio = 1; //ratio to convert from voltage of potentiometer to radians
@@ -39,8 +40,8 @@ public double I = 0;
 public double D = 0;
 public int integral, previous_error;
 public double error, PID, derivative, setpoint;
-public double flat = 3.663286317999746;
-public double angle;
+public static double flat;
+public static double angle;
 public static double conversion;
 public final double tooFast = .5;
 
@@ -50,7 +51,8 @@ public final double tooFast = .5;
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
     conversion = -0.9538999999999994;
-    
+    flat = 3.663286317999746;
+
     angle = (potentiometerArm.getAverageVoltage()-flat)*conversion;
     setpoint = angle;
     
@@ -81,13 +83,19 @@ public final double tooFast = .5;
   }
 
   public static double feedForward(double angle) {
-    return Arm.feedForwardConstant*Math.cos(angle);
+    return feedForwardConstant * Math.cos(angle);
   }
   
   public static double voltToRadians(double potentiometerValue)
   {
-    return (potentiometerValue-Robot.arm.flat)*conversion;
+    return (potentiometerValue - flat)*conversion;
   }
+
+  public static double radiansToVolts(double radians)
+  {
+    return radians/conversion + flat;
+  }
+
   public static void setSpeed(TalonSRX talon, double speed){
     talon.set(ControlMode.PercentOutput, speed);
   }

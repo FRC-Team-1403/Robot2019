@@ -26,7 +26,7 @@ public class MoveArm extends Command {
   @Override
   protected void execute() {
 
-    if(SetControl.mode == 1){
+    if(SetControl.mode == 0){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
     }
 

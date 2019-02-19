@@ -29,30 +29,35 @@ public class Wrist extends Subsystem {
   public AnalogInput potentiometerWrist;
   public double previousArmAngle;
   public double P = 1;
-public double I = 0;
-public double D = 0;
-public int integral, previous_error;
-public double error, PID, derivative, setpoint;
-public double flat = 2.917286317999828;
-public double angle;
-public double conversion = .5;
-public double armConversion = -.949;
-public double prevArmAngle;
+  public double I = 0;
+  public double D = 0;
+  public double error, PID, derivative, setpoint;
+  public static double flat;
+  public static double angle;
+  public static double conversion;
+  public static double armConversion;
+  public static double prevArmAngle;
+  public int integral, previous_error;
+
   public Wrist() {
     wristMotor = new TalonSRX(RobotMap.wristMotor);
     potentiometerWrist = new AnalogInput(RobotMap.potW);
+
+    armConversion = -.949;
     conversion = -0.9538999999999994;
+    flat = 2.917286317999828;
+
     setpoint = (potentiometerWrist.getAverageVoltage()-flat)*conversion;
   }
   
 
 
   public void wristTest(double value) {
-    if(potentiometerWrist.getAverageVoltage() > .39)
+    if(potentiometerWrist.getAverageVoltage() > .39) {
       wristMotor.set(ControlMode.PercentOutput, value);
-    
-    else
+    } else {
       wristMotor.set(ControlMode.PercentOutput, -.3);
+    }
   }
   public void moveBy(double stick){
     setpoint += stick * .01;
@@ -70,7 +75,11 @@ public double prevArmAngle;
   }
 
   public double voltToRadians(double potentiometerValue){
-    return (potentiometerValue-Robot.w.flat)*conversion;
+    return (potentiometerValue - flat) * conversion;
+  }
+
+  public static double radiansToVolts(double radians) {
+    return 1/conversion + flat;
   }
 
   public static void setSpeed(TalonSRX talon, double speed){
