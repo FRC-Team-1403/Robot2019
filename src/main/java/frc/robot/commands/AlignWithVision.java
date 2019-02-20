@@ -10,12 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlignWithVision extends Command {
-  static NetworkTableInstance table;
-  boolean isCurrentlyOnLeft = false;
-  boolean initiallyOnLeft = false;
-  final double motorSpeedConst = .1;
+  public static NetworkTableInstance table;
+  public boolean isCurrentlyOnLeft = false;
+  public boolean initiallyOnLeft = false;
+  public double area = 0;
+  public double motorSpeedConst = .1;
 
   public static double getV(){
     return table.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0);
@@ -42,38 +43,45 @@ public static double getA(){
   public void align(double x){
     if(x < 0){
       isCurrentlyOnLeft = true;
-      Robot.drivetrain.setRaw(.55, -.55); //idk what values should go here, it's just some constant
+      Robot.drivetrain.setRaw(-.3, .3); //idk what values should go here, it's just some constant
     }
 
     else if(x >= 0){
       isCurrentlyOnLeft = false;     
-       Robot.drivetrain.setRaw(-.55, .55);
+       Robot.drivetrain.setRaw(.3, -.3);
     }
 
   }
 
-  double skewmoid(double area) {
-		return Math.pow((1/(1 + Math.pow(Math.E, -area/4))),2);
+  public double skewmoid(double area) {
+    //return Math.pow((1/(1 + Math.pow(Math.E, -2*area+2))),2)+.2;
+    return 2/3*1/(1 + Math.pow(Math.E, -2*area+2)) + 1.0/3;
 	}
 
-  double getMotorSpeedWithVision(double area, double angle, boolean isLeftMotor){
-    final double scale = 27;
-    final double motorSpeedConst = .5;
+  public double getMotorSpeedWithVision(double area, double angle, boolean isLeftMotor){
+    final double scale = 13;
+    double dconst = 0.8;
+    this.area = area;
+    SmartDashboard.putNumber("area: ", area);
     if (isLeftMotor && angle < 0) {
-        return Math.pow(Math.abs(angle/scale), 2) * skewmoid(area) * motorSpeedConst;
+        return Math.pow(Math.abs(angle/scale), 0.333) * skewmoid(area) * dconst;
     } else if (isLeftMotor && angle >= 0) {
       return 0;
     } else if (!isLeftMotor && angle < 0) {
       return 0;
     } else {
-      return Math.pow(Math.abs(angle/scale), 1/2) * skewmoid(area) * motorSpeedConst;
+      return Math.pow(Math.abs(angle/scale), 0.333) * skewmoid(area) * dconst;
     }
   }
   
-  void driveWithVision(double x){
-    final double motorConstant = 0.5;
-    double leftSpeed = motorConstant + getMotorSpeedWithVision(getA(), getX(), true);
-    double rightSpeed = motorConstant + getMotorSpeedWithVision(getA(), getX(), false);
+  public void driveWithVision(double x){
+    this.motorSpeedConst = .3 * Math.pow(-(this.area/7.0) + 1.0, 0.5);
+    double leftSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), true);
+    double rightSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), false);
+    SmartDashboard.putNumber("left speed: ", + leftSpeed);
+    SmartDashboard.putNumber("right speed: ", + rightSpeed);
+    SmartDashboard.putNumber("limelight x: ", + getX());
+    SmartDashboard.putNumber("motor constant: ", + this.motorSpeedConst);
     Robot.drivetrain.setRaw(leftSpeed, rightSpeed);
   }
 
@@ -99,13 +107,13 @@ public static double getA(){
         double x = getX();
         if(isCurrentlyOnLeft == initiallyOnLeft)
             align(x);
-        else if(getA() >= 10){
-          Robot.drivetrain.stop();
-        }
         else{
           driveWithVision(x);
         }
       }
+    }
+    if(Robot.m_oi.djoy.getRawButtonReleased(3)){
+      Robot.drivetrain.stop();
     }
 
   }

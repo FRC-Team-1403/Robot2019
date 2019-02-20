@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
   public Joystick djoy = new Joystick(RobotMap.djoy);
   public Joystick ojoy = new Joystick(RobotMap.ojoy);
-  
+  public Joystick tjoy = new Joystick(RobotMap.tjoy);
   
   
   //// CREATING BUTTONS

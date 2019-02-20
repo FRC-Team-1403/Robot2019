@@ -30,6 +30,7 @@ public class RobotMap {
   
   public static int djoy = 0;
   public static int ojoy = 1;
+  public static int tjoy = 2;
 
   public static int extensionSolenoid1 = 7;
   public static int extensionSolenoid2 = 5;

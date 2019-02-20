@@ -17,13 +17,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class Vision extends Subsystem{
     
-    
-
-    public Vision()
-    {
-      
-    }
-    
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

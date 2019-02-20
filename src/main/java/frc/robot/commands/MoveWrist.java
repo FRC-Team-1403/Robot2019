@@ -30,7 +30,7 @@ public class MoveWrist extends Command {
       Robot.w.moveBy(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
     }
      else{
-      if(SetControl.mode == 1)
+      if(SetControl.mode == 0)
         Robot.w.moveByArm(Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage())); 
       
      }

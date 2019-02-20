@@ -38,6 +38,7 @@ public class Wrist extends Subsystem {
   public static double armConversion;
   public static double prevArmAngle;
   public int integral, previous_error;
+  public static double tooFast = .3;
 
   public Wrist() {
     wristMotor = new TalonSRX(RobotMap.wristMotor);
@@ -53,14 +54,15 @@ public class Wrist extends Subsystem {
 
 
   public void wristTest(double value) {
-    if(potentiometerWrist.getAverageVoltage() > .39) {
+    
+    /*if(potentiometerWrist.getAverageVoltage() > .39) {
       wristMotor.set(ControlMode.PercentOutput, value);
     } else {
       wristMotor.set(ControlMode.PercentOutput, -.3);
-    }
+    }*/
   }
   public void moveBy(double stick){
-    setpoint += stick * .01;
+    setpoint += stick * .015;
   }
   public void moveByArm(double armAngle){
     SmartDashboard.putNumber("change in wrist angle: ", armConversion * (armAngle-prevArmAngle));
@@ -72,6 +74,10 @@ public class Wrist extends Subsystem {
     angle = voltToRadians(potentiometerWrist.getAverageVoltage());
     error = setpoint - angle; // Error = Target - Actual    
     PID = P*error;
+    if(PID > tooFast)
+      PID = tooFast;
+    if(PID < -tooFast)
+      PID = -tooFast;
   }
 
   public double voltToRadians(double potentiometerValue){

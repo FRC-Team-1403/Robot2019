@@ -19,16 +19,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SetControl extends Command {
   public static int ballLevel = 1; // 1 - floor, 2 - 1st, 3 - 2nd, 4 - 3rd
   public static int hatchLevel = 1; // 1 - floor, 2 - 1st, 3 - 2nd, 4 - 3rd
-  public static int mode = 0; //0 - continuous, 1 - ball control, 2 - hatch control
+  public static int mode = 0; //0 - continuous, 2 - ball control, 1 - hatch control
   boolean currentlyPressed = false;
-
-
   //angles are relative to the flat
-  public static final double[][] ballAngles = {{.75087152622 -.65794353926}, {0.39339194857, -.704520682933}, {2.21688712317, -.24690024639}, {1.43904882392, .6939580557}, {0.76833795509, 1.29829649479}};
+  public static final double[][] ballAngles = {{.75087152622, -.65794353926}, {0.39339194857, -.704520682933}, {2.21688712317, -.24690024639}, {1.43904882392, .6939580557}, {0.76833795509, 1.29829649479}};
   public static final double[][] hatchAngles = {{0.38407651983, -.65794353926}, {0.39339194857, -.704520682933}, {-0.50554692422,.19791147563}, {-0.83158692989, .93033705981}};
   
-  public static Setpoint[] hatchPositions;
-  public static Setpoint[] ballPositions;
+  public static Setpoint[] hatchPositions = new Setpoint[hatchAngles.length];
+  public static Setpoint[] ballPositions = new Setpoint[ballAngles.length];
 
 
 
@@ -38,7 +36,7 @@ public class SetControl extends Command {
       hatchPositions[i] = new Setpoint(hatchAngles[i][0], hatchAngles[i][1]);
     } 
     for(int i = 0; i < ballAngles.length; i++){
-      ballPositions[i] = new Setpoint(ballAngles[i][0], hatchAngles[i][1]);
+      ballPositions[i] = new Setpoint(ballAngles[i][0], ballAngles[i][1]);
     }
 
     hatchPositions[0].armOut = true;
@@ -83,19 +81,19 @@ public class SetControl extends Command {
     
     if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)) {
       updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage());
-    }
+    } //DONT FORGET TO SET TO A SEPARATE JOYSTICK
 
       if(joystickMoved()) {
      
         if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY) < -.5) {
-          if(mode == 1) {
+          if(mode == 2) {
            ballLevel++;        
            if(ballLevel == ballPositions.length) {
              ballLevel = ballPositions.length-1;
            }
            ballPositions[ballLevel].run();
          }
-         if(mode == 2) {
+         if(mode == 1) {
            hatchLevel++;
            if(hatchLevel == hatchPositions.length) {
              hatchLevel = hatchPositions.length-1;
@@ -103,14 +101,14 @@ public class SetControl extends Command {
            hatchPositions[hatchLevel].run(); 
          }
        } else {
-         if(mode == 1) {
+         if(mode == 2) {
            ballLevel--;
             if(ballLevel == -1){
              ballLevel = 0;
            }
            ballPositions[ballLevel].run();        
          }
-         if(mode == 2) {
+         if(mode == 1) {
            hatchLevel--;
            if(hatchLevel == -1) {
              hatchLevel = 0;

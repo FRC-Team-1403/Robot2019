@@ -29,8 +29,11 @@ public class Setpoint {
         } 
 
         else if(!armOut) {
-            Robot.in.hatchPush.set(DoubleSolenoid.Value.kReverse);
+            if(Robot.in.hatchPush.get() == DoubleSolenoid.Value.kForward) {
+                Robot.in.hatchPush.set(DoubleSolenoid.Value.kReverse);
+            }
         }
 
     }
+    
 }

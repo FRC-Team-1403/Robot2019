@@ -146,11 +146,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    SetControl.mode = 1;
-    SetControl.ballLevel = 1;
-    SetControl.hatchLevel = 1;
+    /*SetControl.mode = 0;
+    SetControl.ballLevel = 0;
+    SetControl.hatchLevel = 0;
     arm.setpoint = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
     w.setpoint = Robot.w.voltToRadians(Robot.w.potentiometerWrist.getAverageVoltage());
+    */
     if (Robot.m_oi.ojoy.getRawButtonReleased(8)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
 		
