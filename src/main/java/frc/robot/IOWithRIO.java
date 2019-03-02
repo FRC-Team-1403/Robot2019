@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import java.io.BufferedWriter;
@@ -24,21 +17,28 @@ public class IOWithRIO {
     BufferedReader br;
 
     public IOWithRIO(){
+    boolean newFile = false;
     try{
         f = new File("/home/lvuser/Output.txt");
         if(!f.exists()){
             f.createNewFile();
+            newFile = true;
         }
         fw = new FileWriter(f);
     } catch(IOException e){
         e.printStackTrace();
     }
     bw = new BufferedWriter(fw);
+    if(newFile) {
+      writeToRIO(3.663286317999746, 2.917286317999828);
+       
+        }
     }
-
-    public void writeToRIO(double armReading, double wristReading){
+    public void writeToRIO(double armPotReading, double wristPotReading){
         try{
-            bw.write("hi");
+            bw.write(Double.toString(armPotReading));
+            bw.newLine();
+            bw.write(Double.toString(wristPotReading));
             bw.close();
             fw.close();
         } catch(IOException e){
@@ -49,7 +49,11 @@ public class IOWithRIO {
         try{
             br = new BufferedReader(new FileReader(f));
             String currentLine = br.readLine();
-            SmartDashboard.putString("read string:", currentLine);
+            double armPotReading = Double.parseDouble(currentLine);
+            currentLine = br.readLine();
+            double wristPotReading = Double.parseDouble(currentLine);
+            Robot.arm.flat = armPotReading;
+            Robot.w.flat = wristPotReading;
             br.close();
         } catch(IOException e){
             e.printStackTrace();

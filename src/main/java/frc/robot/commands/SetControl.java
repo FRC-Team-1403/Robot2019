@@ -52,9 +52,8 @@ public class SetControl extends Command {
   }
 
   public void updatePotentiometerReadings(double aPotReading, double wPotReading){
-    
-    Robot.arm.flat = aPotReading;
-    Robot.w.flat = wPotReading;
+    Robot.rioIO.writeToRIO(aPotReading, wPotReading);
+    Robot.rioIO.readFromRIO();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -66,7 +65,7 @@ public class SetControl extends Command {
 
     mode%=2;
     
-    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyBack)) {
+    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
       updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
     } 
 

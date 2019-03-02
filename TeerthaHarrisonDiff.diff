@@ -1,0 +1,861 @@
+diff --git a/ChangesToServoPorts.diff b/ChangesToServoPorts.diff
+deleted file mode 100644
+index a6291b1..0000000
+--- a/ChangesToServoPorts.diff
++++ /dev/null
+@@ -1,204 +0,0 @@
+-diff --git a/src/main/java/frc/robot/OI.java b/src/main/java/frc/robot/OI.java
+-index a4bb4b9..737c811 100644
+---- a/src/main/java/frc/robot/OI.java
+-+++ b/src/main/java/frc/robot/OI.java
+-@@ -10,6 +10,7 @@ package frc.robot;
+- import edu.wpi.first.wpilibj.Joystick;
+- import edu.wpi.first.wpilibj.buttons.Button;
+- import edu.wpi.first.wpilibj.buttons.JoystickButton;
+-+import frc.robot.commands.HookHatch;
+- import frc.robot.commands.ReleasingTheHatchPanel;
+- 
+- 
+-@@ -23,10 +24,12 @@ public class OI {
+-   public Joystick djoy = new Joystick(RobotMap.djoy);
+-   public Joystick ojoy = new Joystick(RobotMap.ojoy);
+-   public JoystickButton RBojoy = new JoystickButton(ojoy, RobotMap.ojoyRB);
+-+  public JoystickButton LBojoy = new JoystickButton(ojoy, RobotMap.ojoyLB);
+- 
+-   public OI(){
+-     RBojoy.whenPressed(new ReleasingTheHatchPanel());
+--  }
+-+    LBojoy.whenPressed(new HookHatch());
+-+  }  
+-   
+-   
+-   
+-diff --git a/src/main/java/frc/robot/Robot.java b/src/main/java/frc/robot/Robot.java
+-index f645eb1..2a68dce 100644
+---- a/src/main/java/frc/robot/Robot.java
+-+++ b/src/main/java/frc/robot/Robot.java
+-@@ -9,7 +9,6 @@ package frc.robot;
+- 
+- import edu.wpi.first.wpilibj.TimedRobot;
+- import edu.wpi.first.wpilibj.command.Command;
+--import frc.robot.commands.SetControl;
+- import edu.wpi.first.wpilibj.command.Scheduler;
+- import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+- import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+-@@ -35,6 +34,7 @@ import frc.robot.echo.Recorder;
+- 
+- 
+- 
+-+
+- /**
+-  * The VM is configured to automatically run this class, and to call the
+-  * functions corresponding to each mode, as described in the TimedRobot
+-@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
+-     ae =  new ArmExtension();
+-     arm = new Arm();
+-     w = new Wrist();
+--    cs = new ControlSystem();
+-+    cs= new ControlSystem();
+-     vs = new Vision();
+-     m_oi = new OI();
+- 
+-@@ -211,10 +211,10 @@ public class Robot extends TimedRobot {
+- 			Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
+-       Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
+-       Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
+--      Intake.setPosition(in.hatchPush, recorder.getReading("Push Hatch"));
+--      Intake.setPosition(in.hatchPush, recorder.getReading("Release Hatch"));
+--      //Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
+--      //Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
+-+      Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Push Hatch"));
+-+      Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Release Hatch"));
+-+      Intake.setServo(in.hookServo, recorder.getReading("Hook Hatch"));
+-+      Intake.setServo(in.hookServo, recorder.getReading("Unhook Hatch"));
+-       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
+-       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
+-       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
+-@@ -231,10 +231,10 @@ public class Robot extends TimedRobot {
+- 			Wrist.setSpeed(w.wristMotor, 0);
+-       Intake.setSpeed(in.intakeMotor, 0);
+-       Intake.setSpeed(in.intakeMotor, 0);
+--      Intake.setPosition(in.hatchPush, 0);
+--      Intake.setPosition(in.hatchPush, 0);
+--      //Intake.setServo(in.hook, 0);
+--      //Intake.setServo(in.hook, 0);
+-+      Intake.setPosition(in.hatchPushSolenoid, 0);
+-+      Intake.setPosition(in.hatchPushSolenoid, 0);
+-+      Intake.setServo(in.hookServo, 0);
+-+      Intake.setServo(in.hookServo, 0);
+-       Arm.setSpeed(arm.armMotorL,0);
+-       Arm.setSpeed(arm.armMotorR, 0);
+-       ArmExtension.setPosition(ae.armExtender, 0);
+-@@ -290,9 +290,6 @@ public class Robot extends TimedRobot {
+- 
+-     SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
+- 
+--
+--
+--    SmartDashboard.putNumber("mode: ", SetControl.mode);
+-     SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
+-     SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
+-     SmartDashboard.putNumber("Error a", Robot.arm.error);
+-@@ -300,7 +297,8 @@ public class Robot extends TimedRobot {
+-     SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
+-     SmartDashboard.putNumber("Flat a", Robot.arm.flat);
+-     SmartDashboard.putNumber("P value a", Robot.arm.P);
+--    SmartDashboard.putNumber("Posititi", Robot.in.hook.getPosition());   
+-+    SmartDashboard.putNumber("Posititi", Robot.in.hookServo.getPosition());   
+-+    
+-     if(Recorder.isRecording)
+- 		{
+- 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
+-@@ -312,28 +310,20 @@ public class Robot extends TimedRobot {
+- 			recorder.addReading("Wrist", Robot.m_oi.ojoy.getRawAxis(1));
+-       recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
+-       recorder.addReading("Eject Ball", Robot.m_oi.ojoy.getRawAxis(3));
+--      recorder.addReading("Push Hatch", ArmExtension.convertBoolToDouble()); //boolToDouble is static in ArmExtension, it was intiailly
+-+      recorder.addReading("Push Hatch", Robot.m_oi.djoy.getRawAxis(5)); //boolToDouble is static in ArmExtension, it was intiailly
+-       recorder.addReading("Release Hatch", ArmExtension.convertBoolToDouble()); //Robot.in.convertBoolToDouble but that wasn't where it was
+-       recorder.addReading("Hook Hatch", ArmExtension.convertBoolToDouble()); //if this doesn't work then that is why
+-       recorder.addReading("Unhook Hatch", ArmExtension.convertBoolToDouble());
+-       recorder.addReading("Move Arm Left", -Robot.m_oi.ojoy.getRawAxis(5));
+-       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
+--      recorder.addReading("Arm is extended", Robot.ae.convertBoolToDouble());
+--      recorder.addReading("Arm is retracted", Robot.ae.convertBoolToDouble());
+-+      recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
+-+      recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
+- 			System.out.println(recorder.initNextReading());
+- 		}
+- 		
+- 		else if (Recorder.isStoring()) {
+- 			recorder.storeWritings();
+- 		}
+--    /*if(m_oi.djoy.getRawButtonPressed(3) && (int)getV() == 1){ //will only run when the button is first pressed
+--      if(getX() < 0){
+--        initiallyOnLeft  = true;
+--      }
+--      else if(getX() >= 0){ //dont know how to handle if x is 0
+--        initiallyOnLeft = false;
+--      }
+--    }*/
+-    if(m_oi.ojoy.getRawButton(2)){
+-      drivetrain.moveBackward();
+-    }
+-diff --git a/src/main/java/frc/robot/RobotMap.java b/src/main/java/frc/robot/RobotMap.java
+-index 3878040..3843996 100644
+---- a/src/main/java/frc/robot/RobotMap.java
+-+++ b/src/main/java/frc/robot/RobotMap.java
+-@@ -26,15 +26,14 @@ public class RobotMap {
+-   public static int armMotorR = 4;
+-   public static int intakeMotor = 3;
+-   public static int wristMotor = 5;
+--  public static int hookServo = 1;
+--  
+-+  public static int hookServo = 8;
+-   public static int djoy = 0;
+-   public static int ojoy = 1;
+- 
+--  public static int extensionSolenoid1 = 7;
+--  public static int extensionSolenoid2 = 5;
+--  public static int hatchPush1 = 4;
+--  public static int hatchPush2 = 6;
+-+  public static int extensionSolenoid1 = 4;
+-+  public static int extensionSolenoid2 = 6;
+-+  public static int hatchPush1 = 7;
+-+  public static int hatchPush2 = 5;
+- 
+-   public static int ojoyA = 1;
+-   public static int ojoyB = 2;
+-@@ -42,13 +41,11 @@ public class RobotMap {
+-   public static int ojoyY = 4;
+-   public static int ojoyLB = 5;
+-   public static int ojoyRB = 6;
+--  public static int ojoyBack = 7;
+--  public static int ojoyStart = 8;
+--  public static int ojoyRY = 5;
+--  public static int ojoyLY = 1;
+-+  public static int ojoyStart = 7;
+-+  public static int ojoyBack = 8;
+- 
+--  public static int potA = 0;
+--  public static int potW = 1;
+-+  public static int potA = 1;
+-+  public static int potW = 2;
+- 
+-   // If you are using multiple modules, make sure to define both the port
+-   // number and the module. For example you with a rangefinder:
+-diff --git a/src/main/java/frc/robot/subsystems/Intake.java b/src/main/java/frc/robot/subsystems/Intake.java
+-index 29d0e52..e3fcc58 100644
+---- a/src/main/java/frc/robot/subsystems/Intake.java
+-+++ b/src/main/java/frc/robot/subsystems/Intake.java
+-@@ -65,10 +65,8 @@ public void release(){
+- 
+- 
+- public void hookHatchPanel(){
+--  if (Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)){
+-     hookServo.setPosition(1);
+- }
+--}
+- public void unhookHatchPanel(){
+-   hookServo.setPosition(0);
+- }
+-@@ -97,6 +95,8 @@ public static void setServo(Servo servo, double position){
+-     servo.setPosition(0);
+-   }
+- }
+-+
+-+
+-   // Put methods for controlling this subsystem
+-   // here. Call these from Commands.
+- 
+diff --git a/CleanCodeAndCommandGroup.diff b/CleanCodeAndCommandGroup.diff
+deleted file mode 100644
+index f57cb0b..0000000
+--- a/CleanCodeAndCommandGroup.diff
++++ /dev/null
+@@ -1,430 +0,0 @@
+-diff --git a/src/main/java/frc/robot/OI.java b/src/main/java/frc/robot/OI.java
+-index a4bb4b9..d526d09 100644
+---- a/src/main/java/frc/robot/OI.java
+-+++ b/src/main/java/frc/robot/OI.java
+-@@ -10,7 +10,6 @@ package frc.robot;
+- import edu.wpi.first.wpilibj.Joystick;
+- import edu.wpi.first.wpilibj.buttons.Button;
+- import edu.wpi.first.wpilibj.buttons.JoystickButton;
+--import frc.robot.commands.ReleasingTheHatchPanel;
+- 
+- 
+- 
+-@@ -22,11 +21,6 @@ import frc.robot.commands.ReleasingTheHatchPanel;
+- public class OI {
+-   public Joystick djoy = new Joystick(RobotMap.djoy);
+-   public Joystick ojoy = new Joystick(RobotMap.ojoy);
+--  public JoystickButton RBojoy = new JoystickButton(ojoy, RobotMap.ojoyRB);
+--
+--  public OI(){
+--    RBojoy.whenPressed(new ReleasingTheHatchPanel());
+--  }
+-   
+-   
+-   
+-diff --git a/src/main/java/frc/robot/commands/HookHatch.java b/src/main/java/frc/robot/commands/HookHatch.java
+-deleted file mode 100644
+-index bf353ae..0000000
+---- a/src/main/java/frc/robot/commands/HookHatch.java
+-+++ /dev/null
+-@@ -1,46 +0,0 @@
+--/*----------------------------------------------------------------------------*/
+--/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+--/* Open Source Software - may be modified and shared by FRC teams. The code   */
+--/* must be accompanied by the FIRST BSD license file in the root directory of */
+--/* the project.                                                               */
+--/*----------------------------------------------------------------------------*/
+--
+--package frc.robot.commands;
+--
+--import edu.wpi.first.wpilibj.command.Command;
+--import frc.robot.Robot;
+--
+--public class HookHatch extends Command {
+--  public HookHatch() {
+--    // Use requires() here to declare subsystem dependencies
+--    requires(Robot.in);
+--  }
+--
+--  // Called just before this Command runs the first time
+--  @Override
+--  protected void initialize() {
+--  }
+--
+--  // Called repeatedly when this Command is scheduled to run
+--  @Override
+--  protected void execute() {
+--    Robot.in.hookHatchPanel();
+--  }
+--
+--  // Make this return true when this Command no longer needs to run execute()
+--  @Override
+--  protected boolean isFinished() {
+--    return false;
+--  }
+--
+--  // Called once after isFinished returns true
+--  @Override
+--  protected void end() {
+--  }
+--
+--  // Called when another command which requires one or more of the same
+--  // subsystems is scheduled to run
+--  @Override
+--  protected void interrupted() {
+--  }
+--}
+-diff --git a/src/main/java/frc/robot/commands/IntakeC.java b/src/main/java/frc/robot/commands/IntakeC.java
+-index edd7680..95e95d7 100644
+---- a/src/main/java/frc/robot/commands/IntakeC.java
+-+++ b/src/main/java/frc/robot/commands/IntakeC.java
+-@@ -28,6 +28,7 @@ public class IntakeC extends Command {
+-   @Override
+-   protected void execute() {
+-     Robot.in.intake();
+-+    Robot.in.push();
+-     Robot.in.hookHatchPanel();
+-     }
+- 
+-diff --git a/src/main/java/frc/robot/commands/PushHatch.java b/src/main/java/frc/robot/commands/PushHatch.java
+-deleted file mode 100644
+-index 4ff208e..0000000
+---- a/src/main/java/frc/robot/commands/PushHatch.java
+-+++ /dev/null
+-@@ -1,46 +0,0 @@
+--/*----------------------------------------------------------------------------*/
+--/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+--/* Open Source Software - may be modified and shared by FRC teams. The code   */
+--/* must be accompanied by the FIRST BSD license file in the root directory of */
+--/* the project.                                                               */
+--/*----------------------------------------------------------------------------*/
+--
+--package frc.robot.commands;
+--
+--import edu.wpi.first.wpilibj.command.Command;
+--import frc.robot.Robot;
+--
+--public class PushHatch extends Command {
+--  public PushHatch() {
+--    // Use requires() here to declare subsystem dependencies
+--     requires(Robot.in);
+--  }
+--
+--  // Called just before this Command runs the first time
+--  @Override
+--  protected void initialize() {
+--  }
+--
+--  // Called repeatedly when this Command is scheduled to run
+--  @Override
+--  protected void execute() {
+--    Robot.in.push();
+--  }
+--
+--  // Make this return true when this Command no longer needs to run execute()
+--  @Override
+--  protected boolean isFinished() {
+--    return false;
+--  }
+--
+--  // Called once after isFinished returns true
+--  @Override
+--  protected void end() {
+--  }
+--
+--  // Called when another command which requires one or more of the same
+--  // subsystems is scheduled to run
+--  @Override
+--  protected void interrupted() {
+--  }
+--}
+-diff --git a/src/main/java/frc/robot/commands/ReleaseHatch.java b/src/main/java/frc/robot/commands/ReleaseHatch.java
+-deleted file mode 100644
+-index f384c2f..0000000
+---- a/src/main/java/frc/robot/commands/ReleaseHatch.java
+-+++ /dev/null
+-@@ -1,46 +0,0 @@
+--/*----------------------------------------------------------------------------*/
+--/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+--/* Open Source Software - may be modified and shared by FRC teams. The code   */
+--/* must be accompanied by the FIRST BSD license file in the root directory of */
+--/* the project.                                                               */
+--/*----------------------------------------------------------------------------*/
+--
+--package frc.robot.commands;
+--
+--import edu.wpi.first.wpilibj.command.Command;
+--import frc.robot.Robot;
+--
+--public class ReleaseHatch extends Command {
+--  public ReleaseHatch() {
+--    // Use requires() here to declare subsystem dependencies
+--     requires(Robot.in);
+--  }
+--
+--  // Called just before this Command runs the first time
+--  @Override
+--  protected void initialize() {
+--  }
+--
+--  // Called repeatedly when this Command is scheduled to run
+--  @Override
+--  protected void execute() {
+--    Robot.in.release();
+--  }
+--
+--  // Make this return true when this Command no longer needs to run execute()
+--  @Override
+--  protected boolean isFinished() {
+--    return false;
+--  }
+--
+--  // Called once after isFinished returns true
+--  @Override
+--  protected void end() {
+--  }
+--
+--  // Called when another command which requires one or more of the same
+--  // subsystems is scheduled to run
+--  @Override
+--  protected void interrupted() {
+--  }
+--}
+-diff --git a/src/main/java/frc/robot/commands/ReleasingTheHatchPanel.java b/src/main/java/frc/robot/commands/ReleasingTheHatchPanel.java
+-deleted file mode 100644
+-index 7ea27b6..0000000
+---- a/src/main/java/frc/robot/commands/ReleasingTheHatchPanel.java
+-+++ /dev/null
+-@@ -1,23 +0,0 @@
+--/*----------------------------------------------------------------------------*/
+--/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+--/* Open Source Software - may be modified and shared by FRC teams. The code   */
+--/* must be accompanied by the FIRST BSD license file in the root directory of */
+--/* the project.                                                               */
+--/*----------------------------------------------------------------------------*/
+--
+--package frc.robot.commands;
+--
+--import edu.wpi.first.wpilibj.command.CommandGroup;
+--import edu.wpi.first.wpilibj.command.WaitCommand;
+--
+--public class ReleasingTheHatchPanel extends CommandGroup {
+--
+--  public ReleasingTheHatchPanel() {
+--   
+--    addSequential(new UnhookHatch());
+--    addSequential(new WaitCommand(0.5));
+--    addSequential(new PushHatch());
+--    addSequential(new ReleaseHatch());
+--
+--  }
+--}
+-diff --git a/src/main/java/frc/robot/commands/UnhookHatch.java b/src/main/java/frc/robot/commands/UnhookHatch.java
+-deleted file mode 100644
+-index ef782fe..0000000
+---- a/src/main/java/frc/robot/commands/UnhookHatch.java
+-+++ /dev/null
+-@@ -1,46 +0,0 @@
+--/*----------------------------------------------------------------------------*/
+--/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+--/* Open Source Software - may be modified and shared by FRC teams. The code   */
+--/* must be accompanied by the FIRST BSD license file in the root directory of */
+--/* the project.                                                               */
+--/*----------------------------------------------------------------------------*/
+--
+--package frc.robot.commands;
+--
+--import edu.wpi.first.wpilibj.command.Command;
+--import frc.robot.Robot;
+--
+--public class UnhookHatch extends Command {
+--  public UnhookHatch() {
+--    // Use requires() here to declare subsystem dependencies
+--     requires(Robot.in);
+--  }
+--
+--  // Called just before this Command runs the first time
+--  @Override
+--  protected void initialize() {
+--  }
+--
+--  // Called repeatedly when this Command is scheduled to run
+--  @Override
+--  protected void execute() {
+--    Robot.in.unhookHatchPanel();
+--  }
+--
+--  // Make this return true when this Command no longer needs to run execute()
+--  @Override
+--  protected boolean isFinished() {
+--    return false;
+--  }
+--
+--  // Called once after isFinished returns true
+--  @Override
+--  protected void end() {
+--  }
+--
+--  // Called when another command which requires one or more of the same
+--  // subsystems is scheduled to run
+--  @Override
+--  protected void interrupted() {
+--  }
+--}
+-diff --git a/src/main/java/frc/robot/subsystems/ArmExtension.java b/src/main/java/frc/robot/subsystems/ArmExtension.java
+-index 680d168..8ec086f 100644
+---- a/src/main/java/frc/robot/subsystems/ArmExtension.java
+-+++ b/src/main/java/frc/robot/subsystems/ArmExtension.java
+-@@ -28,18 +28,20 @@ public class ArmExtension extends Subsystem {
+-   }
+- 
+-   public void push() {
+--    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
+-+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)) 
+-     {
+-       armExtender.set(DoubleSolenoid.Value.kForward);
+-       
+-     }
+--    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
+-+    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB)) 
+-     {
+-       armExtender.set(DoubleSolenoid.Value.kReverse);
+-+      
+-     }
+-     else 
+-     {
+-       armExtender.set(DoubleSolenoid.Value.kOff);
+-+     
+-     }
+-   }
+-   public static double convertBoolToDouble(){
+-diff --git a/src/main/java/frc/robot/subsystems/ControlSystem.java b/src/main/java/frc/robot/subsystems/ControlSystem.java
+-index 9037bca..129127e 100644
+---- a/src/main/java/frc/robot/subsystems/ControlSystem.java
+-+++ b/src/main/java/frc/robot/subsystems/ControlSystem.java
+-@@ -9,6 +9,7 @@ package frc.robot.subsystems;
+- 
+- import edu.wpi.first.wpilibj.command.Subsystem;
+- import frc.robot.commands.SetControl;
+-+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+- 
+- /**
+-  * Add your docs here.
+-diff --git a/src/main/java/frc/robot/subsystems/Intake.java b/src/main/java/frc/robot/subsystems/Intake.java
+-index 29d0e52..051eaf3 100644
+---- a/src/main/java/frc/robot/subsystems/Intake.java
+-+++ b/src/main/java/frc/robot/subsystems/Intake.java
+-@@ -24,19 +24,15 @@ import edu.wpi.first.wpilibj.Servo;
+-  */
+- public class Intake extends Subsystem {
+-   public VictorSPX intakeMotor;
+--  public DoubleSolenoid hatchPushSolenoid;
+--  public Servo hookServo;
+--  public double value;
+--  public double position;  
+-+  public DoubleSolenoid hatchPush;
+-+  public Servo hook;
+-+  public double value;  
+- 
+-   public Intake(){
+-     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
+--    hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+--    hookServo= new Servo(RobotMap.hookServo);
+-+    hatchPush = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+-+    hook= new Servo(RobotMap.hookServo);
+-   }
+--
+--
+--
+- public void intake(){
+-   if(Robot.m_oi.ojoy.getRawAxis(2)>0)
+-   {
+-@@ -51,34 +47,42 @@ public void intake(){
+-     intakeMotor.set(ControlMode.PercentOutput, 0);
+-   }
+- }
+--
+--
+--
+--public void push(){
+--    hatchPushSolenoid.set(DoubleSolenoid.Value.kReverse);
+-+public void push()
+-+{
+-+  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
+-+  {
+-+    hatchPush.set(DoubleSolenoid.Value.kForward);
+-+    value = 1.0;
+-+  }
+-+  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
+-+  {
+-+    hatchPush.set(DoubleSolenoid.Value.kReverse);
+-+    value = -1.0;
+-+  }
+-+  else
+-+  {
+-+    hatchPush.set(DoubleSolenoid.Value.kOff);
+-+    value = 0.0;
+-   }
+--
+--public void release(){
+--  hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+- }
+--
+--
+--
+- public void hookHatchPanel(){
+--  if (Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)){
+--    hookServo.setPosition(1);
+--}
+-+  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
+-+    hook.setPosition(1);
+-+    
+-+  }
+-+  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
+-+    hook.setPosition(0);
+-+  }
+- }
+--public void unhookHatchPanel(){
+--  hookServo.setPosition(0);
+-+public void hatchSpeed(){
+-+  // hook.setPosition(-Robot.m_oi.ojoy.getRawAxis(1));
+- }
+- 
+--
+--
+- public static void setSpeed(VictorSPX victor, double speed){
+-   victor.set(ControlMode.PercentOutput, speed);
+- }
+--public static void setPosition(DoubleSolenoid doubleSolenoid, double value){
+-+public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
+-+{
+-   if (value==1.0){
+-     doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+-   }
+-@@ -87,15 +91,9 @@ public static void setPosition(DoubleSolenoid doubleSolenoid, double value){
+-   }
+-   if(value == 0.0){
+-     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+--  }  
+--}
+--public static void setServo(Servo servo, double position){
+--  if (position==1.0){
+--    servo.setPosition(1);
+--  }
+--  if(position==0.0){
+--    servo.setPosition(0);
+-   }
+-+  
+-+  
+- }
+-   // Put methods for controlling this subsystem
+-   // here. Call these from Commands.
+-@@ -103,6 +101,6 @@ public static void setServo(Servo servo, double position){
+-   @Override
+-   public void initDefaultCommand() {
+-     // Set the default command for a subsystem here.
+--    //setDefaultCommand(new IntakeC());
+-+    setDefaultCommand(new IntakeC());
+-   }
+- }
+-\ No newline at end of file
+diff --git a/src/main/java/frc/robot/OI.java b/src/main/java/frc/robot/OI.java
+index ecaf0ae..cb9f925 100644
+--- a/src/main/java/frc/robot/OI.java
++++ b/src/main/java/frc/robot/OI.java
+@@ -10,8 +10,8 @@ package frc.robot;
+ import edu.wpi.first.wpilibj.Joystick;
+ import edu.wpi.first.wpilibj.buttons.Button;
+ import edu.wpi.first.wpilibj.buttons.JoystickButton;
+-import frc.robot.commands.ReleasingTheHatchPanel;
+ import frc.robot.commands.HookHatch;
++import frc.robot.commands.ReleasingTheHatchPanel;
+ 
+ 
+ 
+diff --git a/src/main/java/frc/robot/Robot.java b/src/main/java/frc/robot/Robot.java
+index 67008f8..0c76bd6 100644
+--- a/src/main/java/frc/robot/Robot.java
++++ b/src/main/java/frc/robot/Robot.java
+@@ -9,11 +9,11 @@ package frc.robot;
+ 
+ import edu.wpi.first.wpilibj.TimedRobot;
+ import edu.wpi.first.wpilibj.command.Command;
+-import frc.robot.commands.SetControl;
+ import edu.wpi.first.wpilibj.command.Scheduler;
+ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+ import frc.robot.commands.ExampleCommand;
++import frc.robot.commands.SetControl;
+ import frc.robot.subsystems.ExampleSubsystem;
+ import frc.robot.subsystems.DriveTrain;
+ import frc.robot.subsystems.Intake;
+@@ -221,8 +221,8 @@ public class Robot extends TimedRobot {
+       Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
+       Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Push Hatch"));
+       Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Release Hatch"));
+-      //Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
+-      //Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
++      Intake.setServo(in.hookServo, recorder.getReading("Hook Hatch"));
++      Intake.setServo(in.hookServo, recorder.getReading("Unhook Hatch"));
+       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
+       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
+       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
+@@ -241,8 +241,8 @@ public class Robot extends TimedRobot {
+       Intake.setSpeed(in.intakeMotor, 0);
+       Intake.setPosition(in.hatchPushSolenoid, 0);
+       Intake.setPosition(in.hatchPushSolenoid, 0);
+-      //Intake.setServo(in.hook, 0);
+-      //Intake.setServo(in.hook, 0);
++      Intake.setServo(in.hookServo, 0);
++      Intake.setServo(in.hookServo, 0);
+       Arm.setSpeed(arm.armMotorL,0);
+       Arm.setSpeed(arm.armMotorR, 0);
+       ArmExtension.setPosition(ae.armExtender, 0);
+@@ -298,9 +298,6 @@ public class Robot extends TimedRobot {
+ 
+     SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
+ 
+-    
+-
+-
+     SmartDashboard.putNumber("mode: ", SetControl.mode);
+     SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
+     SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
+@@ -323,29 +320,23 @@ public class Robot extends TimedRobot {
+ 			recorder.addReading("Wrist", Robot.m_oi.ojoy.getRawAxis(1));
+       recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
+       recorder.addReading("Eject Ball", Robot.m_oi.ojoy.getRawAxis(3));
+-      recorder.addReading("Push Hatch", ArmExtension.convertBoolToDouble()); //boolToDouble is static in ArmExtension, it was intiailly
++      recorder.addReading("Push Hatch", Robot.m_oi.djoy.getRawAxis(5)); //boolToDouble is static in ArmExtension, it was intiailly
+       recorder.addReading("Release Hatch", ArmExtension.convertBoolToDouble()); //Robot.in.convertBoolToDouble but that wasn't where it was
+       recorder.addReading("Hook Hatch", ArmExtension.convertBoolToDouble()); //if this doesn't work then that is why
+       recorder.addReading("Unhook Hatch", ArmExtension.convertBoolToDouble());
+       recorder.addReading("Move Arm Left", -Robot.m_oi.ojoy.getRawAxis(5));
+       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
+-      recorder.addReading("Arm is extended", Robot.ae.convertBoolToDouble());
+-      recorder.addReading("Arm is retracted", Robot.ae.convertBoolToDouble());
++      recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
++      recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
+ 			System.out.println(recorder.initNextReading());
+ 		}
+ 		
+ 		else if (Recorder.isStoring()) {
+ 			recorder.storeWritings();
+ 		}
+-    /*if(m_oi.djoy.getRawButtonPressed(3) && (int)getV() == 1){ //will only run when the button is first pressed
+-      if(getX() < 0){
+-        initiallyOnLeft  = true;
+-      }
+-      else if(getX() >= 0){ //dont know how to handle if x is 0
+-        initiallyOnLeft = false;
+-      }
+-    }*/
+-  
++   if(m_oi.ojoy.getRawButton(2)){
++     drivetrain.moveBackward();
++   }
+     Scheduler.getInstance().run();
+   
+   }
+diff --git a/src/main/java/frc/robot/RobotMap.java b/src/main/java/frc/robot/RobotMap.java
+index 286ffc8..c1eb678 100644
+--- a/src/main/java/frc/robot/RobotMap.java
++++ b/src/main/java/frc/robot/RobotMap.java
+@@ -51,8 +51,6 @@ public class RobotMap {
+   public static int ojoyRY = 5;
+   public static int ojoyLY = 1;
+ 
+-  
+-
+   public static int potA = 0;
+   public static int potW = 1;
+ 
+diff --git a/src/main/java/frc/robot/subsystems/ControlSystem.java b/src/main/java/frc/robot/subsystems/ControlSystem.java
+index 129127e..9037bca 100644
+--- a/src/main/java/frc/robot/subsystems/ControlSystem.java
++++ b/src/main/java/frc/robot/subsystems/ControlSystem.java
+@@ -9,7 +9,6 @@ package frc.robot.subsystems;
+ 
+ import edu.wpi.first.wpilibj.command.Subsystem;
+ import frc.robot.commands.SetControl;
+-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+ 
+ /**
+  * Add your docs here.
+diff --git a/src/main/java/frc/robot/subsystems/Intake.java b/src/main/java/frc/robot/subsystems/Intake.java
+index 9e1f14c..5ebdfac 100644
+--- a/src/main/java/frc/robot/subsystems/Intake.java
++++ b/src/main/java/frc/robot/subsystems/Intake.java
+@@ -27,12 +27,14 @@ public class Intake extends Subsystem {
+   public DoubleSolenoid hatchPushSolenoid;
+   public Servo hookServo;
+   public double value;  
++  public double position;  
+ 
+   public Intake(){
+     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
+     hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+     hookServo = new Servo(RobotMap.hookServo);
+   }
++
+ public void intake(){
+   if(Robot.m_oi.ojoy.getRawAxis(2)>0)
+   {
+@@ -53,40 +55,20 @@ public void push(){
+ }
+ 
+ public void release(){
+-hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
++  hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+ }
+ 
+-/*public void push()
+-{
+-  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
+-  {
+-    hatchPush.set(DoubleSolenoid.Value.kForward);
+-    value = 1.0;
+-  }
+-  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
+-  {
+-    hatchPush.set(DoubleSolenoid.Value.kReverse);
+-    value = -1.0;
+-  }
+-  else
+-  {
+-    hatchPush.set(DoubleSolenoid.Value.kOff);
+-    value = 0.0;
+-  }
+-}*/
+ public void hookHatchPanel(){
+   hookServo.setPosition(1);
+ }
+ public void unhookHatchPanel(){
+-hookServo.setPosition(0);
+-}
+-public void hatchSpeed(){
+-  // hook.setPosition(-Robot.m_oi.ojoy.getRawAxis(1));
++  hookServo.setPosition(0);
+ }
+ 
+ public static void setSpeed(VictorSPX victor, double speed){
+   victor.set(ControlMode.PercentOutput, speed);
+ }
++
+ public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
+ {
+   if (value==1.0){
+@@ -98,15 +80,23 @@ public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
+   if(value == 0.0){
+     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+   }
+-  
+-  
+ }
++
++public static void setServo(Servo servo, double position){
++  if (position==1.0){
++    servo.setPosition(1);
++  }
++  if(position==0.0){
++    servo.setPosition(0);
++  }
++}
++
+   // Put methods for controlling this subsystem
+   // here. Call these from Commands.
+ 
+   @Override
+   public void initDefaultCommand() {
+     // Set the default command for a subsystem here.
+-    setDefaultCommand(new IntakeC());
++    // setDefaultCommand(new IntakeC());
+   }
+ }
+\ No newline at end of file

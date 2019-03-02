@@ -69,6 +69,8 @@ public class Robot extends TimedRobot {
   public static NetworkTableEntry tv;
   public static NetworkTableEntry ta;
 
+  public static IOWithRIO rioIO;
+
   public static Recorder recorder;
   public static boolean record;
   public static boolean store;
@@ -101,6 +103,7 @@ public class Robot extends TimedRobot {
     vs = new Vision();
     lift = new MoveLiftingPistons();
     m_oi = new OI();
+    rioIO = new IOWithRIO();
 
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
@@ -148,12 +151,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    /*SetControl.mode = 0;
+    SetControl.mode = 0;
     SetControl.ballLevel = 0;
     SetControl.hatchLevel = 0;
     arm.setpoint = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
     w.setpoint = Robot.w.voltToRadians(Robot.w.potentiometerWrist.getAverageVoltage());
-    */
+    
     if (Robot.m_oi.ojoy.getRawButtonReleased(8)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
 		
@@ -260,6 +263,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    rioIO.readFromRIO();
     Robot.arm.potentiometerArm.resetAccumulator();
   }
 

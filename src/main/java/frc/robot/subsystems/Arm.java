@@ -50,7 +50,6 @@ public final double tooFast = .2;
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
     conversion = -0.9538999999999994;
-    flat = 3.663286317999746;
 
     angle = (potentiometerArm.getAverageVoltage()-flat)*conversion;
     setpoint = angle;

@@ -46,7 +46,6 @@ public class Wrist extends Subsystem {
 
     armConversion = -.949;
     conversion = -0.9538999999999994;
-    flat = 2.917286317999828;
 
     setpoint = (potentiometerWrist.getAverageVoltage()-flat)*conversion;
   }
