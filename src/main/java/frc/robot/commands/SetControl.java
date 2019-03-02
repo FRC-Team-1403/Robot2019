@@ -22,34 +22,19 @@ public class SetControl extends Command {
   public static int mode = 0; //0 - continuous, 2 - ball control, 1 - hatch control
   boolean currentlyPressed = false;
   //angles are relative to the flat
-  public static final double[][] ballAngles = {{.75087152622, -.65794353926}, {0.39339194857, -.704520682933}, {2.21688712317, -.24690024639}, {1.43904882392, .6939580557}, {0.76833795509, 1.29829649479}};
-  public static final double[][] hatchAngles = {{0.38407651983, -.65794353926}, {0.39339194857, -.704520682933}, {-0.50554692422,.19791147563}, {-0.83158692989, .93033705981}};
-  
-  public static Setpoint[] hatchPositions = new Setpoint[hatchAngles.length];
-  public static Setpoint[] ballPositions = new Setpoint[ballAngles.length];
 
-
+  public final Setpoint[] hatchPositions = {new Setpoint(4.353026898, 2.130126735,true), new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.455810193, 1.408691262), new Setpoint(2.6879880060000003, 2.1118161900000003, true)};
+  public final Setpoint[] ballPositions = {new Setpoint(4.210204647, 2.51464818),new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.922118739, 2.504882556), new Setpoint(2.935790715, 3.447265272), new Setpoint(2.302245858, 3.7890621120000003, true)};
 
   public SetControl() {
     // Use requires() here to declare subsystem dependencies
-    for(int i=0; i<hatchAngles.length; i++) {
-      hatchPositions[i] = new Setpoint(hatchAngles[i][0], hatchAngles[i][1]);
-    } 
-    for(int i = 0; i < ballAngles.length; i++){
-      ballPositions[i] = new Setpoint(ballAngles[i][0], ballAngles[i][1]);
-    }
-
-    hatchPositions[0].armOut = true;
-    hatchPositions[3].armOut = true;
-    ballPositions[4].armOut = true;
-
     requires(Robot.cs);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    updatePotentiometerReadings(Robot.arm.flat);
+    updatePotentiometerReadings(Robot.arm.flat, Robot.w.flat);
   }
   
   boolean joystickMoved() {
@@ -66,8 +51,9 @@ public class SetControl extends Command {
     return false;
   }
 
-  public void updatePotentiometerReadings(double potentiometerReading){
-    Robot.arm.flat = potentiometerReading;
+  public void updatePotentiometerReadings(double aPotReading, double wPotReading){
+    Robot.arm.flat = aPotReading;
+    Robot.w.flat = wPotReading;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -79,21 +65,21 @@ public class SetControl extends Command {
 
     mode %= 3;
     
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)) {
-      updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage());
-    } //DONT FORGET TO SET TO A SEPARATE JOYSTICK
+    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyBack)) {
+      updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
+    } 
 
       if(joystickMoved()) {
      
         if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY) < -.5) {
-          if(mode == 2) {
+          if(mode == 1) {
            ballLevel++;        
            if(ballLevel == ballPositions.length) {
              ballLevel = ballPositions.length-1;
            }
            ballPositions[ballLevel].run();
          }
-         if(mode == 1) {
+         if(mode == 2) {
            hatchLevel++;
            if(hatchLevel == hatchPositions.length) {
              hatchLevel = hatchPositions.length-1;
@@ -101,14 +87,14 @@ public class SetControl extends Command {
            hatchPositions[hatchLevel].run(); 
          }
        } else {
-         if(mode == 2) {
+         if(mode == 1) {
            ballLevel--;
             if(ballLevel == -1){
              ballLevel = 0;
            }
            ballPositions[ballLevel].run();        
          }
-         if(mode == 1) {
+         if(mode == 2) {
            hatchLevel--;
            if(hatchLevel == -1) {
              hatchLevel = 0;

@@ -53,15 +53,15 @@ public class Wrist extends Subsystem {
   
 
 
-  public void wristTest(double value) {
+  public void moveWrist(double value) {
     
-    /*if(potentiometerWrist.getAverageVoltage() > .39) {
+    if(potentiometerWrist.getAverageVoltage() > .39) {
       wristMotor.set(ControlMode.PercentOutput, value);
     } else {
       wristMotor.set(ControlMode.PercentOutput, -.3);
-    }*/
+    }
   }
-  public void moveBy(double stick){
+  public void movePIDSetpoint(double stick){
     setpoint += stick * .015;
   }
   public void moveByArm(double armAngle){

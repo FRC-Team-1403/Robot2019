@@ -4,26 +4,26 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.Robot;
 
 public class Setpoint {
-    double armAngle;
-    double wristAngle;
+    double armPotReading;
+    double wristPotReading;
     public boolean armOut;
 
 
     public Setpoint(double armPotReading, double wristPotReading) {
-        this.armAngle = armPotReading;
-        this.wristAngle = wristPotReading;
+        this.armPotReading = armPotReading;
+        this.wristPotReading = wristPotReading;
         armOut = false;
     }
     
     public Setpoint(double armPotReading, double wristPotReading, boolean armOut){
-        this.armAngle = armPotReading;
-        this.wristAngle = wristPotReading;
+        this.armPotReading = armPotReading;
+        this.wristPotReading = wristPotReading;
         this.armOut = armOut;
     }
 
     public void run(){
-        Robot.arm.setpoint = armAngle;
-        Robot.w.setpoint =  wristAngle;
+        Robot.arm.setpoint = getArmAngle();
+        Robot.w.setpoint =  getWristAngle();
         if(armOut){
             Robot.in.hatchPush.set(DoubleSolenoid.Value.kForward);
         } 
@@ -36,4 +36,12 @@ public class Setpoint {
 
     }
     
+    public double getArmAngle(){
+        return Robot.arm.voltToRadians(armPotReading);
+    }
+
+    public double getWristAngle(){
+        return Robot.w.voltToRadians(wristPotReading);
+    }
+
 }

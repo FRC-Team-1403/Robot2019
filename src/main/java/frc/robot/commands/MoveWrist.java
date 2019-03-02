@@ -27,15 +27,14 @@ public class MoveWrist extends Command {
   @Override
   protected void execute() {
      if(Math.abs(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY)) > .1){
-      Robot.w.moveBy(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
+      Robot.w.movePIDSetpoint(-Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
     }
      else{
-      if(SetControl.mode == 0)
+      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX))
         Robot.w.moveByArm(Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage())); 
-      
      }
      Robot.w.PID();
-     Robot.w.wristTest(Robot.w.PID);
+     Robot.w.moveWrist(Robot.w.PID);
 }
 
 

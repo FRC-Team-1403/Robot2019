@@ -25,21 +25,7 @@ public class Tester extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    /*if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyB)){
-      Robot.arm.feedForwardConstant-=.1;
-    }
-    if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyA)){
-      Robot.arm.feedForwardConstant+=.1;
-    }
-
-    if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyLB)){
-      Robot.arm.armConstant += .01;
-    }
-
-    if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyRB)){
-      Robot.arm.armConstant -= .01;
-    }*/
-
+    
   }
 
   // Make this return true when this Command no longer needs to run execute()
