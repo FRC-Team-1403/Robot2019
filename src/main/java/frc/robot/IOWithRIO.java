@@ -11,31 +11,30 @@ import java.io.FileReader;
  * Add your docs here.
  */
 public class IOWithRIO {
-    File f;
-    BufferedWriter bw;
-    FileWriter fw;
-    BufferedReader br;
 
+    String path;
     public IOWithRIO(){
     boolean newFile = false;
     try{
-        f = new File("/home/lvuser/Output.txt");
+        path = "/home/lvuser/Output.txt";
+        File f = new File(path);
         if(!f.exists()){
             f.createNewFile();
             newFile = true;
         }
-        fw = new FileWriter(f);
     } catch(IOException e){
         e.printStackTrace();
     }
-    bw = new BufferedWriter(fw);
-    if(newFile) {
-      writeToRIO(3.663286317999746, 2.917286317999828);
-       
-        }
+
+    if(newFile){
+        writeToRIO(3.6632863, 2.917286317);
+    }
+
     }
     public void writeToRIO(double armPotReading, double wristPotReading){
         try{
+            FileWriter fw = new FileWriter(new File(path));
+            BufferedWriter bw = new BufferedWriter(fw);
             bw.write(Double.toString(armPotReading));
             bw.newLine();
             bw.write(Double.toString(wristPotReading));
@@ -44,10 +43,11 @@ public class IOWithRIO {
         } catch(IOException e){
             e.printStackTrace();
         }
+        
     }
     public void readFromRIO(){
         try{
-            br = new BufferedReader(new FileReader(f));
+            BufferedReader br = new BufferedReader(new FileReader(path));
             String currentLine = br.readLine();
             double armPotReading = Double.parseDouble(currentLine);
             currentLine = br.readLine();

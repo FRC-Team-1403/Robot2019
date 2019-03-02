@@ -16,21 +16,21 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class MoveLiftingPistons extends Subsystem {
+public class MoveLiftingPiston extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
   public DoubleSolenoid lifter;
 
-  public MoveLiftingPistons(){
+  public MoveLiftingPiston(){
     lifter = new DoubleSolenoid(RobotMap.lifter1, RobotMap.lifter2);
   }
 
   public void moveLiftingPiston(){
-    if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyStart)){
+    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyA)){
       lifter.set(DoubleSolenoid.Value.kForward);
     }
-    if (Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyBack)){
+    if (Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyB)){
       lifter.set(DoubleSolenoid.Value.kReverse);
     }
   }

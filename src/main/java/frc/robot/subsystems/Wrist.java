@@ -44,27 +44,25 @@ public class Wrist extends Subsystem {
     wristMotor = new TalonSRX(RobotMap.wristMotor);
     potentiometerWrist = new AnalogInput(RobotMap.potW);
 
-    armConversion = -.949;
-    conversion = -0.9538999999999994;
-
-    setpoint = (potentiometerWrist.getAverageVoltage()-flat)*conversion;
+    armConversion = -.00949;
+    conversion = -0.02536106511136;
   }
   
 
 
   public void moveWrist(double value) {
     
-    if(potentiometerWrist.getAverageVoltage() > .39) {
+    /*if(potentiometerWrist.getAverageVoltage() > 4.80) {
       wristMotor.set(ControlMode.PercentOutput, value);
     } else {
       wristMotor.set(ControlMode.PercentOutput, -.3);
-    }
+    }*/
+
   }
   public void movePIDSetpoint(double stick){
     setpoint += stick * .015;
   }
   public void moveByArm(double armAngle){
-    SmartDashboard.putNumber("change in wrist angle: ", armConversion * (armAngle-prevArmAngle));
     setpoint += armConversion * (armAngle-prevArmAngle);
     prevArmAngle = armAngle;
   }

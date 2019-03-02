@@ -61,15 +61,15 @@ public class SetControl extends Command {
   protected void execute() {
     if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyStart)) {
       mode++;
+      mode%=2;
     }
 
-    mode%=2;
     
     if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
       updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
     } 
 
-      if(joystickMoved()) {
+      if(joystickMoved() && !Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)) {
      
         if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY) < -.5) {
           if(mode == 1) {

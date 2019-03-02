@@ -27,12 +27,14 @@ public class Intake extends Subsystem {
   public DoubleSolenoid hatchPushSolenoid;
   public Servo hookServo;
   public double value;  
+  public double position;  
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
     hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
     hookServo = new Servo(RobotMap.hookServo);
   }
+
 public void intake(){
   if(Robot.m_oi.ojoy.getRawAxis(2)>0)
   {
@@ -53,40 +55,20 @@ public void push(){
 }
 
 public void release(){
-hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+  hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
 }
 
-/*public void push()
-{
-  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
-  {
-    hatchPush.set(DoubleSolenoid.Value.kForward);
-    value = 1.0;
-  }
-  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
-  {
-    hatchPush.set(DoubleSolenoid.Value.kReverse);
-    value = -1.0;
-  }
-  else
-  {
-    hatchPush.set(DoubleSolenoid.Value.kOff);
-    value = 0.0;
-  }
-}*/
 public void hookHatchPanel(){
   hookServo.setPosition(1);
 }
 public void unhookHatchPanel(){
-hookServo.setPosition(0);
-}
-public void hatchSpeed(){
-  // hook.setPosition(-Robot.m_oi.ojoy.getRawAxis(1));
+  hookServo.setPosition(0);
 }
 
 public static void setSpeed(VictorSPX victor, double speed){
   victor.set(ControlMode.PercentOutput, speed);
 }
+
 public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
 {
   if (value==1.0){
@@ -98,15 +80,23 @@ public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
   if(value == 0.0){
     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
   }
-  
-  
 }
+
+public static void setServo(Servo servo, double position){
+  if (position==1.0){
+    servo.setPosition(1);
+  }
+  if(position==0.0){
+    servo.setPosition(0);
+  }
+}
+
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new IntakeC());
+    // setDefaultCommand(new IntakeC());
   }
 }

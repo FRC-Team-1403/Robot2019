@@ -9,12 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.commands.SetControl;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.SetControl;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ArmExtension;
@@ -26,7 +24,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.subsystems.MoveLiftingPistons;
+import frc.robot.subsystems.MoveLiftingPiston;
 
 import frc.robot.subsystems.Vision;
 
@@ -44,7 +42,6 @@ import frc.robot.echo.Recorder;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
   public static DriveTrain drivetrain;
   public static Intake in;
@@ -52,7 +49,7 @@ public class Robot extends TimedRobot {
   public static Arm arm;
   public static Wrist w;
   public static ControlSystem cs;
-  public static MoveLiftingPistons lift;
+  public static MoveLiftingPiston lift;
   public static Vision vs;
 
   public static double FASTMAXRPM = 500;
@@ -95,17 +92,16 @@ public class Robot extends TimedRobot {
     autoint = 0;
     recorder = new Recorder(10000);
     drivetrain = new DriveTrain();
+    rioIO = new IOWithRIO();
     in = new Intake();
     ae =  new ArmExtension();
     arm = new Arm();
     w = new Wrist();
     cs = new ControlSystem();
     vs = new Vision();
-    lift = new MoveLiftingPistons();
+    lift = new MoveLiftingPiston();
     m_oi = new OI();
-    rioIO = new IOWithRIO();
 
-    m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
     talonInitVelocity(drivetrain.frontLeft);
@@ -224,8 +220,8 @@ public class Robot extends TimedRobot {
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
       Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Push Hatch"));
       Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Release Hatch"));
-      //Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
-      //Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
+      Intake.setServo(in.hookServo, recorder.getReading("Hook Hatch"));
+      Intake.setServo(in.hookServo, recorder.getReading("Unhook Hatch"));
       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
@@ -244,8 +240,8 @@ public class Robot extends TimedRobot {
       Intake.setSpeed(in.intakeMotor, 0);
       Intake.setPosition(in.hatchPushSolenoid, 0);
       Intake.setPosition(in.hatchPushSolenoid, 0);
-      //Intake.setServo(in.hook, 0);
-      //Intake.setServo(in.hook, 0);
+      Intake.setServo(in.hookServo, 0);
+      Intake.setServo(in.hookServo, 0);
       Arm.setSpeed(arm.armMotorL,0);
       Arm.setSpeed(arm.armMotorR, 0);
       ArmExtension.setPosition(ae.armExtender, 0);
@@ -264,6 +260,11 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     rioIO.readFromRIO();
+    arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
+    arm.setpoint = arm.angle;
+    w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
+    w.setpoint = w.angle;
+
     Robot.arm.potentiometerArm.resetAccumulator();
   }
 
@@ -302,9 +303,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
 
-    
-
-
     SmartDashboard.putNumber("mode: ", SetControl.mode);
     SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
     SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
@@ -327,29 +325,21 @@ public class Robot extends TimedRobot {
 			recorder.addReading("Wrist", Robot.m_oi.ojoy.getRawAxis(1));
       recorder.addReading("Intake Ball", Robot.m_oi.ojoy.getRawAxis(2));
       recorder.addReading("Eject Ball", Robot.m_oi.ojoy.getRawAxis(3));
-      recorder.addReading("Push Hatch", ArmExtension.convertBoolToDouble()); //boolToDouble is static in ArmExtension, it was intiailly
+      recorder.addReading("Push Hatch", Robot.m_oi.djoy.getRawAxis(5)); //boolToDouble is static in ArmExtension, it was intiailly
       recorder.addReading("Release Hatch", ArmExtension.convertBoolToDouble()); //Robot.in.convertBoolToDouble but that wasn't where it was
       recorder.addReading("Hook Hatch", ArmExtension.convertBoolToDouble()); //if this doesn't work then that is why
       recorder.addReading("Unhook Hatch", ArmExtension.convertBoolToDouble());
       recorder.addReading("Move Arm Left", -Robot.m_oi.ojoy.getRawAxis(5));
       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
-      recorder.addReading("Arm is extended", Robot.ae.convertBoolToDouble());
-      recorder.addReading("Arm is retracted", Robot.ae.convertBoolToDouble());
+      recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
+      recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
 			System.out.println(recorder.initNextReading());
 		}
 		
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
 		}
-    /*if(m_oi.djoy.getRawButtonPressed(3) && (int)getV() == 1){ //will only run when the button is first pressed
-      if(getX() < 0){
-        initiallyOnLeft  = true;
-      }
-      else if(getX() >= 0){ //dont know how to handle if x is 0
-        initiallyOnLeft = false;
-      }
-    }*/
-  
+   
     Scheduler.getInstance().run();
   
   }

@@ -49,16 +49,13 @@ public final double tooFast = .2;
     armMotorL = new TalonSRX(RobotMap.armMotorL);
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
-    conversion = -0.9538999999999994;
-
-    angle = (potentiometerArm.getAverageVoltage()-flat)*conversion;
-    setpoint = angle;
+    conversion = -1.032240000077177;
     
   }
 
   public void moveArm(double input) {
-    armMotorL.set(ControlMode.PercentOutput, -input);
-    armMotorR.set(ControlMode.PercentOutput, input);
+    /*armMotorL.set(ControlMode.PercentOutput, -input);
+    armMotorR.set(ControlMode.PercentOutput, input);*/
   }
 
   public void PID(){
