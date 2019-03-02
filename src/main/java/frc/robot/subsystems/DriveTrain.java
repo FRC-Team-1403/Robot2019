@@ -52,29 +52,7 @@ public CheesyDriveHelper helper;
     backLeft.set(ControlMode.Velocity, leftValue * Robot.maxRPM * 4096 / 600);
     backRight.set(ControlMode.Velocity, -rightValue * Robot.maxRPM * 4096 / 600);
   }
-  public void turnLeft() {
-    setRaw(-0.55,0.55);
-  }
-
-  public void turnRight() {
-    setRaw(0.55, -0.55);
-  }
-
-  public void moveForward() {
-    setRaw(0.75, 0.75);
-  }
-
-  public void moveBackward(){
-    setRaw(-0.4, -0.4);
-  }
-
-  public void tiltRight(){
-    setRaw(0.5, 0.45);
-  }
-
-  public void tiltLeft(){
-    setRaw(0.45, 0.5);
-  }
+  
   public void stop(){
     setRaw(0,0);
   }

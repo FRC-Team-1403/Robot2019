@@ -25,8 +25,10 @@ public class Setpoint {
         Robot.arm.setpoint = getArmAngle();
         Robot.w.setpoint =  getWristAngle();
         if(armOut){
-            Robot.ae.armExtender.set(DoubleSolenoid.Value.kForward);
-        } 
+            if(Robot.ae.armExtender.get() != DoubleSolenoid.Value.kForward) {
+                Robot.ae.armExtender.set(DoubleSolenoid.Value.kForward);
+            }
+         } 
 
         else if(!armOut) {
             if(Robot.ae.armExtender.get() == DoubleSolenoid.Value.kForward) {

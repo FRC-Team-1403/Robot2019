@@ -11,7 +11,6 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class MoveArm extends Command {
-  boolean usePID = true;
   public MoveArm() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.arm);
@@ -26,12 +25,12 @@ public class MoveArm extends Command {
   @Override
   protected void execute() {
 
-    if(SetControl.mode == 0){
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
     }
-
+    
     Robot.arm.PID();
-    Robot.arm.armTest(-Robot.arm.PID);    
+    Robot.arm.moveArm(-Robot.arm.PID);    
 
 
   }

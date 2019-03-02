@@ -57,7 +57,7 @@ public final double tooFast = .2;
     
   }
 
-  public void armTest(double input) {
+  public void moveArm(double input) {
     armMotorL.set(ControlMode.PercentOutput, -input);
     armMotorR.set(ControlMode.PercentOutput, input);
   }

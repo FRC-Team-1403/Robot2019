@@ -17,9 +17,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SetControl extends Command {
-  public static int ballLevel = 1; // 1 - floor, 2 - 1st, 3 - 2nd, 4 - 3rd
-  public static int hatchLevel = 1; // 1 - floor, 2 - 1st, 3 - 2nd, 4 - 3rd
-  public static int mode = 0; //0 - continuous, 2 - ball control, 1 - hatch control
+  public static int ballLevel = 0; // 0 - pick up, 1 - HPS, 2 - first level, 3 - second level, 4 - third level
+  public static int hatchLevel = 0; // 0 - pick up, 1 - first level, 2 - second level, 3 - third level
+  public static int mode = 0; //0 - hatch control, 1 - ball control
   boolean currentlyPressed = false;
   //angles are relative to the flat
 
@@ -34,7 +34,7 @@ public class SetControl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    updatePotentiometerReadings(Robot.arm.flat, Robot.w.flat);
+    //read armPot and wristPot from file or set to default values
   }
   
   boolean joystickMoved() {
@@ -52,6 +52,7 @@ public class SetControl extends Command {
   }
 
   public void updatePotentiometerReadings(double aPotReading, double wPotReading){
+    
     Robot.arm.flat = aPotReading;
     Robot.w.flat = wPotReading;
   }
@@ -63,7 +64,7 @@ public class SetControl extends Command {
       mode++;
     }
 
-    mode %= 3;
+    mode%=2;
     
     if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyBack)) {
       updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
@@ -79,7 +80,7 @@ public class SetControl extends Command {
            }
            ballPositions[ballLevel].run();
          }
-         if(mode == 2) {
+         if(mode == 0) {
            hatchLevel++;
            if(hatchLevel == hatchPositions.length) {
              hatchLevel = hatchPositions.length-1;
@@ -94,7 +95,7 @@ public class SetControl extends Command {
            }
            ballPositions[ballLevel].run();        
          }
-         if(mode == 2) {
+         if(mode == 0) {
            hatchLevel--;
            if(hatchLevel == -1) {
              hatchLevel = 0;

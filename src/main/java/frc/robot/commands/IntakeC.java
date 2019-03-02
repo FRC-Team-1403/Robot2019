@@ -28,7 +28,6 @@ public class IntakeC extends Command {
   @Override
   protected void execute() {
     Robot.in.intake();
-    Robot.in.push();
     Robot.in.hookHatchPanel();
     }
 
