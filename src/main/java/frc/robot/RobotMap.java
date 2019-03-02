@@ -36,6 +36,9 @@ public class RobotMap {
   public static int extensionSolenoid2 = 5;
   public static int hatchPush1 = 4;
   public static int hatchPush2 = 6;
+  public static int lifter1 = ;
+  public static int lifter2 = ;
+
 
   public static int ojoyA = 1;
   public static int ojoyB = 2;
@@ -47,6 +50,8 @@ public class RobotMap {
   public static int ojoyStart = 8;
   public static int ojoyRY = 5;
   public static int ojoyLY = 1;
+
+  
 
   public static int potA = 0;
   public static int potW = 1;

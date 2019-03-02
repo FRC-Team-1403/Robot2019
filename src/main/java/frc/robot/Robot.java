@@ -26,6 +26,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.subsystems.MoveLiftingPistons;
 
 import frc.robot.subsystems.Vision;
 
@@ -51,7 +52,7 @@ public class Robot extends TimedRobot {
   public static Arm arm;
   public static Wrist w;
   public static ControlSystem cs;
-  
+  public static MoveLiftingPistons lift;
   public static Vision vs;
 
   public static double FASTMAXRPM = 500;
@@ -98,6 +99,7 @@ public class Robot extends TimedRobot {
     w = new Wrist();
     cs = new ControlSystem();
     vs = new Vision();
+    lift = new MoveLiftingPistons();
     m_oi = new OI();
 
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
@@ -217,8 +219,8 @@ public class Robot extends TimedRobot {
 			Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
       Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
-      Intake.setPosition(in.hatchPush, recorder.getReading("Push Hatch"));
-      Intake.setPosition(in.hatchPush, recorder.getReading("Release Hatch"));
+      Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Push Hatch"));
+      Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Release Hatch"));
       //Intake.setServo(in.hook, recorder.getReading("Hook Hatch"));
       //Intake.setServo(in.hook, recorder.getReading("Unhook Hatch"));
       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
@@ -237,8 +239,8 @@ public class Robot extends TimedRobot {
 			Wrist.setSpeed(w.wristMotor, 0);
       Intake.setSpeed(in.intakeMotor, 0);
       Intake.setSpeed(in.intakeMotor, 0);
-      Intake.setPosition(in.hatchPush, 0);
-      Intake.setPosition(in.hatchPush, 0);
+      Intake.setPosition(in.hatchPushSolenoid, 0);
+      Intake.setPosition(in.hatchPushSolenoid, 0);
       //Intake.setServo(in.hook, 0);
       //Intake.setServo(in.hook, 0);
       Arm.setSpeed(arm.armMotorL,0);
@@ -307,7 +309,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
     SmartDashboard.putNumber("Flat a", Robot.arm.flat);
     SmartDashboard.putNumber("P value a", Robot.arm.P);
-    SmartDashboard.putNumber("Posititi", Robot.in.hook.getPosition());
+    SmartDashboard.putNumber("Posititi", Robot.in.hookServo.getPosition());
     SmartDashboard.putNumber("hatchLevel: ", SetControl.hatchLevel);
     SmartDashboard.putNumber("ballLevel: ", SetControl.ballLevel);   
     if(Recorder.isRecording)
@@ -343,9 +345,7 @@ public class Robot extends TimedRobot {
         initiallyOnLeft = false;
       }
     }*/
-   if(m_oi.ojoy.getRawButton(2)){
-     drivetrain.moveBackward();
-   }
+  
     Scheduler.getInstance().run();
   
   }

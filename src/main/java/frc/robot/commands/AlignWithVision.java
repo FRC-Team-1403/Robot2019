@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlignWithVision extends Command {
@@ -74,11 +75,11 @@ public static double getA(){
     }
   }
   
-  public void driveWithVision(double x){
+  public void driveWithVision(){
     this.motorSpeedConst = .3 * Math.pow(-(this.area/7.0) + 1.0, 0.5);
     double leftSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), true);
     double rightSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), false);
-    SmartDashboard.putNumber("left speed: ", + leftSpeed);
+    SmartDashboard.putNumber("left speed: ", + leftSpeed); 
     SmartDashboard.putNumber("right speed: ", + rightSpeed);
     SmartDashboard.putNumber("limelight x: ", + getX());
     SmartDashboard.putNumber("motor constant: ", + this.motorSpeedConst);
@@ -88,7 +89,7 @@ public static double getA(){
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.djoy.getRawButtonPressed(3)){ //should only run once, if it runs twice this is a failure
+    if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyX)){
       if((int)getV() == 1){
         double x = getX();
         if(x < 0){
@@ -102,17 +103,17 @@ public static double getA(){
         }
       }
     } 
-    if(Robot.m_oi.djoy.getRawButton(3)){
+    if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyX)){
       if((int)getV() == 1){
         double x = getX();
         if(isCurrentlyOnLeft == initiallyOnLeft)
             align(x);
         else{
-          driveWithVision(x);
+          driveWithVision();
         }
       }
     }
-    if(Robot.m_oi.djoy.getRawButtonReleased(3)){
+    if(Robot.m_oi.djoy.getRawButtonReleased(RobotMap.ojoyX)){
       Robot.drivetrain.stop();
     }
 

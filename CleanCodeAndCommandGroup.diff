@@ -1,0 +1,430 @@
+diff --git a/src/main/java/frc/robot/OI.java b/src/main/java/frc/robot/OI.java
+index a4bb4b9..d526d09 100644
+--- a/src/main/java/frc/robot/OI.java
++++ b/src/main/java/frc/robot/OI.java
+@@ -10,7 +10,6 @@ package frc.robot;
+ import edu.wpi.first.wpilibj.Joystick;
+ import edu.wpi.first.wpilibj.buttons.Button;
+ import edu.wpi.first.wpilibj.buttons.JoystickButton;
+-import frc.robot.commands.ReleasingTheHatchPanel;
+ 
+ 
+ 
+@@ -22,11 +21,6 @@ import frc.robot.commands.ReleasingTheHatchPanel;
+ public class OI {
+   public Joystick djoy = new Joystick(RobotMap.djoy);
+   public Joystick ojoy = new Joystick(RobotMap.ojoy);
+-  public JoystickButton RBojoy = new JoystickButton(ojoy, RobotMap.ojoyRB);
+-
+-  public OI(){
+-    RBojoy.whenPressed(new ReleasingTheHatchPanel());
+-  }
+   
+   
+   
+diff --git a/src/main/java/frc/robot/commands/HookHatch.java b/src/main/java/frc/robot/commands/HookHatch.java
+deleted file mode 100644
+index bf353ae..0000000
+--- a/src/main/java/frc/robot/commands/HookHatch.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-/*----------------------------------------------------------------------------*/
+-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+-/* must be accompanied by the FIRST BSD license file in the root directory of */
+-/* the project.                                                               */
+-/*----------------------------------------------------------------------------*/
+-
+-package frc.robot.commands;
+-
+-import edu.wpi.first.wpilibj.command.Command;
+-import frc.robot.Robot;
+-
+-public class HookHatch extends Command {
+-  public HookHatch() {
+-    // Use requires() here to declare subsystem dependencies
+-    requires(Robot.in);
+-  }
+-
+-  // Called just before this Command runs the first time
+-  @Override
+-  protected void initialize() {
+-  }
+-
+-  // Called repeatedly when this Command is scheduled to run
+-  @Override
+-  protected void execute() {
+-    Robot.in.hookHatchPanel();
+-  }
+-
+-  // Make this return true when this Command no longer needs to run execute()
+-  @Override
+-  protected boolean isFinished() {
+-    return false;
+-  }
+-
+-  // Called once after isFinished returns true
+-  @Override
+-  protected void end() {
+-  }
+-
+-  // Called when another command which requires one or more of the same
+-  // subsystems is scheduled to run
+-  @Override
+-  protected void interrupted() {
+-  }
+-}
+diff --git a/src/main/java/frc/robot/commands/IntakeC.java b/src/main/java/frc/robot/commands/IntakeC.java
+index edd7680..95e95d7 100644
+--- a/src/main/java/frc/robot/commands/IntakeC.java
++++ b/src/main/java/frc/robot/commands/IntakeC.java
+@@ -28,6 +28,7 @@ public class IntakeC extends Command {
+   @Override
+   protected void execute() {
+     Robot.in.intake();
++    Robot.in.push();
+     Robot.in.hookHatchPanel();
+     }
+ 
+diff --git a/src/main/java/frc/robot/commands/PushHatch.java b/src/main/java/frc/robot/commands/PushHatch.java
+deleted file mode 100644
+index 4ff208e..0000000
+--- a/src/main/java/frc/robot/commands/PushHatch.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-/*----------------------------------------------------------------------------*/
+-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+-/* must be accompanied by the FIRST BSD license file in the root directory of */
+-/* the project.                                                               */
+-/*----------------------------------------------------------------------------*/
+-
+-package frc.robot.commands;
+-
+-import edu.wpi.first.wpilibj.command.Command;
+-import frc.robot.Robot;
+-
+-public class PushHatch extends Command {
+-  public PushHatch() {
+-    // Use requires() here to declare subsystem dependencies
+-     requires(Robot.in);
+-  }
+-
+-  // Called just before this Command runs the first time
+-  @Override
+-  protected void initialize() {
+-  }
+-
+-  // Called repeatedly when this Command is scheduled to run
+-  @Override
+-  protected void execute() {
+-    Robot.in.push();
+-  }
+-
+-  // Make this return true when this Command no longer needs to run execute()
+-  @Override
+-  protected boolean isFinished() {
+-    return false;
+-  }
+-
+-  // Called once after isFinished returns true
+-  @Override
+-  protected void end() {
+-  }
+-
+-  // Called when another command which requires one or more of the same
+-  // subsystems is scheduled to run
+-  @Override
+-  protected void interrupted() {
+-  }
+-}
+diff --git a/src/main/java/frc/robot/commands/ReleaseHatch.java b/src/main/java/frc/robot/commands/ReleaseHatch.java
+deleted file mode 100644
+index f384c2f..0000000
+--- a/src/main/java/frc/robot/commands/ReleaseHatch.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-/*----------------------------------------------------------------------------*/
+-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+-/* must be accompanied by the FIRST BSD license file in the root directory of */
+-/* the project.                                                               */
+-/*----------------------------------------------------------------------------*/
+-
+-package frc.robot.commands;
+-
+-import edu.wpi.first.wpilibj.command.Command;
+-import frc.robot.Robot;
+-
+-public class ReleaseHatch extends Command {
+-  public ReleaseHatch() {
+-    // Use requires() here to declare subsystem dependencies
+-     requires(Robot.in);
+-  }
+-
+-  // Called just before this Command runs the first time
+-  @Override
+-  protected void initialize() {
+-  }
+-
+-  // Called repeatedly when this Command is scheduled to run
+-  @Override
+-  protected void execute() {
+-    Robot.in.release();
+-  }
+-
+-  // Make this return true when this Command no longer needs to run execute()
+-  @Override
+-  protected boolean isFinished() {
+-    return false;
+-  }
+-
+-  // Called once after isFinished returns true
+-  @Override
+-  protected void end() {
+-  }
+-
+-  // Called when another command which requires one or more of the same
+-  // subsystems is scheduled to run
+-  @Override
+-  protected void interrupted() {
+-  }
+-}
+diff --git a/src/main/java/frc/robot/commands/ReleasingTheHatchPanel.java b/src/main/java/frc/robot/commands/ReleasingTheHatchPanel.java
+deleted file mode 100644
+index 7ea27b6..0000000
+--- a/src/main/java/frc/robot/commands/ReleasingTheHatchPanel.java
++++ /dev/null
+@@ -1,23 +0,0 @@
+-/*----------------------------------------------------------------------------*/
+-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+-/* must be accompanied by the FIRST BSD license file in the root directory of */
+-/* the project.                                                               */
+-/*----------------------------------------------------------------------------*/
+-
+-package frc.robot.commands;
+-
+-import edu.wpi.first.wpilibj.command.CommandGroup;
+-import edu.wpi.first.wpilibj.command.WaitCommand;
+-
+-public class ReleasingTheHatchPanel extends CommandGroup {
+-
+-  public ReleasingTheHatchPanel() {
+-   
+-    addSequential(new UnhookHatch());
+-    addSequential(new WaitCommand(0.5));
+-    addSequential(new PushHatch());
+-    addSequential(new ReleaseHatch());
+-
+-  }
+-}
+diff --git a/src/main/java/frc/robot/commands/UnhookHatch.java b/src/main/java/frc/robot/commands/UnhookHatch.java
+deleted file mode 100644
+index ef782fe..0000000
+--- a/src/main/java/frc/robot/commands/UnhookHatch.java
++++ /dev/null
+@@ -1,46 +0,0 @@
+-/*----------------------------------------------------------------------------*/
+-/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
+-/* Open Source Software - may be modified and shared by FRC teams. The code   */
+-/* must be accompanied by the FIRST BSD license file in the root directory of */
+-/* the project.                                                               */
+-/*----------------------------------------------------------------------------*/
+-
+-package frc.robot.commands;
+-
+-import edu.wpi.first.wpilibj.command.Command;
+-import frc.robot.Robot;
+-
+-public class UnhookHatch extends Command {
+-  public UnhookHatch() {
+-    // Use requires() here to declare subsystem dependencies
+-     requires(Robot.in);
+-  }
+-
+-  // Called just before this Command runs the first time
+-  @Override
+-  protected void initialize() {
+-  }
+-
+-  // Called repeatedly when this Command is scheduled to run
+-  @Override
+-  protected void execute() {
+-    Robot.in.unhookHatchPanel();
+-  }
+-
+-  // Make this return true when this Command no longer needs to run execute()
+-  @Override
+-  protected boolean isFinished() {
+-    return false;
+-  }
+-
+-  // Called once after isFinished returns true
+-  @Override
+-  protected void end() {
+-  }
+-
+-  // Called when another command which requires one or more of the same
+-  // subsystems is scheduled to run
+-  @Override
+-  protected void interrupted() {
+-  }
+-}
+diff --git a/src/main/java/frc/robot/subsystems/ArmExtension.java b/src/main/java/frc/robot/subsystems/ArmExtension.java
+index 680d168..8ec086f 100644
+--- a/src/main/java/frc/robot/subsystems/ArmExtension.java
++++ b/src/main/java/frc/robot/subsystems/ArmExtension.java
+@@ -28,18 +28,20 @@ public class ArmExtension extends Subsystem {
+   }
+ 
+   public void push() {
+-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
++    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)) 
+     {
+       armExtender.set(DoubleSolenoid.Value.kForward);
+       
+     }
+-    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
++    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyRB)) 
+     {
+       armExtender.set(DoubleSolenoid.Value.kReverse);
++      
+     }
+     else 
+     {
+       armExtender.set(DoubleSolenoid.Value.kOff);
++     
+     }
+   }
+   public static double convertBoolToDouble(){
+diff --git a/src/main/java/frc/robot/subsystems/ControlSystem.java b/src/main/java/frc/robot/subsystems/ControlSystem.java
+index 9037bca..129127e 100644
+--- a/src/main/java/frc/robot/subsystems/ControlSystem.java
++++ b/src/main/java/frc/robot/subsystems/ControlSystem.java
+@@ -9,6 +9,7 @@ package frc.robot.subsystems;
+ 
+ import edu.wpi.first.wpilibj.command.Subsystem;
+ import frc.robot.commands.SetControl;
++import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+ 
+ /**
+  * Add your docs here.
+diff --git a/src/main/java/frc/robot/subsystems/Intake.java b/src/main/java/frc/robot/subsystems/Intake.java
+index 29d0e52..051eaf3 100644
+--- a/src/main/java/frc/robot/subsystems/Intake.java
++++ b/src/main/java/frc/robot/subsystems/Intake.java
+@@ -24,19 +24,15 @@ import edu.wpi.first.wpilibj.Servo;
+  */
+ public class Intake extends Subsystem {
+   public VictorSPX intakeMotor;
+-  public DoubleSolenoid hatchPushSolenoid;
+-  public Servo hookServo;
+-  public double value;
+-  public double position;  
++  public DoubleSolenoid hatchPush;
++  public Servo hook;
++  public double value;  
+ 
+   public Intake(){
+     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
+-    hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+-    hookServo= new Servo(RobotMap.hookServo);
++    hatchPush = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
++    hook= new Servo(RobotMap.hookServo);
+   }
+-
+-
+-
+ public void intake(){
+   if(Robot.m_oi.ojoy.getRawAxis(2)>0)
+   {
+@@ -51,34 +47,42 @@ public void intake(){
+     intakeMotor.set(ControlMode.PercentOutput, 0);
+   }
+ }
+-
+-
+-
+-public void push(){
+-    hatchPushSolenoid.set(DoubleSolenoid.Value.kReverse);
++public void push()
++{
++  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
++  {
++    hatchPush.set(DoubleSolenoid.Value.kForward);
++    value = 1.0;
++  }
++  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
++  {
++    hatchPush.set(DoubleSolenoid.Value.kReverse);
++    value = -1.0;
++  }
++  else
++  {
++    hatchPush.set(DoubleSolenoid.Value.kOff);
++    value = 0.0;
+   }
+-
+-public void release(){
+-  hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+ }
+-
+-
+-
+ public void hookHatchPanel(){
+-  if (Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB)){
+-    hookServo.setPosition(1);
+-}
++  if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
++    hook.setPosition(1);
++    
++  }
++  else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY)){
++    hook.setPosition(0);
++  }
+ }
+-public void unhookHatchPanel(){
+-  hookServo.setPosition(0);
++public void hatchSpeed(){
++  // hook.setPosition(-Robot.m_oi.ojoy.getRawAxis(1));
+ }
+ 
+-
+-
+ public static void setSpeed(VictorSPX victor, double speed){
+   victor.set(ControlMode.PercentOutput, speed);
+ }
+-public static void setPosition(DoubleSolenoid doubleSolenoid, double value){
++public static void setPosition(DoubleSolenoid doubleSolenoid, double value)
++{
+   if (value==1.0){
+     doubleSolenoid.set(DoubleSolenoid.Value.kForward);
+   }
+@@ -87,15 +91,9 @@ public static void setPosition(DoubleSolenoid doubleSolenoid, double value){
+   }
+   if(value == 0.0){
+     doubleSolenoid.set(DoubleSolenoid.Value.kOff);
+-  }  
+-}
+-public static void setServo(Servo servo, double position){
+-  if (position==1.0){
+-    servo.setPosition(1);
+-  }
+-  if(position==0.0){
+-    servo.setPosition(0);
+   }
++  
++  
+ }
+   // Put methods for controlling this subsystem
+   // here. Call these from Commands.
+@@ -103,6 +101,6 @@ public static void setServo(Servo servo, double position){
+   @Override
+   public void initDefaultCommand() {
+     // Set the default command for a subsystem here.
+-    //setDefaultCommand(new IntakeC());
++    setDefaultCommand(new IntakeC());
+   }
+ }
+\ No newline at end of file
