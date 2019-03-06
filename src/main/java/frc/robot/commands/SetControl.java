@@ -21,12 +21,12 @@ public class SetControl extends Command {
   public static int hatchLevel = 0; // 0 - pick up, 1 - first level, 2 - second level, 3 - third level
   public static int mode = 0; //0 - hatch control, 1 - ball control
   boolean currentlyPressed = false;
+  public static final double armCallibrationAngle = -72.2;
+  public static final double wristCallibrationAngle = 99.2;
   //angles are relative to the flat
-
-  public final Setpoint[] hatchPositions = {new Setpoint(4.353026898, 2.130126735,true), new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.455810193, 1.408691262), new Setpoint(2.6879880060000003, 2.1118161900000003, true)};
-  public final Setpoint[] ballPositions = {new Setpoint(4.210204647, 2.51464818),new Setpoint(4.401855018, 0.5932616580000001), new Setpoint(3.922118739, 2.504882556), new Setpoint(2.935790715, 3.447265272), new Setpoint(2.302245858, 3.7890621120000003, true)};
-
-  public SetControl() {
+  public final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.7045206829, 2.216887123), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.9303370598, 0.7683379551, true)};
+  public final Setpoint[] ballPositions = {new Setpoint(-0.521705394, 0.3840765198),new Setpoint(-0.7045206829, 2.216887123), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(0.6939580557, -0.5055469242), new Setpoint(1.298296495, -0.8315869299, true)};
+    public SetControl() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.cs);
   }
@@ -56,6 +56,27 @@ public class SetControl extends Command {
     Robot.rioIO.readFromRIO();
   }
 
+  public void updatePotentiometerReadings(double aInit, double wInit, double aFinal, double wFinal){
+    double aConversion = -1 * Math.abs(Math.PI/180.00 * (armCallibrationAngle)/(aFinal-aInit));
+    double wConversion = -1 * Math.abs(Math.PI/180.00 * (wristCallibrationAngle)/(wFinal - wInit)); 
+    Robot.rioIO.writeToRIO(aInit, wInit, aConversion, wConversion);
+  }
+  public void checkCallibration(){
+    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
+      double startArmReading = Robot.arm.potentiometerArm.getAverageVoltage();
+      double startWristReading = Robot.w.potentiometerWrist.getAverageVoltage();
+      while(true){
+        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyBack)){  
+          updatePotentiometerReadings(startArmReading, startWristReading);
+          break;
+        }
+        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)){
+            updatePotentiometerReadings(startArmReading, startWristReading, Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
+            break;
+          }
+        }
+      } 
+  }
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
@@ -63,12 +84,7 @@ public class SetControl extends Command {
       mode++;
       mode%=2;
     }
-
-    
-    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
-      updatePotentiometerReadings(Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
-    } 
-
+    checkCallibration();
       if(joystickMoved() && !Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)) {
      
         if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY) < -.5) {

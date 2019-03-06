@@ -225,7 +225,9 @@ public class Robot extends TimedRobot {
       Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
       Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
+      
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is retracted"));
+      ArmExtension.setPosition(lift.lifter, recorder.getReading("Lifting pistons"));
 			Timer.delay(0.001);
 		}
 		
@@ -333,6 +335,7 @@ public class Robot extends TimedRobot {
       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
       recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
       recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
+      recorder.addReading("Lifting pistons", MoveLiftingPiston.convertBoolToDouble());
 			System.out.println(recorder.initNextReading());
 		}
 		
