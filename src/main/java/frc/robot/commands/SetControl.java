@@ -61,16 +61,17 @@ public class SetControl extends Command {
     double wConversion = -1 * Math.abs(Math.PI/180.00 * (wristCallibrationAngle)/(wFinal - wInit)); 
     Robot.rioIO.writeToRIO(aInit, wInit, aConversion, wConversion);
   }
+
   public void checkCallibration(){
     if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
       double startArmReading = Robot.arm.potentiometerArm.getAverageVoltage();
       double startWristReading = Robot.w.potentiometerWrist.getAverageVoltage();
       while(true){
-        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyBack)){  
+        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyLB)){  
           updatePotentiometerReadings(startArmReading, startWristReading);
           break;
         }
-        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)){
+        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyRB)){
             updatePotentiometerReadings(startArmReading, startWristReading, Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
             break;
           }

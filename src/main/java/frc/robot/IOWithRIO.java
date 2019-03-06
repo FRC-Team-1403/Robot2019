@@ -16,7 +16,7 @@ public class IOWithRIO {
     public IOWithRIO(){
     boolean newFile = false;
     try{
-        path = "/home/lvuser/Output.txt";
+        path = "/home/lvuser/CallibrationConstants.txt";
         File f = new File(path);
         if(!f.exists()){
             f.createNewFile();
@@ -85,6 +85,7 @@ public class IOWithRIO {
             Robot.w.flat = wristPotReading;
             Robot.arm.conversion = armConversion;
             Robot.w.conversion = wristConversion;
+
             br.close();
         } catch(IOException e){
             e.printStackTrace();
