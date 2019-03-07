@@ -27,7 +27,6 @@ public class Wrist extends Subsystem {
   // here. Call these from Commands.
   public TalonSRX wristMotor;
   public AnalogInput potentiometerWrist;
-  public double previousArmAngle;
   public double P = 1;
   public double I = 0;
   public double D = 0;
@@ -38,34 +37,36 @@ public class Wrist extends Subsystem {
   public static double armConversion;
   public static double prevArmAngle;
   public int integral, previous_error;
-  public static double tooFast = .3;
+  public static double tooFast = .35;
 
   public Wrist() {
     wristMotor = new TalonSRX(RobotMap.wristMotor);
     potentiometerWrist = new AnalogInput(RobotMap.potW);
 
-    armConversion = -.00949;
-    conversion = -0.02536106511136;
+
   }
   
 
 
   public void moveWrist(double value) {
     
-    /*if(potentiometerWrist.getAverageVoltage() > 4.80) {
-      wristMotor.set(ControlMode.PercentOutput, value);
-    } else {
-      wristMotor.set(ControlMode.PercentOutput, -.3);
-    }*/
+     wristMotor.set(ControlMode.PercentOutput, value);
+    
 
   }
   public void movePIDSetpoint(double stick){
-    setpoint += stick * .015;
+    setpoint -= stick * .005;
+
   }
-  public void moveByArm(double armAngle){
+
+  public void moveByArm(double deltaArmAngle){
+    setpoint += deltaArmAngle;
+  }
+
+  /*public void moveByArm(double armAngle){
     setpoint += armConversion * (armAngle-prevArmAngle);
     prevArmAngle = armAngle;
-  }
+  }*/
 
   public void PID(){
     angle = voltToRadians(potentiometerWrist.getAverageVoltage());

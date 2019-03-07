@@ -42,7 +42,7 @@ public double error, PID, derivative, setpoint;
 public static double flat;
 public static double angle;
 public static double conversion;
-public final double tooFast = .2;
+public final double tooFast = .3;
 
   public Arm()
   {
@@ -54,8 +54,8 @@ public final double tooFast = .2;
   }
 
   public void moveArm(double input) {
-    /*armMotorL.set(ControlMode.PercentOutput, -input);
-    armMotorR.set(ControlMode.PercentOutput, input);*/
+    armMotorL.set(ControlMode.PercentOutput, -input);
+    armMotorR.set(ControlMode.PercentOutput, input);
   }
 
   public void PID(){

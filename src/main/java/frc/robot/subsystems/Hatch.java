@@ -8,40 +8,42 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.commands.LiftRobot;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Servo;
 import frc.robot.RobotMap;
-import frc.robot.Robot;
-
+import frc.robot.commands.HatchIntake;
 /**
  * Add your docs here.
  */
-public class MoveLiftingPiston extends Subsystem {
+public class Hatch extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-
-  public DoubleSolenoid lifter;
-
-  public MoveLiftingPiston(){
-    lifter = new DoubleSolenoid(RobotMap.lifter1, RobotMap.lifter2);
+  public DoubleSolenoid hatchPushSolenoid;
+  public Servo hookServo;
+  public Hatch()
+  {
+    hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+    hookServo = new Servo(RobotMap.hookServo);
   }
 
-  public void moveLiftingPiston(){
-    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyA)){
-      lifter.set(DoubleSolenoid.Value.kForward);
-    }
-    else if (Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyB)){
-      lifter.set(DoubleSolenoid.Value.kReverse);
-    }
-    else{
-      lifter.set(DoubleSolenoid.Value.kOff);
-    }
+  public void push(){
+    hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+  }
+  public void release(){
+    hatchPushSolenoid.set(DoubleSolenoid.Value.kReverse);
+  }
+  public void off(){
+    hatchPushSolenoid.set(DoubleSolenoid.Value.kOff);
+  }
+  
+  public void moveServo(){
+    hookServo.setPosition((hookServo.getPosition()+1)%2);
   }
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new LiftRobot());
+    setDefaultCommand(new HatchIntake());
   }
 }

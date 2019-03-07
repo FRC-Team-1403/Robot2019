@@ -14,40 +14,23 @@ public class IOWithRIO {
 
     String path;
     public IOWithRIO(){
-    boolean newFile = false;
-    try{
-        path = "/home/lvuser/CallibrationConstants.txt";
-        File f = new File(path);
-        if(!f.exists()){
-            f.createNewFile();
-            newFile = true;
-        }
-    } catch(IOException e){
-        e.printStackTrace();
-    }
-
-    if(newFile){
-        writeToRIO(3.6632863, 2.917286317, -.9538999999, -.95389999999994);
-    }
-
-    }
-    public void writeToRIO(double armPotReading, double wristPotReading){
+    
+        boolean newFile = false;
         try{
-            FileWriter fw = new FileWriter(new File(path));
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(Double.toString(armPotReading));
-            bw.newLine();
-            bw.write(Double.toString(wristPotReading));
-            bw.newLine();
-            bw.write(Double.toString(Robot.arm.conversion));
-            bw.newLine();
-            bw.write(Double.toString(Robot.w.conversion));
-            bw.close();
-            fw.close();
+            path = "/home/lvuser/CallibrationConstants.txt";
+            File f = new File(path);
+            if(!f.exists()){
+             f.createNewFile();
+             newFile = true;
+            }
         } catch(IOException e){
             e.printStackTrace();
-        }
-        
+     }
+
+        if(newFile){
+            writeToRIO(3.6632863, 2.917286317, -.9538999999, -.95389999999994);
+     }
+
     }
 
     public void writeToRIO(double armPotReading, double wristPotReading, double armConversion, double wristConversion){

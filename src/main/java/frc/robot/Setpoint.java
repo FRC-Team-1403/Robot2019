@@ -24,18 +24,15 @@ public class Setpoint {
     public void run(){
         Robot.arm.setpoint = armPotReading;
         Robot.w.setpoint = wristPotReading;
-        if(armOut){
-            if(Robot.ae.armExtender.get() != DoubleSolenoid.Value.kForward) {
-                Robot.ae.armExtender.set(DoubleSolenoid.Value.kForward);
-            }
+        if(armOut && !Robot.ae.isForward){
+            Robot.ae.armExtender.set(DoubleSolenoid.Value.kForward);
+            Robot.ae.isForward = true;
          } 
 
         else if(!armOut) {
-            if(Robot.ae.armExtender.get() == DoubleSolenoid.Value.kForward) {
-                Robot.ae.armExtender.set(DoubleSolenoid.Value.kReverse);
-            }
+            Robot.ae.armExtender.set(DoubleSolenoid.Value.kReverse);
+            Robot.ae.isForward = false;
         }
-
     }
 
 }

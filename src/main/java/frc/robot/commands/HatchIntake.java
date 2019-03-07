@@ -9,11 +9,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
-public class PushHatch extends Command {
-  public PushHatch() {
+public class HatchIntake extends Command {
+  public HatchIntake() {
     // Use requires() here to declare subsystem dependencies
-     requires(Robot.in);
+    requires(Robot.hatch);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +25,18 @@ public class PushHatch extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.in.push();
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB) && Robot.hatch.hookServo.getPosition() != 1){
+      Robot.hatch.push();
+    }
+    else if(Robot.m_oi.ojoy.getRawButtonReleased(RobotMap.ojoyRB)){
+      Robot.hatch.release();
+    }
+    else{
+      Robot.hatch.off();
+    }
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyLB)){
+      Robot.hatch.moveServo();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

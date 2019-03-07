@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.SetControl;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Hatch;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ControlSystem;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
   public static Intake in;
   public static ArmExtension ae;
   public static Arm arm;
+  public static Hatch hatch;
   public static Wrist w;
   public static ControlSystem cs;
   public static MoveLiftingPiston lift;
@@ -90,6 +92,7 @@ public class Robot extends TimedRobot {
     numpaths = 0;
     delay = 0;
     autoint = 0;
+    hatch = new Hatch();
     recorder = new Recorder(10000);
     drivetrain = new DriveTrain();
     rioIO = new IOWithRIO();
@@ -227,7 +230,6 @@ public class Robot extends TimedRobot {
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
       
       ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is retracted"));
-      ArmExtension.setPosition(lift.lifter, recorder.getReading("Lifting pistons"));
 			Timer.delay(0.001);
 		}
 		
@@ -295,13 +297,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Arm potentiometer: ", Robot.arm.potentiometerArm.getAverageVoltage());
 
     SmartDashboard.putNumber("PID: ", Robot.w.PID);
-    SmartDashboard.putNumber("Angle: ", Robot.w.angle*180/Math.PI);
+    SmartDashboard.putNumber("Angle: ", Robot.w.angle);
     SmartDashboard.putNumber("Error", Robot.w.error);
     SmartDashboard.putNumber("Setpoint", Robot.w.setpoint);
     SmartDashboard.putNumber("Conversion", Robot.w.conversion);
     SmartDashboard.putNumber("Flat", Robot.w.flat);
     SmartDashboard.putNumber("P value", Robot.w.P);
-    SmartDashboard.putNumber("Previous", Robot.w.previousArmAngle);
+    SmartDashboard.putNumber("Previous", Robot.w.prevArmAngle);
 
     SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
 
@@ -313,7 +315,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
     SmartDashboard.putNumber("Flat a", Robot.arm.flat);
     SmartDashboard.putNumber("P value a", Robot.arm.P);
-    SmartDashboard.putNumber("Posititi", Robot.in.hookServo.getPosition());
+    SmartDashboard.putNumber("Posititi", Robot.hatch.hookServo.getPosition());
     SmartDashboard.putNumber("hatchLevel: ", SetControl.hatchLevel);
     SmartDashboard.putNumber("ballLevel: ", SetControl.ballLevel);   
     if(Recorder.isRecording)
@@ -335,7 +337,6 @@ public class Robot extends TimedRobot {
       recorder.addReading("Move Arm Right", Robot.m_oi.ojoy.getRawAxis(5));
       recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
       recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
-      recorder.addReading("Lifting pistons", MoveLiftingPiston.convertBoolToDouble());
 			System.out.println(recorder.initNextReading());
 		}
 		

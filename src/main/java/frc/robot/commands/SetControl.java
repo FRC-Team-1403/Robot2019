@@ -21,8 +21,8 @@ public class SetControl extends Command {
   public static int hatchLevel = 0; // 0 - pick up, 1 - first level, 2 - second level, 3 - third level
   public static int mode = 0; //0 - hatch control, 1 - ball control
   boolean currentlyPressed = false;
-  public static final double armCallibrationAngle = -72.2;
-  public static final double wristCallibrationAngle = 99.2;
+  public static final double armCallibrationAngle = -50.2;
+  public static final double wristCallibrationAngle = 137;
   //angles are relative to the flat
   public final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.7045206829, 2.216887123), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.9303370598, 0.7683379551, true)};
   public final Setpoint[] ballPositions = {new Setpoint(-0.521705394, 0.3840765198),new Setpoint(-0.7045206829, 2.216887123), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(0.6939580557, -0.5055469242), new Setpoint(1.298296495, -0.8315869299, true)};
@@ -52,7 +52,7 @@ public class SetControl extends Command {
   }
 
   public void updatePotentiometerReadings(double aPotReading, double wPotReading){
-    Robot.rioIO.writeToRIO(aPotReading, wPotReading);
+    Robot.rioIO.writeToRIO(aPotReading, wPotReading, Robot.arm.conversion, Robot.w.conversion);
     Robot.rioIO.readFromRIO();
   }
 

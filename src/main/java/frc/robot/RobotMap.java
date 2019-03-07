@@ -24,6 +24,7 @@ public class RobotMap {
   public static int backRightMotor = 7;
   public static int armMotorL = 2;
   public static int armMotorR = 4;
+
   public static int intakeMotor = 3;
   public static int wristMotor = 5;
   public static int hookServo = 1;
@@ -34,8 +35,8 @@ public class RobotMap {
 
   public static int extensionSolenoid1 = 4;
   public static int extensionSolenoid2 = 6;
-  public static int hatchPush1 = 7;
-  public static int hatchPush2 = 5;
+  public static int hatchPush1 = 5;
+  public static int hatchPush2 = 7;
   public static int lifter1 = 2;
   public static int lifter2 = 3;
 

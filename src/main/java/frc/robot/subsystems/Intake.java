@@ -18,7 +18,7 @@ import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Add your docs here.
  */
@@ -31,11 +31,12 @@ public class Intake extends Subsystem {
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
-    hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
-    hookServo = new Servo(RobotMap.hookServo);
+    // hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
+    // hookServo = new Servo(RobotMap.hookServo);
   }
 
 public void intake(){
+  SmartDashboard.putNumber("Intake reached", Robot.m_oi.ojoy.getRawAxis(2));
   if(Robot.m_oi.ojoy.getRawAxis(2)>0)
   {
     intakeMotor.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(2));
@@ -59,10 +60,10 @@ public void release(){
 }
 
 public void hookHatchPanel(){
-  hookServo.setPosition(1);
+  //hookServo.setPosition(1);
 }
 public void unhookHatchPanel(){
-  hookServo.setPosition(0);
+  //hookServo.setPosition(0);
 }
 
 public static void setSpeed(VictorSPX victor, double speed){
@@ -97,6 +98,6 @@ public static void setServo(Servo servo, double position){
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new IntakeC());
+     setDefaultCommand(new IntakeC());
   }
 }
