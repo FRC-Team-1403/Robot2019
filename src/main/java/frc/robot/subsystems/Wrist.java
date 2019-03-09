@@ -37,7 +37,7 @@ public class Wrist extends Subsystem {
   public static double armConversion;
   public static double prevArmAngle;
   public int integral, previous_error;
-  public static double tooFast = .35;
+  public static double tooFast = .5;
 
   public Wrist() {
     wristMotor = new TalonSRX(RobotMap.wristMotor);
@@ -50,23 +50,18 @@ public class Wrist extends Subsystem {
 
   public void moveWrist(double value) {
     
-     wristMotor.set(ControlMode.PercentOutput, value);
+    wristMotor.set(ControlMode.PercentOutput, value);
     
 
   }
   public void movePIDSetpoint(double stick){
-    setpoint -= stick * .005;
+    setpoint -= stick * .015;
 
   }
 
   public void moveByArm(double deltaArmAngle){
     setpoint += deltaArmAngle;
   }
-
-  /*public void moveByArm(double armAngle){
-    setpoint += armConversion * (armAngle-prevArmAngle);
-    prevArmAngle = armAngle;
-  }*/
 
   public void PID(){
     angle = voltToRadians(potentiometerWrist.getAverageVoltage());

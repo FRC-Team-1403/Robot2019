@@ -26,11 +26,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.MoveLiftingPiston;
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.subsystems.Vision;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.echo.Recorder;
 
 
@@ -80,6 +80,8 @@ public class Robot extends TimedRobot {
   int delay;
   int autoint;
 
+  boolean shouldReset;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -93,7 +95,7 @@ public class Robot extends TimedRobot {
     delay = 0;
     autoint = 0;
     hatch = new Hatch();
-    recorder = new Recorder(10000);
+    //recorder = new Recorder(10000);
     drivetrain = new DriveTrain();
     rioIO = new IOWithRIO();
     in = new Intake();
@@ -104,7 +106,7 @@ public class Robot extends TimedRobot {
     vs = new Vision();
     lift = new MoveLiftingPiston();
     m_oi = new OI();
-
+    shouldReset = true;
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
     talonInitVelocity(drivetrain.frontLeft);
@@ -124,7 +126,8 @@ public class Robot extends TimedRobot {
     drivetrain.frontRight.setInverted(false);
     drivetrain.backRight.setInverted(false);
     // in.intakeMotor.setInverted(true);
-  
+    resetPotentiometers();
+
   }
 
   /**
@@ -153,8 +156,6 @@ public class Robot extends TimedRobot {
     SetControl.mode = 0;
     SetControl.ballLevel = 0;
     SetControl.hatchLevel = 0;
-    arm.setpoint = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
-    w.setpoint = Robot.w.voltToRadians(Robot.w.potentiometerWrist.getAverageVoltage());
     
     if (Robot.m_oi.ojoy.getRawButtonReleased(8)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
@@ -178,9 +179,24 @@ public class Robot extends TimedRobot {
    * chooser code above (like the commented example) or additional comparisons
    * to the switch structure below with additional strings & commands.
    */
+
+  public void resetPotentiometers(){
+    
+    rioIO.readFromRIO();
+    arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
+    arm.setpoint = arm.angle;
+    w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
+    Robot.hatch.hookServo.setPosition(1);
+    w.setpoint = Math.PI/4;
+    hatch.hookServo.setPosition(1);
+    hatch.hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+    Robot.arm.potentiometerArm.resetAccumulator();
+  }
+
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
+    
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -190,7 +206,7 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    /*if (m_autonomousCommand != null) {
       
     	recorder.setCurrentWritefile(1);
 		  recorder.setCurrentReadfile(0);
@@ -202,7 +218,7 @@ public class Robot extends TimedRobot {
 		
 		
       m_autonomousCommand.start();
-    }
+    }*/
   }
 
   /**
@@ -211,47 +227,47 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     
-    if(recorder.hasNextLine())
-		{
-			System.out.println(recorder.getReading("DriveTrain Back Left"));
-			DriveTrain.setSpeed(drivetrain.frontLeft, recorder.getReading("DriveTrain Front Left"));
-			DriveTrain.setSpeed(drivetrain.backLeft, recorder.getReading("DriveTrain Back Left"));
-			DriveTrain.setSpeed(drivetrain.frontRight, recorder.getReading("DriveTrain Front Right"));
-			DriveTrain.setSpeed(drivetrain.backRight, recorder.getReading("DriveTrain Back Right"));
-			Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
-      Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
-      Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
-      Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Push Hatch"));
-      Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Release Hatch"));
-      Intake.setServo(in.hookServo, recorder.getReading("Hook Hatch"));
-      Intake.setServo(in.hookServo, recorder.getReading("Unhook Hatch"));
-      Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
-      Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
-      ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
+    // if(recorder.hasNextLine())
+		// {
+		// 	System.out.println(recorder.getReading("DriveTrain Back Left"));
+		// 	DriveTrain.setSpeed(drivetrain.frontLeft, recorder.getReading("DriveTrain Front Left"));
+		// 	DriveTrain.setSpeed(drivetrain.backLeft, recorder.getReading("DriveTrain Back Left"));
+		// 	DriveTrain.setSpeed(drivetrain.frontRight, recorder.getReading("DriveTrain Front Right"));
+		// 	DriveTrain.setSpeed(drivetrain.backRight, recorder.getReading("DriveTrain Back Right"));
+		// 	Wrist.setSpeed(w.wristMotor, recorder.getReading("Wrist"));
+    //   Intake.setSpeed(in.intakeMotor, recorder.getReading("Intake Ball"));
+    //   Intake.setSpeed(in.intakeMotor, recorder.getReading("Eject Ball"));
+    //   Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Push Hatch"));
+    //   Intake.setPosition(in.hatchPushSolenoid, recorder.getReading("Release Hatch"));
+    //   Intake.setServo(in.hookServo, recorder.getReading("Hook Hatch"));
+    //   Intake.setServo(in.hookServo, recorder.getReading("Unhook Hatch"));
+    //   Arm.setSpeed(arm.armMotorL, recorder.getReading("Move Arm Left"));
+    //   Arm.setSpeed(arm.armMotorR, recorder.getReading("Move Arm Right"));
+    //   ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is extended"));
       
-      ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is retracted"));
-			Timer.delay(0.001);
-		}
+    //   ArmExtension.setPosition(ae.armExtender, recorder.getReading("Arm is retracted"));
+		// 	Timer.delay(0.001);
+		// }
 		
-		else
-		{
-      DriveTrain.setSpeed(drivetrain.frontLeft, 0);
-			DriveTrain.setSpeed(drivetrain.backLeft, 0);
-			DriveTrain.setSpeed(drivetrain.frontRight, 0);
-			DriveTrain.setSpeed(drivetrain.backRight, 0);
-			Wrist.setSpeed(w.wristMotor, 0);
-      Intake.setSpeed(in.intakeMotor, 0);
-      Intake.setSpeed(in.intakeMotor, 0);
-      Intake.setPosition(in.hatchPushSolenoid, 0);
-      Intake.setPosition(in.hatchPushSolenoid, 0);
-      Intake.setServo(in.hookServo, 0);
-      Intake.setServo(in.hookServo, 0);
-      Arm.setSpeed(arm.armMotorL,0);
-      Arm.setSpeed(arm.armMotorR, 0);
-      ArmExtension.setPosition(ae.armExtender, 0);
-      ArmExtension.setPosition(ae.armExtender, 0);
-		}
-    Scheduler.getInstance().run();
+		// else
+		// {
+    //   DriveTrain.setSpeed(drivetrain.frontLeft, 0);
+		// 	DriveTrain.setSpeed(drivetrain.backLeft, 0);
+		// 	DriveTrain.setSpeed(drivetrain.frontRight, 0);
+		// 	DriveTrain.setSpeed(drivetrain.backRight, 0);
+		// 	Wrist.setSpeed(w.wristMotor, 0);
+    //   Intake.setSpeed(in.intakeMotor, 0);
+    //   Intake.setSpeed(in.intakeMotor, 0);
+    //   Intake.setPosition(in.hatchPushSolenoid, 0);
+    //   Intake.setPosition(in.hatchPushSolenoid, 0);
+    //   Intake.setServo(in.hookServo, 0);
+    //   Intake.setServo(in.hookServo, 0);
+    //   Arm.setSpeed(arm.armMotorL,0);
+    //   Arm.setSpeed(arm.armMotorR, 0);
+    //   ArmExtension.setPosition(ae.armExtender, 0);
+    //   ArmExtension.setPosition(ae.armExtender, 0);
+    // }
+    this.teleopPeriodic();
   }
 
   @Override
@@ -263,13 +279,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    rioIO.readFromRIO();
-    arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
-    arm.setpoint = arm.angle;
-    w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
-    w.setpoint = w.angle;
-
-    Robot.arm.potentiometerArm.resetAccumulator();
   }
 
   /**
@@ -297,7 +306,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Arm potentiometer: ", Robot.arm.potentiometerArm.getAverageVoltage());
 
     SmartDashboard.putNumber("PID: ", Robot.w.PID);
-    SmartDashboard.putNumber("Angle: ", Robot.w.angle);
+    SmartDashboard.putNumber("Wrist Angle: ", Robot.w.angle);
     SmartDashboard.putNumber("Error", Robot.w.error);
     SmartDashboard.putNumber("Setpoint", Robot.w.setpoint);
     SmartDashboard.putNumber("Conversion", Robot.w.conversion);
@@ -309,7 +318,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("mode: ", SetControl.mode);
     SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
-    SmartDashboard.putNumber("Angle a: ", Robot.arm.angle*180/Math.PI);
+    SmartDashboard.putNumber("Arm Angle: ", Robot.arm.angle);
     SmartDashboard.putNumber("Error a", Robot.arm.error);
     SmartDashboard.putNumber("Setpoint a", Robot.arm.setpoint);
     SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
@@ -318,7 +327,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Posititi", Robot.hatch.hookServo.getPosition());
     SmartDashboard.putNumber("hatchLevel: ", SetControl.hatchLevel);
     SmartDashboard.putNumber("ballLevel: ", SetControl.ballLevel);   
-    if(Recorder.isRecording)
+    
+    /*if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
 			recorder.addReading("DriveTrain Back Right", Robot.m_oi.djoy.getRawAxis(5));
@@ -342,10 +352,9 @@ public class Robot extends TimedRobot {
 		
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
-		}
+		}*/
    
     Scheduler.getInstance().run();
-  
   }
   public void talonInitVelocity(TalonSRX talon) {
     /* Factory Default all hardware to prevent unexpected behaviour */
@@ -429,6 +438,9 @@ talon.setSelectedSensorPosition(absolutePosition, Constants.kPIDLoopIdx, Constan
    */
   @Override
   public void testPeriodic() {
+    Robot.arm.armMotorR.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(1));
+    Robot.arm.armMotorL.set(ControlMode.PercentOutput, -1 * Robot.m_oi.ojoy.getRawAxis(1));
+    
   }
   public void init(){
     recorder.addFileSelect(numpaths, path);

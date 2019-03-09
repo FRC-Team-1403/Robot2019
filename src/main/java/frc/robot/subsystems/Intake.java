@@ -59,13 +59,6 @@ public void release(){
   hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
 }
 
-public void hookHatchPanel(){
-  //hookServo.setPosition(1);
-}
-public void unhookHatchPanel(){
-  //hookServo.setPosition(0);
-}
-
 public static void setSpeed(VictorSPX victor, double speed){
   victor.set(ControlMode.PercentOutput, speed);
 }

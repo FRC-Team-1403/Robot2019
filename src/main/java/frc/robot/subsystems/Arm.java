@@ -18,6 +18,8 @@ import frc.robot.commands.MoveArm;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Setpoint;
+import frc.robot.commands.SetControl;
+
 /**
  * Add your docs here.
  */
@@ -42,9 +44,12 @@ public double error, PID, derivative, setpoint;
 public static double flat;
 public static double angle;
 public static double conversion;
-public final double tooFast = .3;
+public final double tooFast = .5;
+//final double minArmAngle = -1.00 * Math.abs(SetControl.armCallibrationAngle) * Math.PI/180.00; //angle to radians then negative
+//final double setpointCorrectionConstant = .05;
+//final double maxArmAngle = Math.PI/2 - .05; //vertical minus some constant
 
-  public Arm()
+public Arm()
   {
     armMotorL = new TalonSRX(RobotMap.armMotorL);
     armMotorR = new TalonSRX(RobotMap.armMotorR);
@@ -74,7 +79,15 @@ public final double tooFast = .3;
     if(Math.abs(stick) < .05){
       return;
     }
-      setpoint += -stick * 0.01;
+    //if(setpoint < maxArmAngle && setpoint > minArmAngle){
+    setpoint += -stick * 0.01;
+    //}
+    //else if(setpoint > maxArmAngle){
+     // setpoint = maxArmAngle-setpointCorrectionConstant;
+   // }
+    //else if (setpoint < minArmAngle){
+     // setpoint = minArmAngle + setpointCorrectionConstant;
+    //}
   }
 
   public static double feedForward(double angle) {

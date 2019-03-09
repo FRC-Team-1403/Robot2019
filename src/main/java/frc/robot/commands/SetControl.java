@@ -25,8 +25,10 @@ public class SetControl extends Command {
   public static final double wristCallibrationAngle = 137;
   //angles are relative to the flat
   public final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.7045206829, 2.216887123), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.9303370598, 0.7683379551, true)};
-  public final Setpoint[] ballPositions = {new Setpoint(-0.521705394, 0.3840765198),new Setpoint(-0.7045206829, 2.216887123), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(0.6939580557, -0.5055469242), new Setpoint(1.298296495, -0.8315869299, true)};
-    public SetControl() {
+  public final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, .2364825),new Setpoint(-0.7045206829, 2.216887123), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(.390508, -.205), new Setpoint(1.011, -0.687, true)};
+  //ball pickup, HPS, 1, 2, 3
+  
+  public SetControl() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.cs);
   }

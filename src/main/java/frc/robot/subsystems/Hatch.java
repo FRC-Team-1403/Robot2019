@@ -28,10 +28,10 @@ public class Hatch extends Subsystem {
   }
 
   public void push(){
-    hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
+    hatchPushSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
   public void release(){
-    hatchPushSolenoid.set(DoubleSolenoid.Value.kReverse);
+    hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
   }
   public void off(){
     hatchPushSolenoid.set(DoubleSolenoid.Value.kOff);

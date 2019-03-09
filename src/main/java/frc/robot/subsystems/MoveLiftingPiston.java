@@ -13,6 +13,7 @@ import frc.robot.commands.LiftRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Add your docs here.
@@ -20,6 +21,7 @@ import frc.robot.Robot;
 public class MoveLiftingPiston extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+  public boolean isExtended = false;
 
   public DoubleSolenoid lifter;
 
@@ -28,11 +30,18 @@ public class MoveLiftingPiston extends Subsystem {
   }
 
   public void moveLiftingPiston(){
-    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyA)){
-      lifter.set(DoubleSolenoid.Value.kForward);
-    }
-    else if (Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyB)){
-      lifter.set(DoubleSolenoid.Value.kReverse);
+    SmartDashboard.putString("Lifting Code", "Function Called");
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)) {
+      SmartDashboard.putString("Reached lifting code", "Button Pressed");
+      SmartDashboard.putBoolean("Extended:", isExtended);
+      if(isExtended){
+        lifter.set(DoubleSolenoid.Value.kReverse);
+        isExtended = false;
+      }
+      else if(!isExtended){
+        lifter.set(DoubleSolenoid.Value.kForward);
+        isExtended = true;
+      }
     }
     else{
       lifter.set(DoubleSolenoid.Value.kOff);
