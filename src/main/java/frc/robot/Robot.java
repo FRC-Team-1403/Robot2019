@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
     drivetrain.backRight.setInverted(false);
     // in.intakeMotor.setInverted(true);
     resetPotentiometers();
-
+    hatch.hookServo.setPosition(1);
   }
 
   /**
@@ -153,9 +153,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    SetControl.mode = 0;
-    SetControl.ballLevel = 0;
-    SetControl.hatchLevel = 0;
     
     if (Robot.m_oi.ojoy.getRawButtonReleased(8)) { autoint++; }
 		SmartDashboard.putNumber("autoint", autoint%4);
@@ -186,9 +183,7 @@ public class Robot extends TimedRobot {
     arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
     arm.setpoint = arm.angle;
     w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
-    Robot.hatch.hookServo.setPosition(1);
     w.setpoint = Math.PI/4;
-    hatch.hookServo.setPosition(1);
     hatch.hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
     Robot.arm.potentiometerArm.resetAccumulator();
   }

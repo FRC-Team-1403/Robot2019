@@ -28,6 +28,7 @@ public class Hatch extends Subsystem {
   }
 
   public void push(){
+    
     hatchPushSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
   public void release(){

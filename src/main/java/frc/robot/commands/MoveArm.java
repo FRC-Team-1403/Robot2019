@@ -12,7 +12,6 @@ import frc.robot.RobotMap;
 
 public class MoveArm extends Command {
   public MoveArm() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.arm);
   }
 
@@ -24,7 +23,9 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX)){
+      Robot.arm.setpoint = Robot.arm.angle;
+    }
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
     }

@@ -24,12 +24,12 @@ public class SetControl extends Command {
   public static final double armCallibrationAngle = -50.2;
   public static final double wristCallibrationAngle = 137;
   //angles are relative to the flat
-  public final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.7045206829, 2.216887123), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.9303370598, 0.7683379551, true)};
-  public final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, .2364825),new Setpoint(-0.7045206829, 2.216887123), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(.390508, -.205), new Setpoint(1.011, -0.687, true)};
-  //ball pickup, HPS, 1, 2, 3
-  
+  public static final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.9303370598, 0.7683379551, true)};
+  public static final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, .2364825), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(.390508, -.205), new Setpoint(1.011, -0.687, true)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
+  //hatch pickup, 1, 2, 3
+  //ball pickup, HPS, 1, cargo, 2, 3
+   
   public SetControl() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.cs);
   }
 
@@ -66,6 +66,7 @@ public class SetControl extends Command {
 
   public void checkCallibration(){
     if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
+      SmartDashboard.putBoolean("NIVA START HAS BEEN PRESSED: ", Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart));
       double startArmReading = Robot.arm.potentiometerArm.getAverageVoltage();
       double startWristReading = Robot.w.potentiometerWrist.getAverageVoltage();
       while(true){
@@ -87,6 +88,7 @@ public class SetControl extends Command {
       mode++;
       mode%=2;
     }
+    
     checkCallibration();
       if(joystickMoved() && !Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)) {
      
@@ -97,6 +99,7 @@ public class SetControl extends Command {
              ballLevel = ballPositions.length-1;
            }
            ballPositions[ballLevel].run();
+
          }
          if(mode == 0) {
            hatchLevel++;
@@ -111,7 +114,7 @@ public class SetControl extends Command {
             if(ballLevel == -1){
              ballLevel = 0;
            }
-           ballPositions[ballLevel].run();        
+           ballPositions[ballLevel].run(); 
          }
          if(mode == 0) {
            hatchLevel--;

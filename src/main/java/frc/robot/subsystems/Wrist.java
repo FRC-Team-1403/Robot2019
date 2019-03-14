@@ -27,7 +27,7 @@ public class Wrist extends Subsystem {
   // here. Call these from Commands.
   public TalonSRX wristMotor;
   public AnalogInput potentiometerWrist;
-  public double P = 1;
+  public double P = 1.2;
   public double I = 0;
   public double D = 0;
   public double error, PID, derivative, setpoint;
@@ -37,7 +37,7 @@ public class Wrist extends Subsystem {
   public static double armConversion;
   public static double prevArmAngle;
   public int integral, previous_error;
-  public static double tooFast = .5;
+  public static double tooFast = .8;
 
   public Wrist() {
     wristMotor = new TalonSRX(RobotMap.wristMotor);

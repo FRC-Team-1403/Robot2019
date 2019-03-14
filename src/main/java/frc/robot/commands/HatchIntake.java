@@ -13,7 +13,6 @@ import frc.robot.RobotMap;
 
 public class HatchIntake extends Command {
   public HatchIntake() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.hatch);
   }
 
@@ -25,8 +24,10 @@ public class HatchIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB) && Robot.hatch.hookServo.getPosition() != 1){
-      Robot.hatch.push();
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB)){
+      if(Robot.hatch.hookServo.getPosition() != 1){
+        Robot.hatch.push();
+      }
     }
     else if(Robot.m_oi.ojoy.getRawButtonReleased(RobotMap.ojoyRB)){
       Robot.hatch.release();
@@ -34,7 +35,7 @@ public class HatchIntake extends Command {
     else{
       Robot.hatch.off();
     }
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyLB)){
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyLB) || Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyLB) ){
       Robot.hatch.moveServo();
     }
   }

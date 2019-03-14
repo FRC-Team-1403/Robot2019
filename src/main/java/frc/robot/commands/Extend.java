@@ -12,7 +12,6 @@ import frc.robot.Robot;
 
 public class Extend extends Command {
   public Extend() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.ae);
   }
 

@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
 public class DriveWithJoystick extends Command {
   public int count;
   public DriveWithJoystick() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
     count = 0;
   }

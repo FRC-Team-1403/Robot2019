@@ -15,7 +15,6 @@ public class IntakeC extends Command {
 
 
   public IntakeC() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.in);
   }
 

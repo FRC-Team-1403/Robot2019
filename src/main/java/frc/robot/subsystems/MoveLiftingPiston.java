@@ -9,7 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.commands.LiftRobot;
-
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
@@ -24,9 +24,12 @@ public class MoveLiftingPiston extends Subsystem {
   public boolean isExtended = false;
 
   public DoubleSolenoid lifter;
+  public DigitalOutput led;
 
   public MoveLiftingPiston(){
     lifter = new DoubleSolenoid(RobotMap.lifter1, RobotMap.lifter2);
+    led = new DigitalOutput(0);
+    led.set(false);
   }
 
   public void moveLiftingPiston(){
@@ -37,15 +40,18 @@ public class MoveLiftingPiston extends Subsystem {
       if(isExtended){
         lifter.set(DoubleSolenoid.Value.kReverse);
         isExtended = false;
+        led.set(false);
       }
       else if(!isExtended){
         lifter.set(DoubleSolenoid.Value.kForward);
         isExtended = true;
+        led.set(true);
       }
     }
     else{
       lifter.set(DoubleSolenoid.Value.kOff);
     }
+    
   }
 
   @Override

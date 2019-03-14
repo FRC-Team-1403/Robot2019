@@ -17,8 +17,9 @@ public class AlignWithVision extends Command {
   public boolean isCurrentlyOnLeft = false;
   public boolean initiallyOnLeft = false;
   public double area = 0;
-  public double motorSpeedConst = .1;
-
+  public double motorSpeedConst = .2;
+  public double turnSpeed = .4;
+  double prevArmSetpoint;
   public static double getV(){
     return table.getDefault().getTable("limelight").getEntry("tv").getDouble(0.0);
 }
@@ -32,7 +33,6 @@ public static double getA(){
 }
 
   public AlignWithVision() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.vs);
   }
 
@@ -44,19 +44,18 @@ public static double getA(){
   public void align(double x){
     if(x < 0){
       isCurrentlyOnLeft = true;
-      Robot.drivetrain.setRaw(-.3, .3); //idk what values should go here, it's just some constant
+      Robot.drivetrain.setRaw(-1*turnSpeed, turnSpeed); 
     }
 
     else if(x >= 0){
       isCurrentlyOnLeft = false;     
-       Robot.drivetrain.setRaw(.3, -.3);
+       Robot.drivetrain.setRaw(turnSpeed, -turnSpeed);
     }
 
   }
 
   public double skewmoid(double area) {
-    //return Math.pow((1/(1 + Math.pow(Math.E, -2*area+2))),2)+.2;
-    return 2/3*1/(1 + Math.pow(Math.E, -2*area+2)) + 1.0/3;
+    return 2.0/3*1/(1 + Math.pow(Math.E, -2*area+2)) + 1.0/3;
 	}
 
   public double getMotorSpeedWithVision(double area, double angle, boolean isLeftMotor){
@@ -76,7 +75,7 @@ public static double getA(){
   }
   
   public void driveWithVision(){
-    this.motorSpeedConst = .3 * Math.pow(-(this.area/7.0) + 1.0, 0.5);
+    this.motorSpeedConst = turnSpeed * Math.pow(-(this.area/10.0) + 1.0, 0.5);
     double leftSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), true);
     double rightSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), false);
     SmartDashboard.putNumber("left speed: ", + leftSpeed); 
@@ -101,7 +100,10 @@ public static double getA(){
           isCurrentlyOnLeft = false;
           initiallyOnLeft = false;
         }
+        prevArmSetpoint = Robot.arm.setpoint;
+        SetControl.ballPositions[1].run();
       }
+    
     } 
     if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyX)){
       if((int)getV() == 1){
@@ -115,6 +117,7 @@ public static double getA(){
     }
     if(Robot.m_oi.djoy.getRawButtonReleased(RobotMap.ojoyX)){
       Robot.drivetrain.stop();
+      Robot.arm.setpoint = prevArmSetpoint;
     }
 
   }

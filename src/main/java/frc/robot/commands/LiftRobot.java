@@ -12,7 +12,6 @@ import frc.robot.Robot;
 
 public class LiftRobot extends Command {
   public LiftRobot() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.lift);
   }
 

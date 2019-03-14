@@ -13,7 +13,6 @@ import frc.robot.RobotMap;
 
 public class MoveWrist extends Command {
   public MoveWrist() {
-    // Use requires() here to declare subsystem dependencies
     requires(Robot.w);
   }
 
@@ -31,8 +30,7 @@ public class MoveWrist extends Command {
       Robot.w.movePIDSetpoint(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
     }
      else{
-      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
-        //Robot.w.moveByArm(Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage())); 
+      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){ 
         Robot.w.moveByArm(Robot.w.prevArmAngle - currentArmAngle);
 
       }
