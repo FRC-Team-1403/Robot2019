@@ -24,19 +24,24 @@ public class HatchIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB)){
+    if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyA)){
       if(Robot.hatch.hookServo.getPosition() != 1){
         Robot.hatch.push();
       }
     }
-    else if(Robot.m_oi.ojoy.getRawButtonReleased(RobotMap.ojoyRB)){
+    else if(Robot.m_oi.djoy.getRawButtonReleased(RobotMap.ojoyA)){
       Robot.hatch.release();
     }
     else{
       Robot.hatch.off();
     }
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyLB) || Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyLB) ){
-      Robot.hatch.moveServo();
+    if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyRB)){
+      Robot.hatch.hookServo.setPosition(1.0);
+      //Robot.hatch.moveServo();
+    }
+    else if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyLB))
+    {
+      Robot.hatch.hookServo.setPosition(0);
     }
   }
 

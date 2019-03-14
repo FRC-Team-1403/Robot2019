@@ -30,7 +30,8 @@ public class DriveWithJoystick extends Command {
     if (Robot.m_oi.djoy.getRawButton(RobotMap.ojoyLB)) { //while held
       Robot.drivetrain.driveCheesy();
     } else {
-      Robot.drivetrain.driveTank();
+      //Robot.drivetrain.driveTank();
+        Robot.drivetrain.driveCheesy();
     }
   }
 

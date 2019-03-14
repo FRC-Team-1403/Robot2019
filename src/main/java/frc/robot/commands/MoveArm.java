@@ -23,12 +23,12 @@ public class MoveArm extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX)){
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB)){
       Robot.arm.setpoint = Robot.arm.angle;
     }
-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
+   // if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
       Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
-    }
+   // }
     
     Robot.arm.PID();
     Robot.arm.moveArm(-Robot.arm.PID);    
