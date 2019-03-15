@@ -183,7 +183,7 @@ public class Robot extends TimedRobot {
     arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
     arm.setpoint = arm.angle;
     w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
-    w.setpoint = Math.PI/4;
+    //w.setpoint = Math.PI/4;
     hatch.hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
     Robot.arm.potentiometerArm.resetAccumulator();
   }

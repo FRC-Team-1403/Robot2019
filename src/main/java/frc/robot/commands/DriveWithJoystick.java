@@ -27,9 +27,9 @@ public class DriveWithJoystick extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (Robot.m_oi.djoy.getRawButton(RobotMap.ojoyLB)) { //while held
-      Robot.drivetrain.driveCheesy();
-    } else {
+     if (Robot.m_oi.djoy.getRawAxis(2)>0.1) { //while held
+       Robot.drivetrain.driveCheesy();
+     } else {
       Robot.drivetrain.driveTank();
       //Robot.drivetrain.driveCheesy();
     }
