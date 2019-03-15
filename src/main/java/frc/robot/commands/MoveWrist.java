@@ -1,3 +1,4 @@
+
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -25,7 +26,7 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-   /* double currentArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
+  double currentArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
     
      if(Math.abs(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY)) > .1){
       Robot.w.movePIDSetpoint(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
@@ -39,7 +40,7 @@ public class MoveWrist extends Command {
    
      Robot.w.PID();
      Robot.w.moveWrist(-Robot.w.PID);
-    Robot.w.prevArmAngle = currentArmAngle;*/
+    Robot.w.prevArmAngle = currentArmAngle;
 }
 
 

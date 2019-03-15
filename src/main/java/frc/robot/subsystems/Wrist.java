@@ -27,7 +27,7 @@ public class Wrist extends Subsystem {
   // here. Call these from Commands.
   public TalonSRX wristMotor;
   public AnalogInput potentiometerWrist;
-  public double P = 1.2;
+  public double P = 1.6;
   public double I = 0;
   public double D = 0;
   public double error, PID, derivative, setpoint;

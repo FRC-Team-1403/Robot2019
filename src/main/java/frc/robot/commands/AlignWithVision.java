@@ -100,8 +100,8 @@ public static double getA(){
           isCurrentlyOnLeft = false;
           initiallyOnLeft = false;
         }
-        prevArmSetpoint = Robot.arm.setpoint;
-        SetControl.ballPositions[1].run();
+        //prevArmSetpoint = Robot.arm.setpoint;
+        //SetControl.ballPositions[1].run();
       }
     
     } 
@@ -117,7 +117,7 @@ public static double getA(){
     }
     if(Robot.m_oi.djoy.getRawButtonReleased(RobotMap.ojoyX)){
       Robot.drivetrain.stop();
-      Robot.arm.setpoint = prevArmSetpoint;
+      //Robot.arm.setpoint = prevArmSetpoint;
     }
 
   }

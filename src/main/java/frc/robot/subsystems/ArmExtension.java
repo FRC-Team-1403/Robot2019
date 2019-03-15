@@ -28,15 +28,16 @@ public class ArmExtension extends Subsystem {
   }
 
   public void push() {
-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)) 
+    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)) 
     {
-      armExtender.set(DoubleSolenoid.Value.kForward);
-      isForward = true;
-    }
-    else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB)) 
-    {
-      armExtender.set(DoubleSolenoid.Value.kReverse);
-      isForward = false;
+      if(!isForward){
+        armExtender.set(DoubleSolenoid.Value.kForward);
+        isForward = true;
+      }
+      else{
+        armExtender.set(DoubleSolenoid.Value.kReverse);
+        isForward = false;
+      }
     }
     else 
     {
@@ -44,6 +45,7 @@ public class ArmExtension extends Subsystem {
      
     }
   }
+  
   public static double convertBoolToDouble(){
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA)){
       return 1.0;

@@ -34,18 +34,18 @@ public class MoveLiftingPiston extends Subsystem {
 
   public void moveLiftingPiston(){
     SmartDashboard.putString("Lifting Code", "Function Called");
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyBack)) {
+    if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyBack)) {
       SmartDashboard.putString("Reached lifting code", "Button Pressed");
       SmartDashboard.putBoolean("Extended:", isExtended);
       if(isExtended){
         lifter.set(DoubleSolenoid.Value.kReverse);
         isExtended = false;
-        led.set(false);
+        led.set(true);
       }
       else if(!isExtended){
         lifter.set(DoubleSolenoid.Value.kForward);
         isExtended = true;
-        led.set(true);
+        led.set(false);
       }
     }
     else{

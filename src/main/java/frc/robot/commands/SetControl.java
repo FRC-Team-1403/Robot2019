@@ -24,8 +24,8 @@ public class SetControl extends Command {
   public static final double armCallibrationAngle = -50.2;
   public static final double wristCallibrationAngle = 137;
   //angles are relative to the flat
-  public static final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.9303370598, 0.7683379551, true)};
-  public static final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, .2364825), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(-0.2469002464, 0.3933919486), new Setpoint(.390508, -.205), new Setpoint(1.011, -0.687, true)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
+  public static final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.7344078690468266, 0.561088699964242, true)};
+  public static final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, .2364825), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(-0.2901915591978343, 0.6042493691922602), new Setpoint(0.35269435656352155, -0.060424936919227124), new Setpoint(1.011, -0.687, true)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
   //hatch pickup, 1, 2, 3
   //ball pickup, HPS, 1, (not implemented)cargo, 2, 3
    
@@ -79,29 +79,29 @@ public class SetControl extends Command {
   @Override
   protected void execute() {
     
-    if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyLB))
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
     {
       if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)) {
         /*mode++;
         mode%=2;*/
         //cargo ball
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX))
       {
         //floor ball
         ballPositions[0].run();
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyA))
       {
         //level 1 ball
         ballPositions[2].run();
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyB))
       {
         //level 2 ball
         ballPositions[3].run();
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyY))
       {
         //level 3 ball
         ballPositions[4].run();
@@ -110,22 +110,22 @@ public class SetControl extends Command {
     else
     {
       checkCallibration();
-      if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX))
+      if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX))
       {
         //floor hatch
         hatchPositions[0].run();
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyA))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyA))
       {
         //level 1 hatch
         hatchPositions[1].run();
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyB))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyB))
       {
         //level 2 hatch
         hatchPositions[2].run();
       }
-      else if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyY))
+      else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyY))
       {
         //level 3 hatch
         hatchPositions[3].run();
