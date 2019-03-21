@@ -26,9 +26,8 @@ public class MoveArm extends Command {
     if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB)){
       Robot.arm.setpoint = Robot.arm.angle;
     }
-   // if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)){
-      Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
-   // }
+    
+    Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
     
     Robot.arm.PID();
     Robot.arm.moveArm(-Robot.arm.PID);    

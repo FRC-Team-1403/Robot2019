@@ -48,11 +48,8 @@ public class Wrist extends Subsystem {
   
 
 
-  public void moveWrist(double value) {
-    
+  public void moveWrist(double value) { 
     wristMotor.set(ControlMode.PercentOutput, value);
-    
-
   }
   public void movePIDSetpoint(double stick){
     setpoint -= stick * .015;
@@ -75,10 +72,6 @@ public class Wrist extends Subsystem {
 
   public double voltToRadians(double potentiometerValue){
     return (potentiometerValue - flat) * conversion;
-  }
-
-  public static double radiansToVolts(double radians) {
-    return 1/conversion + flat;
   }
 
   public static void setSpeed(TalonSRX talon, double speed){

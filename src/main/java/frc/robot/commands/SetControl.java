@@ -25,9 +25,9 @@ public class SetControl extends Command {
   public static final double wristCallibrationAngle = 137;
   //angles are relative to the flat
   public static final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.7344078690468266, 0.561088699964242, true)};
-  public static final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, .2364825), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(-0.2901915591978343, 0.6042493691922602), new Setpoint(0.35269435656352155, -0.060424936919227124), new Setpoint(1.011, -0.687, true)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
+  public static final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, 0.43456439742 ), new Setpoint(-0.2901915591978343, 0.6042493691922602), new Setpoint(0.305817258539256, -0.5179280307362237), new Setpoint(0.35269435656352155, -0.060424936919227124), new Setpoint(1.011, -0.687, true)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
   //hatch pickup, 1, 2, 3
-  //ball pickup, HPS, 1, (not implemented)cargo, 2, 3
+  //ball pickup, 1, (not implemented)cargo, 2, 3
    
   public SetControl() {
     requires(Robot.cs);
@@ -60,8 +60,7 @@ public class SetControl extends Command {
   }
 
   public void checkCallibration(){
-    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
-      SmartDashboard.putBoolean("NIVA START HAS BEEN PRESSED: ", Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart));
+   if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
       double startArmReading = Robot.arm.potentiometerArm.getAverageVoltage();
       double startWristReading = Robot.w.potentiometerWrist.getAverageVoltage();
       while(true){
@@ -82,9 +81,8 @@ public class SetControl extends Command {
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
     {
       if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)) {
-        /*mode++;
-        mode%=2;*/
-        //cargo ball
+        //cargo
+        ballPositions[2].run();
       }
       else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX))
       {
@@ -94,7 +92,7 @@ public class SetControl extends Command {
       else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyA))
       {
         //level 1 ball
-        ballPositions[2].run();
+        ballPositions[1].run();
       }
       else if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyB))
       {
@@ -131,44 +129,6 @@ public class SetControl extends Command {
         hatchPositions[3].run();
       }
     }
-    
-    // else
-    // checkCallibration();
-    //   if(joystickMoved() && !Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)) {
-     
-    //     if(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY) < -.5) {
-    //       if(mode == 1) {
-    //        ballLevel++;        
-    //        if(ballLevel == ballPositions.length) {
-    //          ballLevel = ballPositions.length-1;
-    //        }
-    //        ballPositions[ballLevel].run();
-
-    //      }
-    //      if(mode == 0) {
-    //        hatchLevel++;
-    //        if(hatchLevel == hatchPositions.length) {
-    //          hatchLevel = hatchPositions.length-1;
-    //         }
-    //        hatchPositions[hatchLevel].run(); 
-    //      }
-    //    } else {
-    //      if(mode == 1) {
-    //        ballLevel--;
-    //         if(ballLevel == -1){
-    //          ballLevel = 0;
-    //        }
-    //        ballPositions[ballLevel].run(); 
-    //      }
-    //      if(mode == 0) {
-    //        hatchLevel--;
-    //        if(hatchLevel == -1) {
-    //          hatchLevel = 0;
-    //        }
-    //        hatchPositions[hatchLevel].run(); 
-    //     }
-    //   }
-    // }
   }
 
   // Make this return true when this Command no longer needs to run execute()

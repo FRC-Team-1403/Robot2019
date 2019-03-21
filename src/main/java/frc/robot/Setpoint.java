@@ -32,7 +32,7 @@ public class Setpoint {
         else if(!armOut) {
             Robot.ae.armExtender.set(DoubleSolenoid.Value.kReverse);
             Robot.ae.isForward = false;
-        }
+        } 
     }
 
 }

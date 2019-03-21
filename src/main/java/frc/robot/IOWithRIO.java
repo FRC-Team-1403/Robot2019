@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.FileReader;
 /**
  * Add your docs here.

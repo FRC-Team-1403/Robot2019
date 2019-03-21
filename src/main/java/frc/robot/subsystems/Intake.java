@@ -36,7 +36,6 @@ public class Intake extends Subsystem {
   }
 
 public void intake(){
-  SmartDashboard.putNumber("Intake reached", Robot.m_oi.ojoy.getRawAxis(2));
   if(Robot.m_oi.ojoy.getRawAxis(2)>0)
   {
     intakeMotor.set(ControlMode.PercentOutput, Robot.m_oi.ojoy.getRawAxis(2));

@@ -44,10 +44,7 @@ public double error, PID, derivative, setpoint;
 public static double flat;
 public static double angle;
 public static double conversion;
-public final double tooFast = .5;
-//final double minArmAngle = -1.00 * Math.abs(SetControl.armCallibrationAngle) * Math.PI/180.00; //angle to radians then negative
-//final double setpointCorrectionConstant = .05;
-//final double maxArmAngle = Math.PI/2 - .05; //vertical minus some constant
+public final double tooFast = .7;
 
 public Arm()
   {
@@ -79,15 +76,7 @@ public Arm()
     if(Math.abs(stick) < .05){
       return;
     }
-    //if(setpoint < maxArmAngle && setpoint > minArmAngle){
-    setpoint += -stick * 0.01;
-    //}
-    //else if(setpoint > maxArmAngle){
-     // setpoint = maxArmAngle-setpointCorrectionConstant;
-   // }
-    //else if (setpoint < minArmAngle){
-     // setpoint = minArmAngle + setpointCorrectionConstant;
-    //}
+    setpoint += -stick * 0.0075;
   }
 
   public static double feedForward(double angle) {

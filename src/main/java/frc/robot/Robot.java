@@ -128,6 +128,7 @@ public class Robot extends TimedRobot {
     // in.intakeMotor.setInverted(true);
     resetPotentiometers();
     hatch.hookServo.setPosition(1);
+    hatch.release();
   }
 
   /**
@@ -183,7 +184,7 @@ public class Robot extends TimedRobot {
     arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
     arm.setpoint = arm.angle;
     w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
-    //w.setpoint = Math.PI/4;
+    w.setpoint = Math.PI/4;  
     hatch.hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
     Robot.arm.potentiometerArm.resetAccumulator();
   }
@@ -288,41 +289,11 @@ public class Robot extends TimedRobot {
     FASTMAXRPM = SmartDashboard.getNumber("FAST Max RPM:", 8000);
     DEFAULTMAXRPM = SmartDashboard.getNumber("Default Max RPM:", 5700);
     FINECONTROLRPM = SmartDashboard.getNumber("Fine Max RPM:", 3000);
-
-    SmartDashboard.putNumber("Motor value 1: ", drivetrain.frontLeft.getMotorOutputPercent());
-    SmartDashboard.putNumber("Motor value 2: ", drivetrain.backLeft.getMotorOutputPercent());
-    SmartDashboard.putNumber("Motor value 3: ", drivetrain.frontRight.getMotorOutputPercent());
-    SmartDashboard.putNumber("Motor value 4: ", drivetrain.backRight.getMotorOutputPercent());
-
-    SmartDashboard.putNumber("Arm movement constant: ", Robot.arm.armConstant);
-    SmartDashboard.putNumber("Feed forward constant: ", Robot.arm.feedForwardConstant);
-
-    SmartDashboard.putNumber("Wrist potentiometer: ", Robot.w.potentiometerWrist.getAverageVoltage());
-    SmartDashboard.putNumber("Arm potentiometer: ", Robot.arm.potentiometerArm.getAverageVoltage());
-
-    SmartDashboard.putNumber("PID: ", Robot.w.PID);
-    SmartDashboard.putNumber("Wrist Angle: ", Robot.w.angle);
-    SmartDashboard.putNumber("Error", Robot.w.error);
-    SmartDashboard.putNumber("Setpoint", Robot.w.setpoint);
-    SmartDashboard.putNumber("Conversion", Robot.w.conversion);
-    SmartDashboard.putNumber("Flat", Robot.w.flat);
-    SmartDashboard.putNumber("P value", Robot.w.P);
-    SmartDashboard.putNumber("Previous", Robot.w.prevArmAngle);
-
-    SmartDashboard.putNumber("arm conversion: ", Robot.w.armConversion);
-
-    SmartDashboard.putNumber("mode: ", SetControl.mode);
-    SmartDashboard.putNumber("PID a: ", Robot.arm.PID);
-    SmartDashboard.putNumber("Arm Angle: ", Robot.arm.angle);
-    SmartDashboard.putNumber("Error a", Robot.arm.error);
-    SmartDashboard.putNumber("Setpoint a", Robot.arm.setpoint);
-    SmartDashboard.putNumber("Conversion a", Robot.arm.conversion);
-    SmartDashboard.putNumber("Flat a", Robot.arm.flat);
-    SmartDashboard.putNumber("P value a", Robot.arm.P);
-    SmartDashboard.putNumber("Posititi", Robot.hatch.hookServo.getPosition());
-    SmartDashboard.putNumber("hatchLevel: ", SetControl.hatchLevel);
-    SmartDashboard.putNumber("ballLevel: ", SetControl.ballLevel);   
     
+    SmartDashboard.putNumber("Arm Setpoint", Robot.arm.setpoint);
+    SmartDashboard.putNumber("Wrist Angle: ", Robot.w.angle);
+    SmartDashboard.putNumber("Wrist Setpoint", Robot.w.setpoint);
+    SmartDashboard.putNumber("Arm Angle", Robot.arm.angle);
     /*if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));

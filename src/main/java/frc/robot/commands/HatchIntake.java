@@ -25,9 +25,9 @@ public class HatchIntake extends Command {
   @Override
   protected void execute() {
     if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyA)){
-      if(Robot.hatch.hookServo.getPosition() != 1){
+      //if(Robot.hatch.hookServo.getPosition() != 1){
         Robot.hatch.push();
-      }
+      //}
     }
     else if(Robot.m_oi.djoy.getRawButtonReleased(RobotMap.ojoyA)){
       Robot.hatch.release();

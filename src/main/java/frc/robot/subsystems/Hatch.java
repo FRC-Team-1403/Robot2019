@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.RobotMap;
@@ -21,8 +20,7 @@ public class Hatch extends Subsystem {
   // here. Call these from Commands.
   public DoubleSolenoid hatchPushSolenoid;
   public Servo hookServo;
-  public Hatch()
-  {
+  public Hatch() {
     hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
     hookServo = new Servo(RobotMap.hookServo);
   }

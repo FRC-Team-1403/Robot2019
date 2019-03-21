@@ -17,8 +17,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class ArmExtension extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+
   public DoubleSolenoid armExtender;
   double value;
   public boolean isForward = false;
@@ -38,11 +37,8 @@ public class ArmExtension extends Subsystem {
         armExtender.set(DoubleSolenoid.Value.kReverse);
         isForward = false;
       }
-    }
-    else 
-    {
+    } else {
       armExtender.set(DoubleSolenoid.Value.kOff);
-     
     }
   }
   

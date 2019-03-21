@@ -62,7 +62,6 @@ public static double getA(){
     final double scale = 13;
     double dconst = 0.8;
     this.area = area;
-    SmartDashboard.putNumber("area: ", area);
     if (isLeftMotor && angle < 0) {
         return Math.pow(Math.abs(angle/scale), 0.333) * skewmoid(area) * dconst;
     } else if (isLeftMotor && angle >= 0) {
@@ -78,10 +77,6 @@ public static double getA(){
     this.motorSpeedConst = turnSpeed * Math.pow(-(this.area/10.0) + 1.0, 0.5);
     double leftSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), true);
     double rightSpeed = motorSpeedConst + getMotorSpeedWithVision(getA(), -getX(), false);
-    SmartDashboard.putNumber("left speed: ", + leftSpeed); 
-    SmartDashboard.putNumber("right speed: ", + rightSpeed);
-    SmartDashboard.putNumber("limelight x: ", + getX());
-    SmartDashboard.putNumber("motor constant: ", + this.motorSpeedConst);
     Robot.drivetrain.setRaw(leftSpeed, rightSpeed);
   }
 
