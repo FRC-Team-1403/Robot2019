@@ -289,6 +289,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     initialTime = System.currentTimeMillis();
+    Robot.log(this.getClass().getName() + ".teleopPeriodic()");
 
     FINECONTROLMAXACCELERATION = SmartDashboard.getNumber("Fine Acceleration: ", 100);
     DEFAULTMAXACCELERATION = SmartDashboard.getNumber("Default Acceleration: ", 500);
@@ -335,9 +336,13 @@ public class Robot extends TimedRobot {
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
 		}*/
-    currentTime = System.currentTimeMillis();
-    SmartDashboard.putNumber("Before Scheduler delta time", currentTime - initialTime);
+    SmartDashboard.putNumber("Before Scheduler delta time", System.currentTimeMillis() - initialTime);
+    
     Scheduler.getInstance().run();
+    currentTime = System.currentTimeMillis();
+    SmartDashboard.putNumber("After Scheduler delta time", currentTime - initialTime);
+    Robot.log(this.getClass().getName() + "teleop finished " + Double.toString(currentTime-initialTime));
+
   }
   public void talonInitVelocity(TalonSRX talon) {
     /* Factory Default all hardware to prevent unexpected behaviour */
