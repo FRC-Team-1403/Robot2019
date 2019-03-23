@@ -24,6 +24,8 @@ public class HatchIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.log(this.getClass().getName() + ".execute()");
+    
     if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyA)){
       //if(Robot.hatch.hookServo.getPosition() != 1){
         Robot.hatch.push();

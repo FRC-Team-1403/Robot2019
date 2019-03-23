@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
+
 public class LiftRobot extends Command {
   public LiftRobot() {
     requires(Robot.lift);
@@ -23,6 +24,9 @@ public class LiftRobot extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.log(this.getClass().getName() + ".execute()");
+
+
     Robot.lift.moveLiftingPiston();
   }
 

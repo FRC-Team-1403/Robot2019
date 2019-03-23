@@ -26,6 +26,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.MoveLiftingPiston;
+
+import java.util.logging.Logger;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -80,11 +83,17 @@ public class Robot extends TimedRobot {
   int delay;
   int autoint;
 
+
+
   boolean shouldReset;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  public static void log(String message){
+    Logger logger = Logger.getLogger("Monty");
+    logger.info(message);
+  }
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -294,6 +303,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Wrist Angle: ", Robot.w.angle);
     SmartDashboard.putNumber("Wrist Setpoint", Robot.w.setpoint);
     SmartDashboard.putNumber("Arm Angle", Robot.arm.angle);
+
+
+      
+    
+    
     /*if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
@@ -314,7 +328,7 @@ public class Robot extends TimedRobot {
       recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
       recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
 			System.out.println(recorder.initNextReading());
-		}
+    }
 		
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
