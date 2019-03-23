@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import java.util.logging.Logger;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -79,11 +80,18 @@ public class Robot extends TimedRobot {
   String pathChooser;
   int delay;
   int autoint;
+  double initialTime, currentTime;
 
   boolean shouldReset;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+
+  public static void log(String message){
+    Logger logger = Logger.getLogger("Monty");
+    logger.info(message);
+  }
 
   /**
    * This function is run when the robot is first started up and should be
@@ -286,6 +294,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    initialTime = System.currentTimeMillis();
+    Robot.log(this.getClass().getName() + ".teleopPeriodic()");
+
     FINECONTROLMAXACCELERATION = SmartDashboard.getNumber("Fine Acceleration: ", 100);
     DEFAULTMAXACCELERATION = SmartDashboard.getNumber("Default Acceleration: ", 500);
     HYPERSPEEDMAXACCELERATION = SmartDashboard.getNumber("Hyper Speed: ", 10000);
@@ -327,8 +338,14 @@ public class Robot extends TimedRobot {
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
 		}*/
-   
+
+    SmartDashboard.putNumber("Before Scheduler delta time", System.currentTimeMillis() - initialTime);
+    
     Scheduler.getInstance().run();
+    currentTime = System.currentTimeMillis();
+    SmartDashboard.putNumber("After Scheduler delta time", currentTime - initialTime);
+    Robot.log(this.getClass().getName() + "teleop finished " + Double.toString(currentTime-initialTime));
+
   }
   public void talonInitVelocity(TalonSRX talon) {
     /* Factory Default all hardware to prevent unexpected behaviour */
