@@ -9,10 +9,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class MoveWrist extends Command {
+
   public MoveWrist() {
     requires(Robot.w);
   }
@@ -26,6 +28,7 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+  double startTime = System.currentTimeMillis();
   double currentArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
     
      if(Math.abs(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY)) > .1){
@@ -41,6 +44,7 @@ public class MoveWrist extends Command {
      Robot.w.PID();
      Robot.w.moveWrist(-Robot.w.PID);
     Robot.w.prevArmAngle = currentArmAngle;
+    SmartDashboard.putNumber("Wrist loop time", System.currentTimeMillis() - startTime);
 }
 
 

@@ -51,8 +51,7 @@ public Arm()
     armMotorL = new TalonSRX(RobotMap.armMotorL);
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
-    conversion = -1.032240000077177;
-    
+    conversion = -1.032240000077177;    
   }
 
   public void moveArm(double input) {

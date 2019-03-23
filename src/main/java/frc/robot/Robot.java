@@ -33,8 +33,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.echo.Recorder;
 
-
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -79,7 +77,7 @@ public class Robot extends TimedRobot {
   String pathChooser;
   int delay;
   int autoint;
-
+  double initialTime, currentTime;
   boolean shouldReset;
 
   Command m_autonomousCommand;
@@ -129,6 +127,7 @@ public class Robot extends TimedRobot {
     resetPotentiometers();
     hatch.hookServo.setPosition(1);
     hatch.release();
+    initialTime = System.currentTimeMillis();
   }
 
   /**
@@ -282,6 +281,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    initialTime = System.currentTimeMillis();
+
     FINECONTROLMAXACCELERATION = SmartDashboard.getNumber("Fine Acceleration: ", 100);
     DEFAULTMAXACCELERATION = SmartDashboard.getNumber("Default Acceleration: ", 500);
     HYPERSPEEDMAXACCELERATION = SmartDashboard.getNumber("Hyper Speed: ", 10000);
@@ -290,10 +291,17 @@ public class Robot extends TimedRobot {
     DEFAULTMAXRPM = SmartDashboard.getNumber("Default Max RPM:", 5700);
     FINECONTROLRPM = SmartDashboard.getNumber("Fine Max RPM:", 3000);
     
+
+
+    SmartDashboard.putNumber("Wrist conversion", Robot.w.conversion);
+
     SmartDashboard.putNumber("Arm Setpoint", Robot.arm.setpoint);
     SmartDashboard.putNumber("Wrist Angle: ", Robot.w.angle);
     SmartDashboard.putNumber("Wrist Setpoint", Robot.w.setpoint);
     SmartDashboard.putNumber("Arm Angle", Robot.arm.angle);
+    SmartDashboard.putNumber("Arm Potentiometer Reading", Robot.arm.potentiometerArm.getAverageVoltage());
+    SmartDashboard.putNumber("Wrist Potentiometer Reading", Robot.w.potentiometerWrist.getAverageVoltage());
+    
     /*if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
@@ -319,7 +327,8 @@ public class Robot extends TimedRobot {
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
 		}*/
-   
+    currentTime = System.currentTimeMillis();
+    SmartDashboard.putNumber("Before Scheduler delta time", currentTime - initialTime);
     Scheduler.getInstance().run();
   }
   public void talonInitVelocity(TalonSRX talon) {

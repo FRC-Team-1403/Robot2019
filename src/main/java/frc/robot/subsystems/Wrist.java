@@ -27,7 +27,7 @@ public class Wrist extends Subsystem {
   // here. Call these from Commands.
   public TalonSRX wristMotor;
   public AnalogInput potentiometerWrist;
-  public double P = 1.6;
+  public double P = 1.8;
   public double I = 0;
   public double D = 0;
   public double error, PID, derivative, setpoint;
@@ -36,6 +36,7 @@ public class Wrist extends Subsystem {
   public static double conversion;
   public static double armConversion;
   public static double prevArmAngle;
+
   public int integral, previous_error;
   public static double tooFast = .8;
 
@@ -49,7 +50,7 @@ public class Wrist extends Subsystem {
 
 
   public void moveWrist(double value) { 
-    wristMotor.set(ControlMode.PercentOutput, value);
+    //wristMotor.set(ControlMode.PercentOutput, value);
   }
   public void movePIDSetpoint(double stick){
     setpoint -= stick * .015;

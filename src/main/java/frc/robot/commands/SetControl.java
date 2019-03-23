@@ -56,6 +56,7 @@ public class SetControl extends Command {
   public void updatePotentiometerReadings(double aInit, double wInit, double aFinal, double wFinal){
     double aConversion = -1 * Math.abs(Math.PI/180.00 * (armCallibrationAngle)/(aFinal-aInit));
     double wConversion = -1 * Math.abs(Math.PI/180.00 * (wristCallibrationAngle)/(wFinal - wInit)); 
+    SmartDashboard.putNumber("Wrist conversion", wConversion);
     Robot.rioIO.writeToRIO(aInit, wInit, aConversion, wConversion);
   }
 
@@ -72,12 +73,12 @@ public class SetControl extends Command {
             break;
           }
         }
-      } 
+      }
   }
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    
+    checkCallibration();    
     if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
     {
       if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)) {
@@ -107,7 +108,6 @@ public class SetControl extends Command {
     }
     else
     {
-      checkCallibration();
       if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX))
       {
         //floor hatch

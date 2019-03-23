@@ -9,7 +9,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MoveArm extends Command {
   public MoveArm() {
     requires(Robot.arm);
@@ -26,10 +26,12 @@ public class MoveArm extends Command {
     if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB)){
       Robot.arm.setpoint = Robot.arm.angle;
     }
-    
-    Robot.arm.moveBy(Robot.m_oi.ojoy.getRawAxis(1));
-    
+    double stick = Robot.m_oi.ojoy.getRawAxis(1);
+    if(Math.abs(stick) >= .05){
+      Robot.arm.moveBy(stick);
+    }
     Robot.arm.PID();
+    SmartDashboard.putNumber("Arm PID Output", -Robot.arm.PID);
     Robot.arm.moveArm(-Robot.arm.PID);    
 
 
