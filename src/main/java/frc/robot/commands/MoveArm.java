@@ -18,22 +18,26 @@ public class MoveArm extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.log(this.getClass().getName() + ".execute()");
+
     if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyRB)){
       Robot.arm.setpoint = Robot.arm.angle;
     }
+
     double stick = Robot.m_oi.ojoy.getRawAxis(1);
     if(Math.abs(stick) >= .05){
       Robot.arm.moveBy(stick);
     }
+
     Robot.arm.PID();
     SmartDashboard.putNumber("Arm PID Output", -Robot.arm.PID);
     Robot.arm.moveArm(-Robot.arm.PID);    
-
 
   }
 

@@ -78,8 +78,11 @@ public class SetControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.log(this.getClass().getName() + ".execute()");   
     checkCallibration();    
-    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
+   
+    
+   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
     {
       if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)) {
         //cargo
