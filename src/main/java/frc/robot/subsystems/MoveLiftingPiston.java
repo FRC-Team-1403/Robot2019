@@ -34,16 +34,20 @@ public class MoveLiftingPiston extends Subsystem {
 
   public void moveLiftingPiston(){
     if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyBack)) {
-      if(isExtended){
-        lifter.set(DoubleSolenoid.Value.kReverse);
-        isExtended = false;
-        led.set(true);
-      }
-      else if(!isExtended){
+      // if(isExtended){
+      //   lifter.set(DoubleSolenoid.Value.kReverse);
+      //   isExtended = false;
+      //   led.set(true);
+      // }
+      // else if(!isExtended){
         lifter.set(DoubleSolenoid.Value.kForward);
-        isExtended = true;
+      // isExtended = true;
         led.set(false);
-      }
+      //}
+    }
+    else if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyStart)){
+      lifter.set(DoubleSolenoid.Value.kReverse);
+      led.set(true);
     }
     else{
       lifter.set(DoubleSolenoid.Value.kOff);
