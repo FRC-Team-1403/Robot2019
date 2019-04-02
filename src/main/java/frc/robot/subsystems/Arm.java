@@ -36,22 +36,23 @@ public AnalogInput potentiometerArm;
 public static double feedForwardConstant = 0; //to find how to deal with torque
 public double armConstant = .1; //to control speed at which joystick moves arm
 public double ratio = 1; //ratio to convert from voltage of potentiometer to radians
-public double P = 4.604;
-public double I = 0;
-public double D = 0;
-public int integral, previous_error;
+public double P = 4.030000000000104;
+public double I = 0.08000000000000006;
+public double D = 0.03799999999999987;
+public double integral, previous_error;
 public double error, PID, derivative, setpoint;
 public static double flat;
 public static double angle;
 public static double conversion;
-public final double tooFast = .7;
+public final double tooFast = 10000;
 
 public Arm()
   {
     armMotorL = new TalonSRX(RobotMap.armMotorL);
     armMotorR = new TalonSRX(RobotMap.armMotorR);
     potentiometerArm = new AnalogInput(RobotMap.potA);
-    conversion = -1.032240000077177;    
+    conversion = -1.032240000077177;
+    
   }
 
   public void moveArm(double input) {
@@ -64,11 +65,12 @@ public Arm()
     error = setpoint - angle; // Error = Target - Actual
     this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - this.previous_error) / .02;
-    PID = P*error + feedForward(angle);
-    if(PID > tooFast)
+    PID = P*error + this.integral * I + derivative * D;
+    /*if(PID > tooFast)
       PID = tooFast;
     if(PID < -tooFast)
-      PID = -tooFast;
+      PID = -tooFast;*/
+    this.previous_error = this.error;
   }
 
   public void moveBy(double stick) {

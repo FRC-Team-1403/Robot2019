@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
@@ -24,8 +25,6 @@ public class HatchIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.log(this.getClass().getName() + ".execute()");
-    
     if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyA)){
       //if(Robot.hatch.hookServo.getPosition() != 1){
         Robot.hatch.push();
@@ -39,7 +38,6 @@ public class HatchIntake extends Command {
     }
     if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyRB)){
       Robot.hatch.hookServo.setPosition(1.0);
-      //Robot.hatch.moveServo();
     }
     else if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyLB))
     {

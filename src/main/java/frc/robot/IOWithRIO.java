@@ -27,12 +27,19 @@ public class IOWithRIO {
      }
 
         if(newFile){
-            writeToRIO(3.6632863, 2.917286317, -.9538999999, -.95389999999994);
+            writeToRIO(3.6632863, 2.917286317, -1.02, -3.2);
      }
 
     }
 
     public void writeToRIO(double armPotReading, double wristPotReading, double armConversion, double wristConversion){
+        path = "/home/lvuser/CallibrationConstants.txt";
+        File f = new File(path);
+        try{
+            f.createNewFile();
+        } catch(IOException e){
+        e.printStackTrace();
+        }
         try{
             FileWriter fw = new FileWriter(new File(path));
             BufferedWriter bw = new BufferedWriter(fw);
@@ -67,7 +74,6 @@ public class IOWithRIO {
             Robot.w.flat = wristPotReading;
             Robot.arm.conversion = armConversion;
             Robot.w.conversion = wristConversion;
-
             br.close();
         } catch(IOException e){
             e.printStackTrace();

@@ -24,10 +24,13 @@ public class SetControl extends Command {
   public static final double armCallibrationAngle = -50.2;
   public static final double wristCallibrationAngle = 137;
   //angles are relative to the flat
-  public static final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true), new Setpoint(-0.6521623529, 2.31684621524), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.7344078690468266, 0.561088699964242, true)};
-  public static final Setpoint[] ballPositions = {new Setpoint(-0.6936229335634126, 0.43456439742 ), new Setpoint(-0.2901915591978343, 0.6042493691922602), new Setpoint(0.305817258539256, -0.5179280307362237), new Setpoint(0.35269435656352155, -0.060424936919227124), new Setpoint(1.011, -0.687, true)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
+  public static final Setpoint[] hatchPositions = {new Setpoint(-0.6579435393, 0.7508715262,true, false), new Setpoint(-0.6703075464933462, 2.3430167757303044), new Setpoint(0.1979114756, 1.439048824), new Setpoint(0.6758309715586512, 0.8599574042501887, true, false)};
+  public static final Setpoint[] ballPositions = {new Setpoint(-0.766999725800844, 0.4023758239272958, false, true), new Setpoint(-0.2901915591978343, 0.6042493691922602), new Setpoint(0.469908753990639, -0.5179280307362237), new Setpoint(0.469908753990639, -0.060424936919227124), new Setpoint(0.9351982398947328, -0.7089404942355213, true, false)};//new Setpoint(youneedtodocargoarm, youneedtodocargowrist), <- this goes third to last
+  boolean shouldUpdate = true;
+  double startArmReading = 0; 
+  double startWristReading = 0; 
   //hatch pickup, 1, 2, 3
-  //ball pickup, 1, (not implemented)cargo, 2, 3
+  //ball pickup, 1, cargo, 2, 3
    
   public SetControl() {
     requires(Robot.cs);
@@ -56,34 +59,35 @@ public class SetControl extends Command {
   public void updatePotentiometerReadings(double aInit, double wInit, double aFinal, double wFinal){
     double aConversion = -1 * Math.abs(Math.PI/180.00 * (armCallibrationAngle)/(aFinal-aInit));
     double wConversion = -1 * Math.abs(Math.PI/180.00 * (wristCallibrationAngle)/(wFinal - wInit)); 
-    SmartDashboard.putNumber("Wrist conversion", wConversion);
+    SmartDashboard.putNumber("arm Conversion", aConversion);
+    SmartDashboard.putNumber("wrist Conversion", wConversion);
     Robot.rioIO.writeToRIO(aInit, wInit, aConversion, wConversion);
   }
 
   public void checkCallibration(){
    if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyStart)) {
-      double startArmReading = Robot.arm.potentiometerArm.getAverageVoltage();
-      double startWristReading = Robot.w.potentiometerWrist.getAverageVoltage();
-      while(true){
-        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyLB)){
-          break;
-        }
-        if(Robot.m_oi.tjoy.getRawButtonPressed(RobotMap.ojoyRB)){
-            updatePotentiometerReadings(startArmReading, startWristReading, Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
-            break;
-          }
-        }
+    SmartDashboard.putBoolean("reached callibration", shouldUpdate); 
+    
+    if(shouldUpdate){
+      startArmReading = Robot.arm.potentiometerArm.getAverageVoltage();
+      startWristReading = Robot.w.potentiometerWrist.getAverageVoltage();
+      SmartDashboard.putNumber("Init armPot", startArmReading);
+      SmartDashboard.putNumber("Init wPot", startWristReading);
+      shouldUpdate = false;
+    }
+    else{  
+      updatePotentiometerReadings(startArmReading, startWristReading, Robot.arm.potentiometerArm.getAverageVoltage(), Robot.w.potentiometerWrist.getAverageVoltage());
+      SmartDashboard.putNumber("Final armPot", Robot.arm.potentiometerArm.getAverageVoltage());
+      SmartDashboard.putNumber("Final wPot", Robot.w.potentiometerWrist.getAverageVoltage());
+      shouldUpdate = true;
       }
+    }
   }
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    
-    Robot.log(this.getClass().getName() + ".execute()");   
-    checkCallibration();    
-   
-    
-   if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
+    checkCallibration();
+    if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyLB))
     {
       if(Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyStart)) {
         //cargo

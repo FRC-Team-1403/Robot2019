@@ -27,7 +27,7 @@ public class Wrist extends Subsystem {
   // here. Call these from Commands.
   public TalonSRX wristMotor;
   public AnalogInput potentiometerWrist;
-  public double P = 1.8;
+  public double P = 1.6;
   public double I = 0;
   public double D = 0;
   public double error, PID, derivative, setpoint;
@@ -36,8 +36,7 @@ public class Wrist extends Subsystem {
   public static double conversion;
   public static double armConversion;
   public static double prevArmAngle;
-
-  public int integral, previous_error;
+  public double integral, previous_error;
   public static double tooFast = .8;
 
   public Wrist() {
@@ -50,10 +49,10 @@ public class Wrist extends Subsystem {
 
 
   public void moveWrist(double value) { 
-    //wristMotor.set(ControlMode.PercentOutput, value);
+    wristMotor.set(ControlMode.PercentOutput, value);
   }
   public void movePIDSetpoint(double stick){
-    setpoint -= stick * .015;
+    setpoint -= stick * .025;
 
   }
 
@@ -64,11 +63,16 @@ public class Wrist extends Subsystem {
   public void PID(){
     angle = voltToRadians(potentiometerWrist.getAverageVoltage());
     error = setpoint - angle; // Error = Target - Actual    
-    PID = P*error;
+    this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
+    derivative = (error - this.previous_error) / .02;
+    PID = P*error + this.integral * I + derivative * D;
+    
     if(PID > tooFast)
       PID = tooFast;
     if(PID < -tooFast)
       PID = -tooFast;
+    
+    this.previous_error = error;
   }
 
   public double voltToRadians(double potentiometerValue){

@@ -9,12 +9,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class MoveWrist extends Command {
-
   public MoveWrist() {
     requires(Robot.w);
   }
@@ -28,26 +26,22 @@ public class MoveWrist extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-  double startTime = System.currentTimeMillis();
-  Robot.log(this.getClass().getName() + ".execute()");
   double currentArmAngle = Robot.arm.voltToRadians(Robot.arm.potentiometerArm.getAverageVoltage());
     
      if(Math.abs(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY)) > .1){
-
       Robot.w.movePIDSetpoint(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyRY));
-    } else {
-      if (Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)) {
+    }
+     else{
+      if(Math.abs(Robot.m_oi.ojoy.getRawAxis(RobotMap.ojoyLY)) > .05){ 
         Robot.w.moveByArm(Robot.w.prevArmAngle - currentArmAngle);
       }
-    }
-
-    Robot.w.PID();
-    Robot.w.moveWrist(-Robot.w.PID);
-    Robot.w.prevArmAngle = currentArmAngle;
-    SmartDashboard.putNumber("Wrist loop time", System.currentTimeMillis() - startTime);
+    }        
+   
+     Robot.w.PID();
+     Robot.w.moveWrist(-Robot.w.PID);
+      //Robot.w.moveWrist(-Robot.m_oi.ojoy.getRawAxis(5));
+     Robot.w.prevArmAngle = currentArmAngle;
 }
-
 
 
   // Make this return true when this Command no longer needs to run execute()

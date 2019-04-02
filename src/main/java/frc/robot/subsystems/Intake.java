@@ -31,9 +31,7 @@ public class Intake extends Subsystem {
 
   public Intake(){
     intakeMotor = new VictorSPX(RobotMap.intakeMotor);
-    // hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
-    // hookServo = new Servo(RobotMap.hookServo);
-  }
+     }
 
 public void intake(){
   if(Robot.m_oi.ojoy.getRawAxis(2)>0)

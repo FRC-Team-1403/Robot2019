@@ -23,6 +23,7 @@ public class Hatch extends Subsystem {
   public Hatch() {
     hatchPushSolenoid = new DoubleSolenoid(RobotMap.hatchPush1, RobotMap.hatchPush2);
     hookServo = new Servo(RobotMap.hookServo);
+    this.release();
   }
 
   public void push(){

@@ -7,18 +7,20 @@ public class Setpoint {
     double armPotReading;
     double wristPotReading;
     public boolean armOut;
-
+    public boolean servoOut;
 
     public Setpoint(double armPotReading, double wristPotReading) {
         this.armPotReading = armPotReading;
         this.wristPotReading = wristPotReading;
         armOut = false;
+        servoOut = false;
     }
     
-    public Setpoint(double armPotReading, double wristPotReading, boolean armOut){
+    public Setpoint(double armPotReading, double wristPotReading, boolean armOut, boolean servoOut){
         this.armPotReading = armPotReading;
         this.wristPotReading = wristPotReading;
         this.armOut = armOut;
+        this.servoOut = servoOut;
     }
 
     public void run(){
@@ -33,6 +35,11 @@ public class Setpoint {
             Robot.ae.armExtender.set(DoubleSolenoid.Value.kReverse);
             Robot.ae.isForward = false;
         } 
+        if(servoOut){
+            Robot.hatch.hookServo.setPosition(1);
+        }
+        else{
+        }
     }
 
 }

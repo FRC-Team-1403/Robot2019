@@ -23,8 +23,6 @@ public class Extend extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.log(this.getClass().getName() + ".execute()");
-    
     Robot.ae.push();
   }
 

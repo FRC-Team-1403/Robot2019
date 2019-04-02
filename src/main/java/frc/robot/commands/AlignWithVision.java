@@ -83,8 +83,6 @@ public static double getA(){
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.log(this.getClass().getName() + ".execute()");
-    
     if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyX)){
       if((int)getV() == 1){
         double x = getX();

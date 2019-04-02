@@ -26,15 +26,14 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.MoveLiftingPiston;
-
-import java.util.logging.Logger;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.echo.Recorder;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -80,16 +79,12 @@ public class Robot extends TimedRobot {
   String pathChooser;
   int delay;
   int autoint;
-  double initialTime, currentTime;
+
   boolean shouldReset;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  public static void log(String message){
-    Logger logger = Logger.getLogger("Monty");
-    logger.info(message);
-  }
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -114,6 +109,7 @@ public class Robot extends TimedRobot {
     shouldReset = true;
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    SmartDashboard.putBoolean("USE PISTONS", hatch.hookServo.getPosition()>0.5);
     talonInitVelocity(drivetrain.frontLeft);
     talonInitVelocity(drivetrain.frontRight);
     talonInitVelocity(drivetrain.backLeft);
@@ -132,9 +128,11 @@ public class Robot extends TimedRobot {
     drivetrain.backRight.setInverted(false);
     // in.intakeMotor.setInverted(true);
     resetPotentiometers();
+    // Robot.arm.flat = 3.544921512;
+    // Robot.w.flat = 2.504882556;
+    // Robot.arm.conversion = -0.9357842015131478;
+    // Robot.w.conversion = -3.580969289598466;
     hatch.hookServo.setPosition(1);
-    hatch.release();
-    initialTime = System.currentTimeMillis();
   }
 
   /**
@@ -190,7 +188,7 @@ public class Robot extends TimedRobot {
     arm.angle = (arm.potentiometerArm.getAverageVoltage()-arm.flat)*arm.conversion;
     arm.setpoint = arm.angle;
     w.angle = (w.potentiometerWrist.getAverageVoltage()-w.flat)*w.conversion;
-    w.setpoint = Math.PI/4;  
+    w.setpoint = w.angle;
     hatch.hatchPushSolenoid.set(DoubleSolenoid.Value.kForward);
     Robot.arm.potentiometerArm.resetAccumulator();
   }
@@ -288,9 +286,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    initialTime = System.currentTimeMillis();
-    Robot.log(this.getClass().getName() + ".teleopPeriodic()");
-
     FINECONTROLMAXACCELERATION = SmartDashboard.getNumber("Fine Acceleration: ", 100);
     DEFAULTMAXACCELERATION = SmartDashboard.getNumber("Default Acceleration: ", 500);
     HYPERSPEEDMAXACCELERATION = SmartDashboard.getNumber("Hyper Speed: ", 10000);
@@ -299,18 +294,14 @@ public class Robot extends TimedRobot {
     DEFAULTMAXRPM = SmartDashboard.getNumber("Default Max RPM:", 5700);
     FINECONTROLRPM = SmartDashboard.getNumber("Fine Max RPM:", 3000);
     
-
-
-    SmartDashboard.putNumber("Wrist conversion", Robot.w.conversion);
-
+    SmartDashboard.putNumber("Wrist Conversion from Robot", Robot.w.conversion);
     SmartDashboard.putNumber("Arm Setpoint", Robot.arm.setpoint);
     SmartDashboard.putNumber("Wrist Angle: ", Robot.w.angle);
     SmartDashboard.putNumber("Wrist Setpoint", Robot.w.setpoint);
     SmartDashboard.putNumber("Arm Angle", Robot.arm.angle);
-
-    SmartDashboard.putNumber("Arm Potentiometer Reading", Robot.arm.potentiometerArm.getAverageVoltage());
-    SmartDashboard.putNumber("Wrist Potentiometer Reading", Robot.w.potentiometerWrist.getAverageVoltage());
- 
+    SmartDashboard.putNumber("Arm Potentiometer", Robot.arm.potentiometerArm.getAverageVoltage());
+    SmartDashboard.putNumber("Wrist Potentiometer", Robot.w.potentiometerWrist.getAverageVoltage());
+    SmartDashboard.putBoolean("USE PISTONS", hatch.hookServo.getPosition()<0.5);
     /*if(Recorder.isRecording)
 		{
 			recorder.addReading("DriveTrain Back Left", -Robot.m_oi.djoy.getRawAxis(1));
@@ -331,18 +322,13 @@ public class Robot extends TimedRobot {
       recorder.addReading("Arm is extended", ArmExtension.convertBoolToDouble());
       recorder.addReading("Arm is retracted", ArmExtension.convertBoolToDouble());
 			System.out.println(recorder.initNextReading());
-    }
+		}
 		
 		else if (Recorder.isStoring()) {
 			recorder.storeWritings();
 		}*/
-    SmartDashboard.putNumber("Before Scheduler delta time", System.currentTimeMillis() - initialTime);
-    
+   
     Scheduler.getInstance().run();
-    currentTime = System.currentTimeMillis();
-    SmartDashboard.putNumber("After Scheduler delta time", currentTime - initialTime);
-    Robot.log(this.getClass().getName() + "teleop finished " + Double.toString(currentTime-initialTime));
-
   }
   public void talonInitVelocity(TalonSRX talon) {
     /* Factory Default all hardware to prevent unexpected behaviour */
