@@ -39,7 +39,6 @@ public class MoveWrist extends Command {
     } else {
       if (Robot.m_oi.ojoy.getRawButton(RobotMap.ojoyX)) {
         Robot.w.moveByArm(Robot.w.prevArmAngle - currentArmAngle);
-
       }
     }
 
