@@ -68,7 +68,12 @@ public CheesyDriveHelper helper;
     backLeft.set(ControlMode.Velocity, -1 * Robot.m_oi.djoy.getRawAxis(1) * Robot.maxRPM * 4096 / 600);
     backRight.set(ControlMode.Velocity, Robot.m_oi.djoy.getRawAxis(5) * Robot.maxRPM * 4096 / 600);
   }
- 
+  
+
+  public void driveArcade(double velocity, double omega) {
+    backLeft.set(ControlMode.Velocity, -1 * (velocity + omega));
+    backRight.set(ControlMode.Velocity, (velocity - omega));
+  }
   
   @Override
   public void initDefaultCommand() {
