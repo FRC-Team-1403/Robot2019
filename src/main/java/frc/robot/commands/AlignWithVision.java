@@ -144,11 +144,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlignWithVision extends Command {
   public static NetworkTableInstance table;
   public boolean isCurrentlyOnLeft = false;
@@ -179,25 +178,44 @@ public static double getA(){
   }
 
   // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
-  }
-
+  boolean useVision = false;
+  boolean driveStraight = false;
   @Override
   protected void execute(){
+  if(Robot.m_oi.djoy.getRawButtonPressed(RobotMap.ojoyX)){
+    useVision = true;
     table.getDefault().getTable("limelight").getEntry("ledMode").forceSetDouble(3);
 
-  if(Robot.m_oi.djoy.getRawButton(RobotMap.ojoyX)) {/*insert turn on*/
+    driveStraight = false;
+  }
+  else if(Robot.m_oi.djoy.getRawButtonReleased(RobotMap.ojoyX)){
+    useVision = false;
+    driveStraight = false;
+    table.getDefault().getTable("limelight").getEntry("ledMode").forceSetDouble(1);
 
+  }
+  if(Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyA) || Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyB) ||Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyX) ||Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyY) || Robot.m_oi.ojoy.getRawButtonPressed(RobotMap.ojoyStart) ){
+    driveStraight = true;
+  }
+  if(useVision && !driveStraight) {
     double x = getX();
     double a = getA();
-    System.out.println(x);
-    Robot.drivetrain.driveArcade(cV * (a-areaFinal), -cO * x);
-    }
-  else{
-    /*turn off*/
+
+    Robot.drivetrain.driveArcade(cV * (areaFinal - a), cO * x);
   }
+  else if(useVision && driveStraight){
+    Robot.drivetrain.driveArcade(.1, 0);
+  }
+  else{
+    /*TODO
     
+    
+    
+    this is where the most crucial part of the vision function occurs
+    
+    
+    
+    */
   }
 
   // Make this return true when this Command no longer needs to run execute()
